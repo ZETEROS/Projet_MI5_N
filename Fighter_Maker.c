@@ -19,11 +19,15 @@ Fighter creator(char* name){
     scanf("%f",&a.def);
     printf("\nDodging: ");
     scanf("%f",&a.dodge);
+    printf("\nSpecial Attack: ");
+    scanf("%f",&a.special_attack_name);
     //a.speed = 0;
 
     return a;
 }
-
+void show_stats(Fighter a){
+    printf("Name = %s\nHP: %.2f\nHP_MAX:%.2f\nDMG:%.2f\nDEF:%.2f\nDODGE:%.2f\nSPEED:%.2f\n",a.name,a.hp,a.hp_max,a.dmg,a.dmg,a.def,a.dodge,a.speed);
+}
 void export_fighter(Fighter a , char* file){
     FILE* doc = fopen(file , "wb");
     if(doc == NULL){

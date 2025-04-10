@@ -1,6 +1,8 @@
 #include "structure.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "special_attacks_list.h"
 
 Fighter import(char* file){
     Fighter a;
@@ -16,6 +18,10 @@ Fighter import(char* file){
 
 }
 
+void show_stats(Fighter a){
+    printf("Name = %s\nHP: %.2f\nHP_MAX:%.2f\nDMG:%.2f\nDEF:%.2f\nDODGE:%.2f\nSPEED:%.2f\n",a.name,a.hp,a.hp_max,a.dmg,a.dmg,a.def,a.dodge,a.speed);
+}
+
 
 int main(){
     char file[20];
@@ -23,5 +29,7 @@ int main(){
     scanf("%s",file);
     Fighter a = import(file);
     show_stats(a);
+    assign_special(&a);
+    a.special1(&a);
 
 }
