@@ -11,3 +11,8 @@ de la langue de notre code qui sera donc l'anglais.
 
 // 10 - 04 - 2025
 Dans cette mise à jour, nous avons réussi à implémenter des capacités spéciales pour les personnages en utilisant des pointeurs vers des fonctions dans leurs structures de combat. Maintenant, les personnages, lorsqu'ils sont chargés dans le programme, se verront attribuer leurs capacités spéciales basées sur le nom de leur capacité qui se trouve dans leur propre membre dans la structure du combattant, appelé « special_attack_name ».
+
+
+#SETUP
+
+To compile the game please use in Ubuntu : gcc 'Smash_N_Kill.c' -o 'Smash&Kill' -lSDL2 -lSDL2_image
