@@ -1,18 +1,21 @@
-# Projet_MI5_N
-
-Ici, l'équipe MI5_N composée de Noa, Mohamed et Nicolas enregistrera les progrès du projet Cy Fighters.
-
+# SMASH & KILL
+### PROJECT_MI5_N
 
 
-// 06 - 04 - 2025
-Jusqu'à présent, nous nous sommes organisés pour tenter de créer une base de fonctionnement et de concepts. Nous avons créé une liste de personnages avec quelques stats qui sont encore en Beta, nous devrons les regarder plus tard une fois que le système de combat sera établi au cas où les stats des personnages seraient trop déséquilibrées.
-Nous avons mis en place 2 toolcodes qui nous permettront de créer une structure de Fighter, que nous pourrons sauvegarder dans un fichier binaire dans le dossier du même nom, Fighters. Et un autre code nous permet évidemment de charger depuis le fichier binaire le Fighter dans la RAM et pouvoir ensuite le manipuler.De plus nous avons decidé
-de la langue de notre code qui sera donc l'anglais.
+## Project Progress
+### 06 - 04 - 2025
+So far, we've organized ourselves to try and create a base of operations and concepts. **We've created a list of characters with some stats that are still in Beta**, we'll have to look at them later once the fighting system is established in case the character stats are too unbalanced.
+**We've implemented 2 toolcodes that will allow us to create a Fighter structure** , which we can save in a binary file in the folder of the same name, Fighters. And, of course, another code allows us to load the Fighter into RAM from the binary file and then manipulate it.
+We've decided to work in english for the coding and for this github repository.
 
-// 10 - 04 - 2025
-Dans cette mise à jour, nous avons réussi à implémenter des capacités spéciales pour les personnages en utilisant des pointeurs vers des fonctions dans leurs structures de combat. Maintenant, les personnages, lorsqu'ils sont chargés dans le programme, se verront attribuer leurs capacités spéciales basées sur le nom de leur capacité qui se trouve dans leur propre membre dans la structure du combattant, appelé « special_attack_name ».
+### 10 - 04 - 2025
+In this update, **we've managed to implement special abilities for characters using pointers to functions in their Fighter structure**. Now, characters, when loaded into the program, **will be assigned their special abilities based on the name of their ability found in their own member in the fighter structure**, called "special_attack_name".
+
+### 16 - 04 - 2025
+In this advancement **we have made several decisions that could be modified later**, but we have decided to work using the **SDL library** that will allow us to realize a **graphical and interactive interface**. For this we will use SDL_Image to load and render in the window **our own designs** of the menu, buttons, game, etc. Today we have added the file Smash_N_Kill.c in which we have already formed something basic and that we will use later in the game, a simple menu that **at this time is not interactive yet**. **We plan to work on a 1280 x 720 p game**, we will see if we continue with this later. To test it must be compiled and executed in the same folder as the assets folder in which is the Menu.png which is the actual design of our menu.
 
 
-#SETUP
 
-To compile the game please use in Ubuntu : gcc 'Smash_N_Kill.c' -o 'Smash&Kill' -lSDL2 -lSDL2_image
+## SETUP
+
+To compile the game please use in Ubuntu : **gcc 'Smash_N_Kill.c' -o 'Smash&Kill' -lSDL2 -lSDL2_image**
