@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Fighter Fighter ;
+
+struct Fighter {
+    char name[20];
+    int class ; //1: Attacker ; 2: Tank ; 3: Healer
+    float hp , hp_max , dmg , def , dodge , speed ;
+
+    char special_attack_name[20];
+    void (*special1)(Fighter* cible);  // Pointeurs vers une fonction
+    //void (*special2)(Fighter *cible);  
+    //void (*ultimate)(Fighter *cible);  
+
+};
+
