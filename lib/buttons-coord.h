@@ -6,8 +6,12 @@
 
 
 
-SDL_Rect Button_PLAY = {580 , 409 , 119 , 70};
-SDL_Rect Button_HOWTOPLAY = {459 , 508 , 361 , 70};
-SDL_Rect Button_EXIT = {583 , 610 , 119 , 70};
+SDL_Rect Button_START = {509 , 404 , 259 , 55};
+SDL_Rect Button_HOWTOPLAY = {509 , 478 , 259 , 55};
+SDL_Rect Button_QUIT = {509 , 553 , 259 , 55};
+SDL_Rect Button_MAINMENU_FROM_SELECTION_HTP = {1120 , 670 , 267 , 67};
+
+SDL_Rect Button_SelectPVP = {230 , 472 , 267 , 67};
+SDL_Rect Button_SelectPVB = {780 , 472 , 267 , 67};
 
 #endif
