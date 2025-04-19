@@ -9,7 +9,8 @@ struct Fighter {
     float hp , hp_max , dmg , def , dodge , speed ;
 
     char special_attack_name[20];
-    void (*special1)(Fighter* cible);  // Pointeurs vers une fonction
+    void (*AttackFunction)(Fighter* attacker, Fighter* defender, Fighter* ally, Fighter* team[]);
+    //void (*special1)(Fighter* cible);  // Pointeurs vers une fonction
     //void (*special2)(Fighter *cible);  
     //void (*ultimate)(Fighter *cible);  
 
