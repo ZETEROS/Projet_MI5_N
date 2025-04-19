@@ -65,7 +65,7 @@ Ultimate - dodo infection
 🧛 Dracula (Class: Healer)
 Name : Dracula
 Max HP : 100
-Attack : 45
+Attack : 25
 Defense : 10
 Dodge : 0.15
 Special attack - Drainage
