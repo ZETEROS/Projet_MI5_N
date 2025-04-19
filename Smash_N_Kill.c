@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "lib/structure.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
@@ -26,6 +27,8 @@ SDL_Texture* loadTexture(char* path , SDL_Renderer* renderer){
 
 
 int main(){
+
+    //STARTING SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0 ){
         printf("Error, unable to start SDL.\n%s",SDL_GetError());
         exit(1);
@@ -60,6 +63,7 @@ int main(){
     int quit = 0 ;
     SDL_Event event ;
 
+    //GAME STATES (MOMENTS)
     typedef enum{
         MENU,
         GAMEMODE_SELECTION,
@@ -70,10 +74,22 @@ int main(){
         
     }Game_State;
 
+    //ALWAYS START IN THE MENU
     Game_State state = MENU ;
 
-    SDL_Texture* menu_screen = loadTexture("assets/Menu.png", render);
+
+    //SCREENS , OBJECTS AND SOUND TO RENDER OR REPRODUCE
+    SDL_Texture* menu_screen = loadTexture("assets/Menu_pixel_art.png", render);
     SDL_Texture* how_to_play_screen = loadTexture("assets/How_to_play.png", render);
+    SDL_Texture* gamemode_screen = loadTexture("assets/GameMode_Selection.png", render);
+    SDL_Texture* teamselection_screen= loadTexture("assets/Team_Selection.png", render);
+    Mix_Chunk* select_sound = Mix_LoadWAV("assets/select.ogg");
+    Mix_Chunk* tick_sound = Mix_LoadWAV("assets/tick.ogg");
+    Mix_Chunk* back_sound = Mix_LoadWAV("assets/back.ogg");
+    if(!menu_screen || !how_to_play_screen || !gamemode_screen || !teamselection_screen || !select_sound || !tick_sound || !back_sound ){
+        printf("Error, unable to load some assets . Exiting...");
+        exit(10);
+    }
 
 
     while(!quit){
@@ -81,7 +97,7 @@ int main(){
             if(event.type == SDL_QUIT){
                 quit = 1;
             }
-            //Here we manage the input from the player.
+            //Here we manage the input from the player and render in the window everything.
             
             switch(state){
 
@@ -95,16 +111,19 @@ int main(){
                         int y = event.button.y ;
 
                         //WHERE?
-                        if( x >= Button_PLAY.x && x <= Button_PLAY.x + Button_PLAY.w && y >= Button_PLAY.y && y <= Button_PLAY.y + Button_PLAY.h){
+                        if( x >= Button_START.x && x <= Button_START.x + Button_START.w && y >= Button_START.y && y <= Button_START.y + Button_START.h){
                             //Go to the next part , the GAME MODE SELECTION SCREEN.
+                            Mix_PlayChannel(-1 , select_sound , 0);
                             state = GAMEMODE_SELECTION;
                         }
                         else if( x >= Button_HOWTOPLAY.x && x <= Button_HOWTOPLAY.x + Button_HOWTOPLAY.w && y >= Button_HOWTOPLAY.y && y <= Button_HOWTOPLAY.y + Button_HOWTOPLAY.h){
                             //Go to the next part , the GAME MODE SELECTION SCREEN.
+                            Mix_PlayChannel(-1 , select_sound , 0);                            
                             state = HOW_TO_PLAY;
                         }
-                        else if( x >= Button_EXIT.x && x <= Button_EXIT.x + Button_EXIT.w && y >= Button_EXIT.y && y <= Button_EXIT.y + Button_EXIT.h){
+                        else if( x >= Button_QUIT.x && x <= Button_QUIT.x + Button_QUIT.w && y >= Button_QUIT.y && y <= Button_QUIT.y + Button_QUIT.h){
                             //Exit the Game.
+                            Mix_PlayChannel(-1 , select_sound , 0);
                             quit = -1 ;
                         }
 
@@ -115,10 +134,55 @@ int main(){
                     break;
                 
                 case GAMEMODE_SELECTION :
-                    quit = -1; //Currently only exiting the game.
+                    SDL_RenderClear(render);
+                    SDL_RenderCopy(render , gamemode_screen , NULL , NULL);
+                    SDL_RenderPresent(render);
+                    //Clicked?
+                    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                        int x = event.button.x ;
+                        int y = event.button.y ;
+
+                        //WHERE?
+                        if( x >= Button_SelectPVP.x && x <= Button_SelectPVP.x + Button_SelectPVP.w && y >= Button_SelectPVP.y && y <= Button_SelectPVP.y + Button_SelectPVP.h){
+                            //Go to the next part , the TEAM SELECTION SCREEN.
+                            Mix_PlayChannel(-1 , select_sound , 0);
+                            state = TEAM_SELECTION;
+                        }
+                        else if( x >= Button_SelectPVB.x && x <= Button_SelectPVB.x + Button_SelectPVB.w && y >= Button_SelectPVB.y && y <= Button_SelectPVB.y + Button_SelectPVB.h){
+                            //Go to the next part , the TEAM SELECTION SCREEN.
+                            Mix_PlayChannel(-1 , select_sound , 0);
+                            state = TEAM_SELECTION;
+                        }
+                        else if( x >= Button_MAINMENU_FROM_SELECTION_HTP.x && x <= Button_MAINMENU_FROM_SELECTION_HTP.x + Button_MAINMENU_FROM_SELECTION_HTP.w && y >= Button_MAINMENU_FROM_SELECTION_HTP.y && y <= Button_MAINMENU_FROM_SELECTION_HTP.y + Button_MAINMENU_FROM_SELECTION_HTP.h){
+                            Mix_PlayChannel(-1 , back_sound , 0);
+                            state = MENU;
+                        }
+
+
+
+                    }
+
                     break;
                 
                 case TEAM_SELECTION :
+                    SDL_RenderClear(render);
+                    SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                    SDL_RenderPresent(render);
+                    Fighter TEAM1[4];
+                    Fighter TEAM2[4];
+                    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                        int x = event.button.x ;
+                        int y = event.button.y ;
+
+                        //WHERE?
+                        if( x >= Left_Key_Logos.x && x <= Left_Key_Logos.x + Left_Key_Logos.w && y >= Left_Key_Logos.y && y <= Left_Key_Logos.y + Left_Key_Logos.h){
+                            Mix_PlayChannel(-1 , back_sound , 0);
+                            state = GAMEMODE_SELECTION;
+                        }
+
+
+
+                    }
 
                     break;
                 
@@ -134,6 +198,18 @@ int main(){
                     SDL_RenderClear(render);
                     SDL_RenderCopy(render , how_to_play_screen , NULL , NULL);
                     SDL_RenderPresent(render);
+                    //CLICKED?
+                    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                        int x = event.button.x ;
+                        int y = event.button.y ;
+                        //WHERE?
+                        if( x >= Button_MAINMENU_FROM_SELECTION_HTP.x && x <= Button_MAINMENU_FROM_SELECTION_HTP.x + Button_MAINMENU_FROM_SELECTION_HTP.w && y >= Button_MAINMENU_FROM_SELECTION_HTP.y && y <= Button_MAINMENU_FROM_SELECTION_HTP.y + Button_MAINMENU_FROM_SELECTION_HTP.h){
+                            Mix_PlayChannel(-1 , back_sound , 0);
+                            state = MENU;
+                        }
+
+                    }
+
                     break;
 
             }
