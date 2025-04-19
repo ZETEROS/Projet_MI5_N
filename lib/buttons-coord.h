@@ -9,7 +9,7 @@
 SDL_Rect Button_START = {509 , 404 , 259 , 55};
 SDL_Rect Button_HOWTOPLAY = {509 , 478 , 259 , 55};
 SDL_Rect Button_QUIT = {509 , 553 , 259 , 55};
-SDL_Rect Button_MAINMENU_FROM_SELECTION_HTP = {1120 , 670 , 267 , 67};
+SDL_Rect Button_MAINMENU_FROM_SELECTION_HTP = {987 , 637 , 267 , 67};
 
 //TEAM SELECTION - LOGOS COORD
 SDL_Rect Logo_John_Wick = {107 , 193 , 90 , 90};
@@ -21,18 +21,18 @@ SDL_Rect Logo_Demolisher = {717 , 193 , 90 , 90};
 SDL_Rect Logo_Lifeline = {844 , 193 , 90 , 90};
 SDL_Rect Logo_Dracula = {964 , 193 , 90 , 90};
 SDL_Rect Logo_Medic = {1085 , 193 , 90 , 90};
-SDL_Rect Left_Key_Logos = {43 , 54 , 57 , 57};
+SDL_Rect Left_Key_Logos = {15 , 26 , 57 , 57};
 //Members of team 1 
-SDL_Rect 1_TeamMember1 = {34 , 571 , 90 , 90};
-SDL_Rect 1_TeamMember2 = {154 , 571 , 90 , 90};
-SDL_Rect 1_TeamMember3 = {275 , 571 , 90 , 90};
-SDL_Rect 1_TeamMember4 = {396 , 571 , 90 , 90};
+SDL_Rect Team1_Member1 = {34 , 571 , 90 , 90};
+SDL_Rect Team1_Member2 = {154 , 571 , 90 , 90};
+SDL_Rect Team1_Member3 = {275 , 571 , 90 , 90};
+SDL_Rect Team1_Member4 = {396 , 571 , 90 , 90};
 
 //Members of team 2
-SDL_Rect 2_TeamMember1 = {785 , 571 , 90 , 90};
-SDL_Rect 2_TeamMember2 = {905 , 571 , 90 , 90};
-SDL_Rect 2_TeamMember3 = {1026 , 571 , 90 , 90};
-SDL_Rect 2_TeamMember4 = {1147 , 571 , 90 , 90};
+SDL_Rect Team2_Member1 = {785 , 571 , 90 , 90};
+SDL_Rect Team2_Member2 = {905 , 571 , 90 , 90};
+SDL_Rect Team2_Member3 = {1026 , 571 , 90 , 90};
+SDL_Rect Team2_Member4 = {1147 , 571 , 90 , 90};
 
 
 SDL_Rect Button_SelectPVP = {230 , 472 , 267 , 67};
