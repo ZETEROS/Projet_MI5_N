@@ -83,14 +83,22 @@ int main(){
     SDL_Texture* how_to_play_screen = loadTexture("assets/How_to_play.png", render);
     SDL_Texture* gamemode_screen = loadTexture("assets/GameMode_Selection.png", render);
     SDL_Texture* teamselection_screen= loadTexture("assets/Team_Selection.png", render);
+    SDL_Texture* blink_turn= loadTexture("assets/yourturn.png", render);
+    SDL_Texture* ready_pressed= loadTexture("assets/readypressed.png", render);
+    
     Mix_Chunk* select_sound = Mix_LoadWAV("assets/select.ogg");
     Mix_Chunk* tick_sound = Mix_LoadWAV("assets/tick.ogg");
     Mix_Chunk* back_sound = Mix_LoadWAV("assets/back.ogg");
-    if(!menu_screen || !how_to_play_screen || !gamemode_screen || !teamselection_screen || !select_sound || !tick_sound || !back_sound ){
+    Mix_Music* menu_music = Mix_LoadMUS("assets/Stray_Cat.ogg");
+    Mix_Music* combat_music = Mix_LoadMUS("assets/The_Trial.ogg");
+
+    if(!menu_screen || !how_to_play_screen || !gamemode_screen || !teamselection_screen || !select_sound || !tick_sound || !back_sound || !combat_music || !menu_music ){
         printf("Error, unable to load some assets . Exiting...");
         exit(10);
     }
 
+    int currentMusic = -1 ; // 0 : menu , 1 : fight music , -1 : none 
+    int current_team = 1;
 
     while(!quit){
         while(SDL_PollEvent(&event)){
@@ -105,6 +113,12 @@ int main(){
                     SDL_RenderClear(render);
                     SDL_RenderCopy(render , menu_screen , NULL , NULL);
                     SDL_RenderPresent(render);
+                    //music ON:
+                    if(currentMusic != 0){
+                        Mix_HaltMusic();
+                        Mix_PlayMusic(menu_music , -1);
+                        currentMusic = 0;
+                    }
                     //Clicked?
                     if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                         int x = event.button.x ;
@@ -137,6 +151,12 @@ int main(){
                     SDL_RenderClear(render);
                     SDL_RenderCopy(render , gamemode_screen , NULL , NULL);
                     SDL_RenderPresent(render);
+                    //Music on?
+                    if(currentMusic != 0){
+                        Mix_HaltMusic();
+                        Mix_PlayMusic(menu_music , -1);
+                        currentMusic = 0;
+                    }
                     //Clicked?
                     if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                         int x = event.button.x ;
@@ -165,29 +185,83 @@ int main(){
                     break;
                 
                 case TEAM_SELECTION :
-                    SDL_RenderClear(render);
-                    SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
-                    SDL_RenderPresent(render);
-                    Fighter TEAM1[4];
-                    Fighter TEAM2[4];
-                    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
-                        int x = event.button.x ;
-                        int y = event.button.y ;
 
-                        //WHERE?
-                        if( x >= Left_Key_Logos.x && x <= Left_Key_Logos.x + Left_Key_Logos.w && y >= Left_Key_Logos.y && y <= Left_Key_Logos.y + Left_Key_Logos.h){
-                            Mix_PlayChannel(-1 , back_sound , 0);
-                            state = GAMEMODE_SELECTION;
+                    //Fighting music on:
+                    if(currentMusic != 1){
+                        Mix_HaltMusic();
+                        Mix_PlayMusic(combat_music , -1);
+                        currentMusic = 1;
+                    }
+
+                    
+
+                    if(current_team == 1){
+                        SDL_RenderClear(render);
+                        SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                        SDL_RenderCopy(render , blink_turn , NULL , &yourturn1);
+                        SDL_RenderPresent(render);
+
+                        if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                            int x = event.button.x ;
+                            int y = event.button.y ;
+
+
+                            //WHERE?
+                            if( x >= Left_Key_Logos.x && x <= Left_Key_Logos.x + Left_Key_Logos.w && y >= Left_Key_Logos.y && y <= Left_Key_Logos.y + Left_Key_Logos.h){
+                                Mix_PlayChannel(-1 , back_sound , 0);
+                                state = GAMEMODE_SELECTION;
+                            }
+                            else if( x >= ready1.x && x <= ready1.x + ready1.w && y >= ready1.y && y <= ready1.y + ready1.h){
+                                Mix_PlayChannel(-1 , select_sound , 0);
+                                SDL_RenderCopy(render , ready_pressed , NULL , &ready1);
+                                SDL_RenderPresent(render);
+                                current_team = 2;
+                            }
+
+
+
                         }
+                    }
+                    if(current_team == 2){
+                        SDL_RenderClear(render);
+                        SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                        SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
+                        SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
+                        SDL_RenderPresent(render);
+
+                        if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                            int x = event.button.x ;
+                            int y = event.button.y ;
 
 
+                            //WHERE?
+                            if( x >= Left_Key_Logos.x && x <= Left_Key_Logos.x + Left_Key_Logos.w && y >= Left_Key_Logos.y && y <= Left_Key_Logos.y + Left_Key_Logos.h){
+                                Mix_PlayChannel(-1 , back_sound , 0);
+                                current_team = 1;
+                                state = GAMEMODE_SELECTION;
+                            }
+                            else if( x >= ready2.x && x <= ready2.x + ready2.w && y >= ready2.y && y <= ready2.y + ready2.h){
+                                Mix_PlayChannel(-1 , select_sound , 0);
+                                SDL_RenderClear(render);
+                                SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                                SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
+                                SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
+                                SDL_RenderCopy(render , ready_pressed , NULL , &ready2);
+                                SDL_RenderPresent(render);
+                                current_team = 1;
+                                state= FIGHT;
+                            }
+
+
+
+                        }
 
                     }
 
                     break;
                 
                 case FIGHT:
-
+                    state = GAMEMODE_SELECTION;
                     break;
                 
                 case END_GAME:
@@ -198,6 +272,12 @@ int main(){
                     SDL_RenderClear(render);
                     SDL_RenderCopy(render , how_to_play_screen , NULL , NULL);
                     SDL_RenderPresent(render);
+                    //Music on?
+                    if(currentMusic != 0){
+                        Mix_HaltMusic();
+                        Mix_PlayMusic(menu_music , -1);
+                        currentMusic = 0;
+                    }
                     //CLICKED?
                     if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                         int x = event.button.x ;
