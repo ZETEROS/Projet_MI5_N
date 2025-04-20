@@ -22,17 +22,25 @@ SDL_Rect Logo_Lifeline = {844 , 193 , 90 , 90};
 SDL_Rect Logo_Dracula = {964 , 193 , 90 , 90};
 SDL_Rect Logo_Medic = {1085 , 193 , 90 , 90};
 SDL_Rect Left_Key_Logos = {15 , 26 , 57 , 57};
-//Members of team 1 
-SDL_Rect Team1_Member1 = {34 , 571 , 90 , 90};
-SDL_Rect Team1_Member2 = {154 , 571 , 90 , 90};
-SDL_Rect Team1_Member3 = {275 , 571 , 90 , 90};
-SDL_Rect Team1_Member4 = {396 , 571 , 90 , 90};
+//team 1 
+SDL_Rect Team1_Member1 = {34 , 603 , 90 , 90};
+SDL_Rect Team1_Member2 = {154 , 603 , 90 , 90};
+SDL_Rect Team1_Member3 = {275 , 603 , 90 , 90};
+SDL_Rect Team1_Member4 = {396 , 603 , 90 , 90};
+SDL_Rect coins1 = {466 , 518 , 76 , 36};
+SDL_Rect ready1 = {167 , 667 , 187 , 39};
+SDL_Rect yourturn1 = {184 , 357 , 169 , 33};
 
-//Members of team 2
-SDL_Rect Team2_Member1 = {785 , 571 , 90 , 90};
-SDL_Rect Team2_Member2 = {905 , 571 , 90 , 90};
-SDL_Rect Team2_Member3 = {1026 , 571 , 90 , 90};
-SDL_Rect Team2_Member4 = {1147 , 571 , 90 , 90};
+
+//team 2
+SDL_Rect Team2_Member1 = {785 , 603 , 90 , 90};
+SDL_Rect Team2_Member2 = {905 , 603 , 90 , 90};
+SDL_Rect Team2_Member3 = {1026 , 603 , 90 , 90};
+SDL_Rect Team2_Member4 = {1147 , 603 , 90 , 90};
+SDL_Rect coins2 = {690 , 518 , 76 , 36};
+SDL_Rect ready2 = {918 , 667 , 187 , 39};
+SDL_Rect yourturn2 = {926 , 357 , 169 , 33};
+
 
 
 SDL_Rect Button_SelectPVP = {230 , 472 , 267 , 67};
