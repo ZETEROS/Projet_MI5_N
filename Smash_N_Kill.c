@@ -1,9 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
 #include "lib/structure.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "lib/buttons-coord.h"
 
@@ -16,7 +19,7 @@
 SDL_Texture* loadTexture(char* path , SDL_Renderer* renderer){
     SDL_Surface* surface = IMG_Load(path);
     if (!surface){
-        printf("Image not found.\n");
+        printf("Image not found.\n%s\n",IMG_GetError());
         return NULL;
     }
     SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer , surface);
@@ -25,9 +28,43 @@ SDL_Texture* loadTexture(char* path , SDL_Renderer* renderer){
 
 }
 
+int coins_giver(){
+    int coins = 100 + rand() % 101 ;
+    return coins; 
+}
+void rendercoins(SDL_Renderer* renderer, int coin, SDL_Rect* pos, int size, SDL_Color color) {
+    int x = pos->x ;
+    int y = pos->y ;
+    char coin_text[10];
+    sprintf(coin_text , "%d", coin);
+    TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", size);
+    if (!font) {
+    printf("Failed to load font: %s\n", TTF_GetError());
+    exit(1);
+    } 
+    SDL_Surface* surface = TTF_RenderText_Solid(font, coin_text, color); 
+    if (!surface) {
+        printf("Text surface error: %s\n", TTF_GetError());
+        return;
+    }
 
-int main(){
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!texture) {
+        printf("Text texture error: %s\n", SDL_GetError());
+        SDL_FreeSurface(surface);
+        return;
+    }
 
+    SDL_RenderCopy(renderer, texture, NULL, pos);
+
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+}
+
+
+int main(int argc , char** argv){
+    (void)argc;
+    (void)argv;
     //STARTING SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0 ){
         printf("Error, unable to start SDL.\n%s",SDL_GetError());
@@ -40,6 +77,10 @@ int main(){
     if ( Mix_OpenAudio(44100 , MIX_DEFAULT_FORMAT , 2 , 2048) < 0){
         printf("Error , couldnt open the mixer.\n%s",Mix_GetError());
         exit(3);
+    }
+    if (TTF_Init() == -1) {
+        printf("Error initializing SDL_ttf: %s\n", TTF_GetError());
+        exit(1);
     }
 
     //Create Window
@@ -58,6 +99,8 @@ int main(){
         exit(5);
     }
 
+    //
+    srand(time(NULL));
 
     //GAME RUNNING
     int quit = 0 ;
@@ -99,6 +142,8 @@ int main(){
 
     int currentMusic = -1 ; // 0 : menu , 1 : fight music , -1 : none 
     int current_team = 1;
+    int team1_coins = 0;
+    int team2_coins = 0;
 
     while(!quit){
         while(SDL_PollEvent(&event)){
@@ -116,7 +161,7 @@ int main(){
                     //music ON:
                     if(currentMusic != 0){
                         Mix_HaltMusic();
-                        Mix_PlayMusic(menu_music , -1);
+                        Mix_FadeInMusic(menu_music,-1 , 6000);
                         currentMusic = 0;
                     }
                     //Clicked?
@@ -154,7 +199,7 @@ int main(){
                     //Music on?
                     if(currentMusic != 0){
                         Mix_HaltMusic();
-                        Mix_PlayMusic(menu_music , -1);
+                        Mix_FadeInMusic(menu_music,-1 , 3000);
                         currentMusic = 0;
                     }
                     //Clicked?
@@ -189,18 +234,23 @@ int main(){
                     //Fighting music on:
                     if(currentMusic != 1){
                         Mix_HaltMusic();
-                        Mix_PlayMusic(combat_music , -1);
+                        Mix_FadeInMusic(combat_music,-1 , 5000);
+                        //Mix_PlayMusic(combat_music , -1);
                         currentMusic = 1;
                     }
+                    SDL_Color dark_gray = { 70 , 70 , 70};
 
-                    
-
+                    if(team1_coins == 0 && team2_coins == 0){
+                        team1_coins = coins_giver();
+                        team2_coins = coins_giver();
+                    }
                     if(current_team == 1){
                         SDL_RenderClear(render);
                         SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                        rendercoins(render , team1_coins , &coins1 , 40 , dark_gray);
                         SDL_RenderCopy(render , blink_turn , NULL , &yourturn1);
                         SDL_RenderPresent(render);
-
+                        //Clicked?
                         if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                             int x = event.button.x ;
                             int y = event.button.y ;
@@ -212,6 +262,7 @@ int main(){
                                 state = GAMEMODE_SELECTION;
                             }
                             else if( x >= ready1.x && x <= ready1.x + ready1.w && y >= ready1.y && y <= ready1.y + ready1.h){
+
                                 Mix_PlayChannel(-1 , select_sound , 0);
                                 SDL_RenderCopy(render , ready_pressed , NULL , &ready1);
                                 SDL_RenderPresent(render);
@@ -225,6 +276,8 @@ int main(){
                     if(current_team == 2){
                         SDL_RenderClear(render);
                         SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                        rendercoins(render , team1_coins , &coins1 , 40 , dark_gray);
+                        rendercoins(render , team2_coins , &coins2 , 40 , dark_gray);
                         SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
                         SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
                         SDL_RenderPresent(render);
@@ -275,7 +328,7 @@ int main(){
                     //Music on?
                     if(currentMusic != 0){
                         Mix_HaltMusic();
-                        Mix_PlayMusic(menu_music , -1);
+                        Mix_FadeInMusic(menu_music,-1 , 3000);
                         currentMusic = 0;
                     }
                     //CLICKED?
