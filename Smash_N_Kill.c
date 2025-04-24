@@ -2,64 +2,26 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "lib/structure.h"
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "lib/structure.h"
 #include "lib/buttons-coord.h"
+#include "lib/special_attacks_list.h"
+#include "lib/renderingfonctions.h"
 
 //Dimensions
 #define WIDTH 1280
 #define HEIGHT 720
 
-//LoadTexture or Images
-
-SDL_Texture* loadTexture(char* path , SDL_Renderer* renderer){
-    SDL_Surface* surface = IMG_Load(path);
-    if (!surface){
-        printf("Image not found.\n%s\n",IMG_GetError());
-        return NULL;
-    }
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer , surface);
-    SDL_FreeSurface(surface);
-    return texture;
-
-}
-
 int coins_giver(){
     int coins = 100 + rand() % 101 ;
     return coins; 
 }
-void rendercoins(SDL_Renderer* renderer, int coin, SDL_Rect* pos, int size, SDL_Color color) {
-    int x = pos->x ;
-    int y = pos->y ;
-    char coin_text[10];
-    sprintf(coin_text , "%d", coin);
-    TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", size);
-    if (!font) {
-    printf("Failed to load font: %s\n", TTF_GetError());
-    exit(1);
-    } 
-    SDL_Surface* surface = TTF_RenderText_Solid(font, coin_text, color); 
-    if (!surface) {
-        printf("Text surface error: %s\n", TTF_GetError());
-        return;
-    }
 
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    if (!texture) {
-        printf("Text texture error: %s\n", SDL_GetError());
-        SDL_FreeSurface(surface);
-        return;
-    }
-
-    SDL_RenderCopy(renderer, texture, NULL, pos);
-
-    SDL_FreeSurface(surface);
-    SDL_DestroyTexture(texture);
-}
 
 
 int main(int argc , char** argv){
@@ -128,14 +90,28 @@ int main(int argc , char** argv){
     SDL_Texture* teamselection_screen= loadTexture("assets/Team_Selection.png", render);
     SDL_Texture* blink_turn= loadTexture("assets/yourturn.png", render);
     SDL_Texture* ready_pressed= loadTexture("assets/readypressed.png", render);
-    
+    SDL_Texture* Info_JohnWick = loadTexture("assets/Info_JohnWick.png", render);
+    SDL_Texture* Info_Sans = loadTexture("assets/Info_Sans.png", render);
+    SDL_Texture* Info_Batman = loadTexture("assets/Info_Batman.png", render);
+
     Mix_Chunk* select_sound = Mix_LoadWAV("assets/select.ogg");
     Mix_Chunk* tick_sound = Mix_LoadWAV("assets/tick.ogg");
     Mix_Chunk* back_sound = Mix_LoadWAV("assets/back.ogg");
     Mix_Music* menu_music = Mix_LoadMUS("assets/Stray_Cat.ogg");
     Mix_Music* combat_music = Mix_LoadMUS("assets/The_Trial.ogg");
 
-    if(!menu_screen || !how_to_play_screen || !gamemode_screen || !teamselection_screen || !select_sound || !tick_sound || !back_sound || !combat_music || !menu_music ){
+    Fighter John_Wick = importandassign("Fighters/John_Wick");
+    Fighter Sans = importandassign("Fighters/Sans");
+    Fighter Batman = importandassign("Fighters/Batman");
+    Fighter Hulk = importandassign("Fighters/Hulk");
+    Fighter Snorlax = importandassign("Fighters/Snorlax");
+    Fighter Demolisher = importandassign("Fighters/Demolisher");
+    Fighter Lifeline = importandassign("Fighters/Lifeline");
+    Fighter Dracula = importandassign("Fighters/Dracula");
+    Fighter Medic = importandassign("Fighters/The_Medic");
+    
+    show_stats(John_Wick);
+    if(!menu_screen || !how_to_play_screen || !gamemode_screen || !teamselection_screen || !select_sound || !tick_sound || !back_sound || !combat_music || !menu_music || !&John_Wick){
         printf("Error, unable to load some assets . Exiting...");
         exit(10);
     }
@@ -271,6 +247,25 @@ int main(int argc , char** argv){
 
 
 
+                        }
+                        //Right Clicked?
+                        else if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT){
+                            int x = event.button.x ;
+                            int y = event.button.y ;
+                            //Where?
+                            if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
+                                showinfoandstats(render , Info_JohnWick , &John_Wick, tick_sound , teamselection_screen , team1_coins , blink_turn);
+                            }
+                            else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
+                                showinfoandstats(render , Info_Sans , &Sans, tick_sound , teamselection_screen , team1_coins , blink_turn);
+                            }
+                            else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
+                                showinfoandstats(render , Info_Batman , &Batman, tick_sound , teamselection_screen , team1_coins , blink_turn);
+                            }
+
+                            
+                            
+                            
                         }
                     }
                     if(current_team == 2){
