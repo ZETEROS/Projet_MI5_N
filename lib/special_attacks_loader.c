@@ -9,6 +9,6 @@
 
 void assign_special(Fighter* a){
     if(strcmp(a->special_attack_name , "test")){
-        a->special1 = test ;
+        a->AttackFunction = test ;
     }
 }

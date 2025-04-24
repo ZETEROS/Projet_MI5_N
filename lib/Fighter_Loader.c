@@ -28,9 +28,6 @@ int main(){
     printf("\nName of the file from where to import the fighter:\n");
     scanf("%s",file);
     Fighter a = import(file);
-    show_stats(a);
     assign_special(&a);
-    //Trying special attack!
-    a.special1(&a);
 
 }

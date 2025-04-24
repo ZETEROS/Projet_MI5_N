@@ -41,6 +41,14 @@ SDL_Rect coins2 = {690 , 518 , 76 , 36};
 SDL_Rect ready2 = {918 , 667 , 187 , 39};
 SDL_Rect yourturn2 = {926 , 357 , 169 , 33};
 
+//Stats rendering
+
+SDL_Rect Info_HP = {974 , 193 , 106 , 39};
+SDL_Rect Info_DMG = {974 , 247 , 106 , 39};
+SDL_Rect Info_DEF = {974 , 312 , 106 , 39};
+SDL_Rect Info_DODGE = {974 , 368 , 106 , 39};
+SDL_Rect Info_SPEED = {974 , 424 , 106 , 39};
+
 
 
 SDL_Rect Button_SelectPVP = {230 , 472 , 267 , 67};
