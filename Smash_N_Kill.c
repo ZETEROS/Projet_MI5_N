@@ -48,6 +48,7 @@ int main(int argc , char** argv){
     //Create Window
 
     SDL_Window* Game = SDL_CreateWindow("Smash&Kill", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT , SDL_WINDOW_SHOWN);
+    
     if (!Game){
         printf("Error, unabler to create the window.\n");
         exit(4);
@@ -93,6 +94,21 @@ int main(int argc , char** argv){
     SDL_Texture* Info_JohnWick = loadTexture("assets/Info_JohnWick.png", render);
     SDL_Texture* Info_Sans = loadTexture("assets/Info_Sans.png", render);
     SDL_Texture* Info_Batman = loadTexture("assets/Info_Batman.png", render);
+    SDL_Texture* Info_Hulk = loadTexture("assets/Info_Hulk.png", render);
+    SDL_Texture* Info_Snorlax = loadTexture("assets/Info_Snorlax.png", render);
+    SDL_Texture* Info_Demolisher = loadTexture("assets/Info_Demolisher.png", render);
+    SDL_Texture* Info_Lifeline = loadTexture("assets/Info_Lifeline.png", render);
+    SDL_Texture* Info_Dracula = loadTexture("assets/Info_Dracula.png", render);
+    SDL_Texture* Info_Medic = loadTexture("assets/Info_Medic.png", render);
+    SDL_Texture* Square_JohnWick = loadTexture("assets/Logos/Logo_JohnWick.png", render);
+    SDL_Texture* Square_Sans = loadTexture("assets/Logos/Logo_Sans.png", render);
+    SDL_Texture* Square_Batman = loadTexture("assets/Logos/Logo_Batman.png", render);
+    SDL_Texture* Square_Hulk = loadTexture("assets/Logos/Logo_Hulk.png", render);
+    SDL_Texture* Square_Snorlax = loadTexture("assets/Logos/Logo_Snorlax.png", render);
+    SDL_Texture* Square_Demolisher = loadTexture("assets/Logos/Logo_Demolisher.png", render);
+    SDL_Texture* Square_Lifeline = loadTexture("assets/Logos/Logo_Lifeline.png", render);
+    SDL_Texture* Square_Dracula = loadTexture("assets/Logos/Logo_Dracula.png", render);
+    SDL_Texture* Square_Medic = loadTexture("assets/Logos/Logo_Medic.png", render);
 
     Mix_Chunk* select_sound = Mix_LoadWAV("assets/select.ogg");
     Mix_Chunk* tick_sound = Mix_LoadWAV("assets/tick.ogg");
@@ -110,16 +126,17 @@ int main(int argc , char** argv){
     Fighter Dracula = importandassign("Fighters/Dracula");
     Fighter Medic = importandassign("Fighters/The_Medic");
     
-    show_stats(John_Wick);
-    if(!menu_screen || !how_to_play_screen || !gamemode_screen || !teamselection_screen || !select_sound || !tick_sound || !back_sound || !combat_music || !menu_music || !&John_Wick){
-        printf("Error, unable to load some assets . Exiting...");
-        exit(10);
-    }
 
+    //Initial Values 
     int currentMusic = -1 ; // 0 : menu , 1 : fight music , -1 : none 
     int current_team = 1;
     int team1_coins = 0;
     int team2_coins = 0;
+    int members_team1 = 0;
+    int members_team2 = 0;
+    //TEAMS IN SELECTION PHASE , ALL UN-SELECTED HERE
+    Fighter PRETEAM1[9] = {John_Wick , Sans , Batman , Hulk , Snorlax , Demolisher , Lifeline , Dracula , Medic};
+    Fighter PRETEAM2[9] = {John_Wick , Sans , Batman , Hulk , Snorlax , Demolisher , Lifeline , Dracula , Medic};
 
     while(!quit){
         while(SDL_PollEvent(&event)){
@@ -238,11 +255,26 @@ int main(int argc , char** argv){
                                 state = GAMEMODE_SELECTION;
                             }
                             else if( x >= ready1.x && x <= ready1.x + ready1.w && y >= ready1.y && y <= ready1.y + ready1.h){
-
+                                
                                 Mix_PlayChannel(-1 , select_sound , 0);
                                 SDL_RenderCopy(render , ready_pressed , NULL , &ready1);
                                 SDL_RenderPresent(render);
                                 current_team = 2;
+                            }
+                            else if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
+  /*NEED TO CHECK*/                              if(howmanyselected(PRETEAM1) < 4 && howmanyselected(PRETEAM1)){
+                                    if(PRETEAM1[0].selected == 0){
+                                        PRETEAM1[0].selected = 1 ;
+                                    }
+                                    else if(PRETEAM1[0].selected == 1){
+                                        PRETEAM1[0].selected = 0;
+                                    }
+                                }
+                                else{
+                                    rendermessageTEMP("You need to pick 2 to 4 fighters" , &MessageSelection , render , 2000);
+                                }
+                                
+
                             }
 
 
@@ -254,13 +286,31 @@ int main(int argc , char** argv){
                             int y = event.button.y ;
                             //Where?
                             if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
-                                showinfoandstats(render , Info_JohnWick , &John_Wick, tick_sound , teamselection_screen , team1_coins , blink_turn);
+                                showinfoandstats(render , Info_JohnWick , &John_Wick, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
                             }
                             else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
-                                showinfoandstats(render , Info_Sans , &Sans, tick_sound , teamselection_screen , team1_coins , blink_turn);
+                                showinfoandstats(render , Info_Sans , &Sans, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
                             }
                             else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
-                                showinfoandstats(render , Info_Batman , &Batman, tick_sound , teamselection_screen , team1_coins , blink_turn);
+                                showinfoandstats(render , Info_Batman , &Batman, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Hulk.x && x <= Logo_Hulk.x + Logo_Hulk.w && y >= Logo_Hulk.y && y <= Logo_Hulk.y + Logo_Hulk.h){
+                                showinfoandstats(render , Info_Hulk , &Hulk, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Snorlax.x && x <= Logo_Snorlax.x + Logo_Snorlax.w && y >= Logo_Snorlax.y && y <= Logo_Snorlax.y + Logo_Snorlax.h){
+                                showinfoandstats(render , Info_Snorlax , &Snorlax, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Demolisher.x && x <= Logo_Demolisher.x + Logo_Demolisher.w && y >= Logo_Demolisher.y && y <= Logo_Demolisher.y + Logo_Demolisher.h){
+                                showinfoandstats(render , Info_Demolisher , &Demolisher, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Lifeline.x && x <= Logo_Lifeline.x + Logo_Lifeline.w && y >= Logo_Lifeline.y && y <= Logo_Lifeline.y + Logo_Lifeline.h){
+                                showinfoandstats(render , Info_Lifeline , &Lifeline, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Dracula.x && x <= Logo_Dracula.x + Logo_Dracula.w && y >= Logo_Dracula.y && y <= Logo_Dracula.y + Logo_Dracula.h){
+                                showinfoandstats(render , Info_Dracula , &Dracula, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Medic.x && x <= Logo_Medic.x + Logo_Medic.w && y >= Logo_Medic.y && y <= Logo_Medic.y + Logo_Medic.h){
+                                showinfoandstats(render , Info_Medic , &Medic, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
                             }
 
                             
@@ -303,6 +353,38 @@ int main(int argc , char** argv){
 
 
                         }
+                        //Right Clicked?
+                        else if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT){
+                            int x = event.button.x ;
+                            int y = event.button.y ;
+                            //Where?
+                            if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
+                                showinfoandstats(render , Info_JohnWick , &John_Wick, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
+                                showinfoandstats(render , Info_Sans , &Sans, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
+                                showinfoandstats(render , Info_Batman , &Batman, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Hulk.x && x <= Logo_Hulk.x + Logo_Hulk.w && y >= Logo_Hulk.y && y <= Logo_Hulk.y + Logo_Hulk.h){
+                                showinfoandstats(render , Info_Hulk , &Hulk, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Snorlax.x && x <= Logo_Snorlax.x + Logo_Snorlax.w && y >= Logo_Snorlax.y && y <= Logo_Snorlax.y + Logo_Snorlax.h){
+                                showinfoandstats(render , Info_Snorlax , &Snorlax, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Demolisher.x && x <= Logo_Demolisher.x + Logo_Demolisher.w && y >= Logo_Demolisher.y && y <= Logo_Demolisher.y + Logo_Demolisher.h){
+                                showinfoandstats(render , Info_Demolisher , &Demolisher, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Lifeline.x && x <= Logo_Lifeline.x + Logo_Lifeline.w && y >= Logo_Lifeline.y && y <= Logo_Lifeline.y + Logo_Lifeline.h){
+                                showinfoandstats(render , Info_Lifeline , &Lifeline, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Dracula.x && x <= Logo_Dracula.x + Logo_Dracula.w && y >= Logo_Dracula.y && y <= Logo_Dracula.y + Logo_Dracula.h){
+                                showinfoandstats(render , Info_Dracula , &Dracula, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
+                            else if(x >= Logo_Medic.x && x <= Logo_Medic.x + Logo_Medic.w && y >= Logo_Medic.y && y <= Logo_Medic.y + Logo_Medic.h){
+                                showinfoandstats(render , Info_Medic , &Medic, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            }
 
                     }
 
@@ -348,4 +430,5 @@ int main(int argc , char** argv){
     }
 
 
+    }
 }
