@@ -31,6 +31,7 @@ Fighter importandassign(char* file){
     }
     fread(&a , sizeof(Fighter), 1 , doc);
     fclose(doc);
+    a.selected = 0;
     assign_special(&a);
 
     return a;

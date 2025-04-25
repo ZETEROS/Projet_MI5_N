@@ -6,6 +6,7 @@
 #define BUTTONS_COORD_H
 #include "lib/buttons-coord.h"
 #endif
+#include "structure.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -54,7 +55,7 @@ void rendercoins(SDL_Renderer* renderer, int coin, SDL_Rect* pos, int size, SDL_
     SDL_DestroyTexture(texture);
 }
 
-void showinfoandstats(SDL_Renderer* renderer , SDL_Texture* screen , Fighter* fighter , Mix_Chunk* sound , SDL_Texture* teamselection_screen , int team1_coins , SDL_Texture* blink_turn ){
+void showinfoandstats(SDL_Renderer* renderer , SDL_Texture* screen , Fighter* fighter , Mix_Chunk* sound , SDL_Texture* teamselection_screen , int team1_coins ,int team2_coins, SDL_Texture* blink_turn , SDL_Texture* ready_pressed, int current_team){
     Mix_PlayChannel(-1 , sound , 0);
     SDL_Color dark_grey = {70 , 70 , 70};
     SDL_RenderClear(renderer);
@@ -107,12 +108,68 @@ void showinfoandstats(SDL_Renderer* renderer , SDL_Texture* screen , Fighter* fi
         }
         }
     }
-    Mix_PlayChannel(-1 , sound , 0);
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer , teamselection_screen , NULL , NULL);
-    rendercoins(renderer , team1_coins , &coins1 , 40 , dark_grey);
-    SDL_RenderCopy(renderer , blink_turn , NULL , &yourturn1);
-    SDL_RenderPresent(renderer);
+
+    if (current_team == 1 ){
+        Mix_PlayChannel(-1 , sound , 0);
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer , teamselection_screen , NULL , NULL);
+        rendercoins(renderer , team1_coins , &coins1 , 40 , dark_grey);
+        SDL_RenderCopy(renderer , blink_turn , NULL , &yourturn1);
+        SDL_RenderPresent(renderer);
+    }
+    else if (current_team == 2){
+        SDL_RenderClear(renderer);
+        SDL_RenderCopy(renderer , teamselection_screen , NULL , NULL);
+        rendercoins(renderer , team1_coins , &coins1 , 40 , dark_grey);
+        rendercoins(renderer , team2_coins , &coins2 , 40 , dark_grey);
+        SDL_RenderCopy(renderer , blink_turn , NULL , &yourturn2);
+        SDL_RenderCopy(renderer , ready_pressed , NULL ,&ready1);
+        SDL_RenderPresent(renderer);
+    }
 }
+
+int howmanyselected(Fighter* team ){
+    int num = 0;
+    for (int i= 0 ; i<9 ; i++){
+        if(team[i].selected == 1){
+            num++;
+        }
+        
+    }
+    return num;
+}
+
+void rendermessageTEMP(char* message ,SDL_Rect* pos,  SDL_Renderer* renderer , int timeshowing){
+    SDL_Color color = {255 , 255 , 255};
+    TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 40);
+    if (!font) {
+    printf("Failed to load font: %s\n", TTF_GetError());
+    exit(1);
+    } 
+    SDL_Surface* surface = TTF_RenderText_Solid(font, message, color); 
+    if (!surface) {
+        printf("Text surface error: %s\n", TTF_GetError());
+        return;
+    }
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!texture) {
+        printf("Text texture error: %s\n", SDL_GetError());
+        SDL_FreeSurface(surface);
+        return;
+    }
+
+    SDL_RenderCopy(renderer, texture, NULL, pos);
+    SDL_RenderPresent(renderer);
+    SDL_Delay(timeshowing);
+
+    SDL_FreeSurface(surface);
+    SDL_DestroyTexture(texture);
+}
+
+
+
+
+
 
 #endif

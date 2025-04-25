@@ -15,6 +15,7 @@ struct Fighter {
     //void (*special1)(Fighter* cible);  // Pointeurs vers une fonction
     //void (*special2)(Fighter *cible);  
     //void (*ultimate)(Fighter *cible);  
+    int selected ;
 
 };
 
