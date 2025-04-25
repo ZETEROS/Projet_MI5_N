@@ -34,6 +34,8 @@ Special attack - Drone Heal
 
 Ultimate - Combat Revive
 ➤ Revives a knocked-out ally to 50% HP or heals the entire group by 40 HP
+PROPOSITION BY MOHAMED
+"I think its better to only give one use to this ultimate , reviving a knocked out ally is already a huge advantage and i think its enough."
 
 __________________________________________
 
@@ -74,6 +76,9 @@ Special attack - Drainage
 Ultimate - Collective dodge
 ➤ heals the whole team by 70 hp multiplied by their dodge coefficient
 I'm really not sure about the attacks, but let me know if you think it's too strong/not strong enough.
+PROPOSITION BY MOHAMED :
+Name of the ultimate : BLOODBOUND
+Description : Augments an ally's defense by 30 % as Dracula shares his eternal curse
 
 _____________________________________________
 
