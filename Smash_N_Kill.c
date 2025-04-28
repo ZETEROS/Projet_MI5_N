@@ -85,10 +85,10 @@ int main(int argc , char** argv){
 
 
     //SCREENS , OBJECTS AND SOUND TO RENDER OR REPRODUCE
-    SDL_Texture* menu_screen = loadTexture("assets/Menu_pixel_art.png", render);
-    SDL_Texture* how_to_play_screen = loadTexture("assets/How_to_play.png", render);
-    SDL_Texture* gamemode_screen = loadTexture("assets/GameMode_Selection.png", render);
-    SDL_Texture* teamselection_screen= loadTexture("assets/Team_Selection.png", render);
+    SDL_Texture* menu_screen = loadTexture("assets/menu.png", render);
+    SDL_Texture* how_to_play_screen = loadTexture("assets/how_to_play.png", render);
+    SDL_Texture* gamemode_screen = loadTexture("assets/gamemode_selection.png", render);
+    SDL_Texture* teamselection_screen= loadTexture("assets/team_selection.png", render);
     SDL_Texture* blink_turn= loadTexture("assets/yourturn.png", render);
     SDL_Texture* ready_pressed= loadTexture("assets/readypressed.png", render);
     SDL_Texture* Info_JohnWick = loadTexture("assets/Info_JohnWick.png", render);
