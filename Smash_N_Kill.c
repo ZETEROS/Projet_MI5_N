@@ -119,15 +119,27 @@ int main(int argc , char** argv){
     Mix_Music* menu_music = Mix_LoadMUS("assets/Stray_Cat.ogg");
     Mix_Music* combat_music = Mix_LoadMUS("assets/The_Trial.ogg");
 
-    Fighter John_Wick = importandassign("Fighters/John_Wick");
-    Fighter Sans = importandassign("Fighters/Sans");
-    Fighter Batman = importandassign("Fighters/Batman");
-    Fighter Hulk = importandassign("Fighters/Hulk");
-    Fighter Snorlax = importandassign("Fighters/Snorlax");
-    Fighter Demolisher = importandassign("Fighters/Demolisher");
-    Fighter Lifeline = importandassign("Fighters/Lifeline");
-    Fighter Dracula = importandassign("Fighters/Dracula");
-    Fighter Medic = importandassign("Fighters/The_Medic");
+    //FIGHTERS TEAM 2
+    Fighter John_Wick1 = importandassign("Fighters/John_Wick");
+    Fighter Sans1 = importandassign("Fighters/Sans");
+    Fighter Batman1 = importandassign("Fighters/Batman");
+    Fighter Hulk1 = importandassign("Fighters/Hulk");
+    Fighter Snorlax1 = importandassign("Fighters/Snorlax");
+    Fighter Demolisher1 = importandassign("Fighters/Demolisher");
+    Fighter Lifeline1 = importandassign("Fighters/Lifeline");
+    Fighter Dracula1 = importandassign("Fighters/Dracula");
+    Fighter Medic1 = importandassign("Fighters/The_Medic");
+
+    //FIGHTERS TEAM 2
+    Fighter John_Wick2 = importandassign("Fighters/John_Wick");
+    Fighter Sans2 = importandassign("Fighters/Sans");
+    Fighter Batman2 = importandassign("Fighters/Batman");
+    Fighter Hulk2 = importandassign("Fighters/Hulk");
+    Fighter Snorlax2 = importandassign("Fighters/Snorlax");
+    Fighter Demolisher2 = importandassign("Fighters/Demolisher");
+    Fighter Lifeline2 = importandassign("Fighters/Lifeline");
+    Fighter Dracula2 = importandassign("Fighters/Dracula");
+    Fighter Medic2 = importandassign("Fighters/The_Medic");
     
 
     //Initial Values 
@@ -138,352 +150,358 @@ int main(int argc , char** argv){
     int members_team1 = 0;
     int members_team2 = 0;
     //TEAMS IN SELECTION PHASE , ALL UN-SELECTED HERE
-    Fighter* PRETEAM1[9] = {&John_Wick , &Sans , &Batman , &Hulk , &Snorlax , &Demolisher , &Lifeline , &Dracula , &Medic};
-    Fighter* PRETEAM2[9] = {&John_Wick , &Sans , &Batman , &Hulk , &Snorlax , &Demolisher , &Lifeline , &Dracula , &Medic};
+    Fighter* PRETEAM1[9] = {&John_Wick1 , &Sans1 , &Batman1 , &Hulk1 , &Snorlax1 , &Demolisher1 , &Lifeline1 , &Dracula1 , &Medic1};
+    Fighter* PRETEAM2[9] = {&John_Wick2 , &Sans2 , &Batman2 , &Hulk2 , &Snorlax2 , &Demolisher2 , &Lifeline2 , &Dracula2 , &Medic2};
 
+   
     while(!quit){
         while(SDL_PollEvent(&event)){
-            if(event.type == SDL_QUIT){
-                quit = 1;
-            }
-            //Here we manage the input from the player and render in the window everything.
             
-            switch(state){
-
-                case MENU :
-                    SDL_RenderClear(render);
-                    SDL_RenderCopy(render , menu_screen , NULL , NULL);
-                    SDL_RenderPresent(render);
-                    //music ON:
-                    if(currentMusic != 0){
-                        Mix_HaltMusic();
-                        Mix_FadeInMusic(menu_music,-1 , 6000);
-                        currentMusic = 0;
-                    }
-                    //Clicked?
-                    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
-                        int x = event.button.x ;
-                        int y = event.button.y ;
-
-                        //WHERE?
-                        if( x >= Button_START.x && x <= Button_START.x + Button_START.w && y >= Button_START.y && y <= Button_START.y + Button_START.h){
-                            //Go to the next part , the GAME MODE SELECTION SCREEN.
-                            Mix_PlayChannel(-1 , select_sound , 0);
-                            state = GAMEMODE_SELECTION;
-                        }
-                        else if( x >= Button_HOWTOPLAY.x && x <= Button_HOWTOPLAY.x + Button_HOWTOPLAY.w && y >= Button_HOWTOPLAY.y && y <= Button_HOWTOPLAY.y + Button_HOWTOPLAY.h){
-                            //Go to the next part , the GAME MODE SELECTION SCREEN.
-                            Mix_PlayChannel(-1 , select_sound , 0);                            
-                            state = HOW_TO_PLAY;
-                        }
-                        else if( x >= Button_QUIT.x && x <= Button_QUIT.x + Button_QUIT.w && y >= Button_QUIT.y && y <= Button_QUIT.y + Button_QUIT.h){
-                            //Exit the Game.
-                            Mix_PlayChannel(-1 , select_sound , 0);
-                            quit = -1 ;
-                        }
-
-
-                    }
-
-
-                    break;
+                if(event.type == SDL_QUIT){
+                    quit = 1;
+                }
+                //Here we manage the input from the player and render in the window everything.
                 
-                case GAMEMODE_SELECTION :
-                    SDL_RenderClear(render);
-                    SDL_RenderCopy(render , gamemode_screen , NULL , NULL);
-                    SDL_RenderPresent(render);
-                    //Music on?
-                    if(currentMusic != 0){
-                        Mix_HaltMusic();
-                        Mix_FadeInMusic(menu_music,-1 , 3000);
-                        currentMusic = 0;
-                    }
-                    //Clicked?
-                    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
-                        int x = event.button.x ;
-                        int y = event.button.y ;
+                switch(state){
 
-                        //WHERE?
-                        if( x >= Button_SelectPVP.x && x <= Button_SelectPVP.x + Button_SelectPVP.w && y >= Button_SelectPVP.y && y <= Button_SelectPVP.y + Button_SelectPVP.h){
-                            //Go to the next part , the TEAM SELECTION SCREEN.
-                            Mix_PlayChannel(-1 , select_sound , 0);
-                            state = TEAM_SELECTION;
-                        }
-                        else if( x >= Button_SelectPVB.x && x <= Button_SelectPVB.x + Button_SelectPVB.w && y >= Button_SelectPVB.y && y <= Button_SelectPVB.y + Button_SelectPVB.h){
-                            //Go to the next part , the TEAM SELECTION SCREEN.
-                            Mix_PlayChannel(-1 , select_sound , 0);
-                            state = TEAM_SELECTION;
-                        }
-                        else if( x >= Button_MAINMENU_FROM_SELECTION_HTP.x && x <= Button_MAINMENU_FROM_SELECTION_HTP.x + Button_MAINMENU_FROM_SELECTION_HTP.w && y >= Button_MAINMENU_FROM_SELECTION_HTP.y && y <= Button_MAINMENU_FROM_SELECTION_HTP.y + Button_MAINMENU_FROM_SELECTION_HTP.h){
-                            Mix_PlayChannel(-1 , back_sound , 0);
-                            state = MENU;
-                        }
-
-
-
-                    }
-
-                    break;
-                
-                case TEAM_SELECTION :
-
-                    //Fighting music on:
-                    if(currentMusic != 1){
-                        Mix_HaltMusic();
-                        Mix_FadeInMusic(combat_music,-1 , 5000);
-                        //Mix_PlayMusic(combat_music , -1);
-                        currentMusic = 1;
-                    }
-                    SDL_Color dark_gray = { 70 , 70 , 70};
-
-                    if(team1_coins == 0 && team2_coins == 0){
-                        team1_coins = coins_giver();
-                        team2_coins = coins_giver();
-                    }
-                    if(current_team == 1){
+                    case MENU :
                         SDL_RenderClear(render);
-                        SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
-                        rendercoins(render , team1_coins , &coins1 , 40 , dark_gray);
-                        SDL_RenderCopy(render , blink_turn , NULL , &yourturn1);
-                        renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , current_team);
+                        SDL_RenderCopy(render , menu_screen , NULL , NULL);
                         SDL_RenderPresent(render);
+                        //music ON:
+                        if(currentMusic != 0){
+                            Mix_HaltMusic();
+                            Mix_FadeInMusic(menu_music,-1 , 6000);
+                            currentMusic = 0;
+                        }
                         //Clicked?
                         if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                             int x = event.button.x ;
                             int y = event.button.y ;
 
-
                             //WHERE?
-                            if( x >= Left_Key_Logos.x && x <= Left_Key_Logos.x + Left_Key_Logos.w && y >= Left_Key_Logos.y && y <= Left_Key_Logos.y + Left_Key_Logos.h){
-                                Mix_PlayChannel(-1 , back_sound , 0);
+                            if( x >= Button_START.x && x <= Button_START.x + Button_START.w && y >= Button_START.y && y <= Button_START.y + Button_START.h){
+                                //Go to the next part , the GAME MODE SELECTION SCREEN.
+                                Mix_PlayChannel(-1 , select_sound , 0);
                                 state = GAMEMODE_SELECTION;
                             }
-                            else if( x >= ready1.x && x <= ready1.x + ready1.w && y >= ready1.y && y <= ready1.y + ready1.h){
-                                if(howmanyselected(PRETEAM1) <= 4 && howmanyselected(PRETEAM1) >= 2){
-                                    Mix_PlayChannel(-1 , select_sound , 0);
-                                    SDL_RenderCopy(render , ready_pressed , NULL , &ready1);
-                                    SDL_RenderPresent(render);
-                                    current_team = 2;
-                                    
-                                }
-                                else{
-                                    if(howmanyselected(PRETEAM1) < 2){
-                                        Mix_PlayChannel(-1 , tick_sound , 0);
-                                        rendermessageTEMP("You need to pick at least 2 fighters" , &MessageSelection , render , 2000 , font);
-                                    }
-                                    
-                                }
-                                
+                            else if( x >= Button_HOWTOPLAY.x && x <= Button_HOWTOPLAY.x + Button_HOWTOPLAY.w && y >= Button_HOWTOPLAY.y && y <= Button_HOWTOPLAY.y + Button_HOWTOPLAY.h){
+                                //Go to the next part , the GAME MODE SELECTION SCREEN.
+                                Mix_PlayChannel(-1 , select_sound , 0);                            
+                                state = HOW_TO_PLAY;
                             }
-                            else if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
-  /*NEED TO CHECK*/             addorkickfromteam(PRETEAM1 , render , 0 , font);
+                            else if( x >= Button_QUIT.x && x <= Button_QUIT.x + Button_QUIT.w && y >= Button_QUIT.y && y <= Button_QUIT.y + Button_QUIT.h){
+                                //Exit the Game.
+                                Mix_PlayChannel(-1 , select_sound , 0);
+                                quit = -1 ;
                             }
-                            else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
-                                addorkickfromteam(PRETEAM1 , render , 1 , font);
-                            }
-                            else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
-                                addorkickfromteam(PRETEAM1 , render , 2 , font);
-                            }
-                            else if(x >= Logo_Hulk.x && x <= Logo_Hulk.x + Logo_Hulk.w && y >= Logo_Hulk.y && y <= Logo_Hulk.y + Logo_Hulk.h){
-                                addorkickfromteam(PRETEAM1 , render , 3 , font);
-                            }
-                            else if(x >= Logo_Snorlax.x && x <= Logo_Snorlax.x + Logo_Snorlax.w && y >= Logo_Snorlax.y && y <= Logo_Snorlax.y + Logo_Snorlax.h){
-                                addorkickfromteam(PRETEAM1 , render , 4 , font);
-                            }
-                            else if(x >= Logo_Demolisher.x && x <= Logo_Demolisher.x + Logo_Demolisher.w && y >= Logo_Demolisher.y && y <= Logo_Demolisher.y + Logo_Demolisher.h){
-                                addorkickfromteam(PRETEAM1 , render , 5 , font);
-                            }
-                            else if(x >= Logo_Lifeline.x && x <= Logo_Lifeline.x + Logo_Lifeline.w && y >= Logo_Lifeline.y && y <= Logo_Lifeline.y + Logo_Lifeline.h){
-                                addorkickfromteam(PRETEAM1 , render , 6 , font);
-                            }
-                            else if(x >= Logo_Dracula.x && x <= Logo_Dracula.x + Logo_Dracula.w && y >= Logo_Dracula.y && y <= Logo_Dracula.y + Logo_Dracula.h){
-                                addorkickfromteam(PRETEAM1 , render , 7 , font);
-                            }
-                            else if(x >= Logo_Medic.x && x <= Logo_Medic.x + Logo_Medic.w && y >= Logo_Medic.y && y <= Logo_Medic.y + Logo_Medic.h){
-                                addorkickfromteam(PRETEAM1 , render , 8 , font);
-                            }
-
 
 
                         }
-                        //Right Clicked?
-                        else if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT){
-                            int x = event.button.x ;
-                            int y = event.button.y ;
-                            //Where?
-                            if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
-                                showinfoandstats(render , Info_JohnWick , &John_Wick, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
-                                showinfoandstats(render , Info_Sans , &Sans, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
-                                showinfoandstats(render , Info_Batman , &Batman, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Hulk.x && x <= Logo_Hulk.x + Logo_Hulk.w && y >= Logo_Hulk.y && y <= Logo_Hulk.y + Logo_Hulk.h){
-                                showinfoandstats(render , Info_Hulk , &Hulk, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Snorlax.x && x <= Logo_Snorlax.x + Logo_Snorlax.w && y >= Logo_Snorlax.y && y <= Logo_Snorlax.y + Logo_Snorlax.h){
-                                showinfoandstats(render , Info_Snorlax , &Snorlax, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Demolisher.x && x <= Logo_Demolisher.x + Logo_Demolisher.w && y >= Logo_Demolisher.y && y <= Logo_Demolisher.y + Logo_Demolisher.h){
-                                showinfoandstats(render , Info_Demolisher , &Demolisher, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Lifeline.x && x <= Logo_Lifeline.x + Logo_Lifeline.w && y >= Logo_Lifeline.y && y <= Logo_Lifeline.y + Logo_Lifeline.h){
-                                showinfoandstats(render , Info_Lifeline , &Lifeline, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Dracula.x && x <= Logo_Dracula.x + Logo_Dracula.w && y >= Logo_Dracula.y && y <= Logo_Dracula.y + Logo_Dracula.h){
-                                showinfoandstats(render , Info_Dracula , &Dracula, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Medic.x && x <= Logo_Medic.x + Logo_Medic.w && y >= Logo_Medic.y && y <= Logo_Medic.y + Logo_Medic.h){
-                                showinfoandstats(render , Info_Medic , &Medic, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
 
-                            
-                            
-                            
-                        }
-                    }
-                    if(current_team == 2){
+
+                        break;
+                    
+                    case GAMEMODE_SELECTION :
                         SDL_RenderClear(render);
-                        SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
-                        rendercoins(render , team1_coins , &coins1 , 40 , dark_gray);
-                        rendercoins(render , team2_coins , &coins2 , 40 , dark_gray);
-                        SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
-                        SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
-                        renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , 1);
-                        renderlogoselectedfighters(render , PRETEAM2 ,All_Logos , current_team);
+                        SDL_RenderCopy(render , gamemode_screen , NULL , NULL);
                         SDL_RenderPresent(render);
-
+                        //Music on?
+                        if(currentMusic != 0){
+                            Mix_HaltMusic();
+                            Mix_FadeInMusic(menu_music,-1 , 3000);
+                            currentMusic = 0;
+                        }
+                        //Clicked?
                         if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                             int x = event.button.x ;
                             int y = event.button.y ;
 
-
                             //WHERE?
-                            if( x >= Left_Key_Logos.x && x <= Left_Key_Logos.x + Left_Key_Logos.w && y >= Left_Key_Logos.y && y <= Left_Key_Logos.y + Left_Key_Logos.h){
-                                Mix_PlayChannel(-1 , back_sound , 0);
-                                current_team = 1;
-                                state = GAMEMODE_SELECTION;
-                            }
-                            else if( x >= ready2.x && x <= ready2.x + ready2.w && y >= ready2.y && y <= ready2.y + ready2.h){
+                            if( x >= Button_SelectPVP.x && x <= Button_SelectPVP.x + Button_SelectPVP.w && y >= Button_SelectPVP.y && y <= Button_SelectPVP.y + Button_SelectPVP.h){
+                                //Go to the next part , the TEAM SELECTION SCREEN.
                                 Mix_PlayChannel(-1 , select_sound , 0);
-                                SDL_RenderClear(render);
-                                SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
-                                SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
-                                SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
-                                SDL_RenderCopy(render , ready_pressed , NULL , &ready2);
-                                SDL_RenderPresent(render);
-                                current_team = 1;
-                                state= FIGHT;
+                                state = TEAM_SELECTION;
                             }
-                            else if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
-  /*NEED TO CHECK*/             addorkickfromteam(PRETEAM2 , render , 0, font);
+                            else if( x >= Button_SelectPVB.x && x <= Button_SelectPVB.x + Button_SelectPVB.w && y >= Button_SelectPVB.y && y <= Button_SelectPVB.y + Button_SelectPVB.h){
+                                //Go to the next part , the TEAM SELECTION SCREEN.
+                                Mix_PlayChannel(-1 , select_sound , 0);
+                                state = TEAM_SELECTION;
                             }
-                            else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
-                                addorkickfromteam(PRETEAM2 , render , 1, font);
-                            }
-                            else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
-                                addorkickfromteam(PRETEAM2 , render , 2, font);
-                            }
-                            else if(x >= Logo_Hulk.x && x <= Logo_Hulk.x + Logo_Hulk.w && y >= Logo_Hulk.y && y <= Logo_Hulk.y + Logo_Hulk.h){
-                                addorkickfromteam(PRETEAM2 , render , 3, font);
-                            }
-                            else if(x >= Logo_Snorlax.x && x <= Logo_Snorlax.x + Logo_Snorlax.w && y >= Logo_Snorlax.y && y <= Logo_Snorlax.y + Logo_Snorlax.h){
-                                addorkickfromteam(PRETEAM2 , render , 4, font);
-                            }
-                            else if(x >= Logo_Demolisher.x && x <= Logo_Demolisher.x + Logo_Demolisher.w && y >= Logo_Demolisher.y && y <= Logo_Demolisher.y + Logo_Demolisher.h){
-                                addorkickfromteam(PRETEAM2 , render , 5, font);
-                            }
-                            else if(x >= Logo_Lifeline.x && x <= Logo_Lifeline.x + Logo_Lifeline.w && y >= Logo_Lifeline.y && y <= Logo_Lifeline.y + Logo_Lifeline.h){
-                                addorkickfromteam(PRETEAM2 , render , 6, font);
-                            }
-                            else if(x >= Logo_Dracula.x && x <= Logo_Dracula.x + Logo_Dracula.w && y >= Logo_Dracula.y && y <= Logo_Dracula.y + Logo_Dracula.h){
-                                addorkickfromteam(PRETEAM2 , render , 7, font);
-                            }
-                            else if(x >= Logo_Medic.x && x <= Logo_Medic.x + Logo_Medic.w && y >= Logo_Medic.y && y <= Logo_Medic.y + Logo_Medic.h){
-                                addorkickfromteam(PRETEAM2 , render , 8, font);
+                            else if( x >= Button_MAINMENU_FROM_SELECTION_HTP.x && x <= Button_MAINMENU_FROM_SELECTION_HTP.x + Button_MAINMENU_FROM_SELECTION_HTP.w && y >= Button_MAINMENU_FROM_SELECTION_HTP.y && y <= Button_MAINMENU_FROM_SELECTION_HTP.y + Button_MAINMENU_FROM_SELECTION_HTP.h){
+                                Mix_PlayChannel(-1 , back_sound , 0);
+                                state = MENU;
                             }
 
 
 
                         }
-                        //Right Clicked?
-                        else if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT){
+
+                        break;
+                    
+                    case TEAM_SELECTION :
+
+                        //Fighting music on:
+                        if(currentMusic != 1){
+                            Mix_HaltMusic();
+                            Mix_FadeInMusic(combat_music,-1 , 5000);
+                            //Mix_PlayMusic(combat_music , -1);
+                            currentMusic = 1;
+                        }
+                        SDL_Color dark_gray = { 70 , 70 , 70};
+
+                        if(team1_coins == 0 && team2_coins == 0){
+                            team1_coins = coins_giver();
+                            team2_coins = coins_giver();
+                        }
+                        if(current_team == 1){
+                            SDL_RenderClear(render);
+                            SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                            rendercoins(render , team1_coins , &coins1 , 40 , dark_gray);
+                            SDL_RenderCopy(render , blink_turn , NULL , &yourturn1);
+                            renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , current_team);
+                            SDL_RenderPresent(render);
+                            //Clicked?
+                            if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                                int x = event.button.x ;
+                                int y = event.button.y ;
+
+
+                                //WHERE?
+                                if( x >= Left_Key_Logos.x && x <= Left_Key_Logos.x + Left_Key_Logos.w && y >= Left_Key_Logos.y && y <= Left_Key_Logos.y + Left_Key_Logos.h){
+                                    Mix_PlayChannel(-1 , back_sound , 0);
+                                    unselectallfighters(PRETEAM1 , PRETEAM2);
+                                    state = GAMEMODE_SELECTION;
+                                }
+                                else if( x >= ready1.x && x <= ready1.x + ready1.w && y >= ready1.y && y <= ready1.y + ready1.h){
+                                    if(howmanyselected(PRETEAM1) <= 4 && howmanyselected(PRETEAM1) >= 2){
+                                        Mix_PlayChannel(-1 , select_sound , 0);
+                                        SDL_RenderCopy(render , ready_pressed , NULL , &ready1);
+                                        SDL_RenderPresent(render);
+                                        current_team = 2;
+                                        
+                                    }
+                                    else{
+                                        if(howmanyselected(PRETEAM1) < 2){
+                                            Mix_PlayChannel(-1 , tick_sound , 0);
+                                            rendermessageTEMP("You need to pick at least 2 fighters" , &MessageSelection , render , 2000 , font);
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                                else if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
+    /*NEED TO CHECK*/             addorkickfromteam(PRETEAM1 , render , 0 , font);
+                                }
+                                else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
+                                    addorkickfromteam(PRETEAM1 , render , 1 , font);
+                                }
+                                else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
+                                    addorkickfromteam(PRETEAM1 , render , 2 , font);
+                                }
+                                else if(x >= Logo_Hulk.x && x <= Logo_Hulk.x + Logo_Hulk.w && y >= Logo_Hulk.y && y <= Logo_Hulk.y + Logo_Hulk.h){
+                                    addorkickfromteam(PRETEAM1 , render , 3 , font);
+                                }
+                                else if(x >= Logo_Snorlax.x && x <= Logo_Snorlax.x + Logo_Snorlax.w && y >= Logo_Snorlax.y && y <= Logo_Snorlax.y + Logo_Snorlax.h){
+                                    addorkickfromteam(PRETEAM1 , render , 4 , font);
+                                }
+                                else if(x >= Logo_Demolisher.x && x <= Logo_Demolisher.x + Logo_Demolisher.w && y >= Logo_Demolisher.y && y <= Logo_Demolisher.y + Logo_Demolisher.h){
+                                    addorkickfromteam(PRETEAM1 , render , 5 , font);
+                                }
+                                else if(x >= Logo_Lifeline.x && x <= Logo_Lifeline.x + Logo_Lifeline.w && y >= Logo_Lifeline.y && y <= Logo_Lifeline.y + Logo_Lifeline.h){
+                                    addorkickfromteam(PRETEAM1 , render , 6 , font);
+                                }
+                                else if(x >= Logo_Dracula.x && x <= Logo_Dracula.x + Logo_Dracula.w && y >= Logo_Dracula.y && y <= Logo_Dracula.y + Logo_Dracula.h){
+                                    addorkickfromteam(PRETEAM1 , render , 7 , font);
+                                }
+                                else if(x >= Logo_Medic.x && x <= Logo_Medic.x + Logo_Medic.w && y >= Logo_Medic.y && y <= Logo_Medic.y + Logo_Medic.h){
+                                    addorkickfromteam(PRETEAM1 , render , 8 , font);
+                                }
+
+
+
+                            }
+                            //Right Clicked?
+                            else if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT){
+                                int x = event.button.x ;
+                                int y = event.button.y ;
+                                //Where?
+                                if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
+                                    showinfoandstats(render , Info_JohnWick , &John_Wick1, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
+                                    showinfoandstats(render , Info_Sans , &Sans1, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
+                                    showinfoandstats(render , Info_Batman , &Batman1, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Hulk.x && x <= Logo_Hulk.x + Logo_Hulk.w && y >= Logo_Hulk.y && y <= Logo_Hulk.y + Logo_Hulk.h){
+                                    showinfoandstats(render , Info_Hulk , &Hulk1, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Snorlax.x && x <= Logo_Snorlax.x + Logo_Snorlax.w && y >= Logo_Snorlax.y && y <= Logo_Snorlax.y + Logo_Snorlax.h){
+                                    showinfoandstats(render , Info_Snorlax , &Snorlax1, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Demolisher.x && x <= Logo_Demolisher.x + Logo_Demolisher.w && y >= Logo_Demolisher.y && y <= Logo_Demolisher.y + Logo_Demolisher.h){
+                                    showinfoandstats(render , Info_Demolisher , &Demolisher1, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Lifeline.x && x <= Logo_Lifeline.x + Logo_Lifeline.w && y >= Logo_Lifeline.y && y <= Logo_Lifeline.y + Logo_Lifeline.h){
+                                    showinfoandstats(render , Info_Lifeline , &Lifeline1, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Dracula.x && x <= Logo_Dracula.x + Logo_Dracula.w && y >= Logo_Dracula.y && y <= Logo_Dracula.y + Logo_Dracula.h){
+                                    showinfoandstats(render , Info_Dracula , &Dracula1, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Medic.x && x <= Logo_Medic.x + Logo_Medic.w && y >= Logo_Medic.y && y <= Logo_Medic.y + Logo_Medic.h){
+                                    showinfoandstats(render , Info_Medic , &Medic1, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+
+                                
+                                
+                                
+                            }
+                        }
+                        if(current_team == 2){
+                            SDL_RenderClear(render);
+                            SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                            rendercoins(render , team1_coins , &coins1 , 40 , dark_gray);
+                            rendercoins(render , team2_coins , &coins2 , 40 , dark_gray);
+                            SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
+                            SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
+                            renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , 1);
+                            renderlogoselectedfighters(render , PRETEAM2 ,All_Logos , current_team);
+                            SDL_RenderPresent(render);
+
+                            if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                                int x = event.button.x ;
+                                int y = event.button.y ;
+
+
+                                //WHERE?
+                                if( x >= Left_Key_Logos.x && x <= Left_Key_Logos.x + Left_Key_Logos.w && y >= Left_Key_Logos.y && y <= Left_Key_Logos.y + Left_Key_Logos.h){
+                                    Mix_PlayChannel(-1 , back_sound , 0);
+                                    current_team = 1;
+                                    unselectallfighters(PRETEAM1 , PRETEAM2);
+                                    state = GAMEMODE_SELECTION;
+                                }
+                                else if( x >= ready2.x && x <= ready2.x + ready2.w && y >= ready2.y && y <= ready2.y + ready2.h){
+                                    Mix_PlayChannel(-1 , select_sound , 0);
+                                    SDL_RenderClear(render);
+                                    SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                                    SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
+                                    SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
+                                    SDL_RenderCopy(render , ready_pressed , NULL , &ready2);
+                                    SDL_RenderPresent(render);
+                                    current_team = 1;
+                                    state= FIGHT;
+                                }
+                                else if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
+    /*NEED TO CHECK*/             addorkickfromteam(PRETEAM2 , render , 0, font);
+                                }
+                                else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
+                                    addorkickfromteam(PRETEAM2 , render , 1, font);
+                                }
+                                else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
+                                    addorkickfromteam(PRETEAM2 , render , 2, font);
+                                }
+                                else if(x >= Logo_Hulk.x && x <= Logo_Hulk.x + Logo_Hulk.w && y >= Logo_Hulk.y && y <= Logo_Hulk.y + Logo_Hulk.h){
+                                    addorkickfromteam(PRETEAM2 , render , 3, font);
+                                }
+                                else if(x >= Logo_Snorlax.x && x <= Logo_Snorlax.x + Logo_Snorlax.w && y >= Logo_Snorlax.y && y <= Logo_Snorlax.y + Logo_Snorlax.h){
+                                    addorkickfromteam(PRETEAM2 , render , 4, font);
+                                }
+                                else if(x >= Logo_Demolisher.x && x <= Logo_Demolisher.x + Logo_Demolisher.w && y >= Logo_Demolisher.y && y <= Logo_Demolisher.y + Logo_Demolisher.h){
+                                    addorkickfromteam(PRETEAM2 , render , 5, font);
+                                }
+                                else if(x >= Logo_Lifeline.x && x <= Logo_Lifeline.x + Logo_Lifeline.w && y >= Logo_Lifeline.y && y <= Logo_Lifeline.y + Logo_Lifeline.h){
+                                    addorkickfromteam(PRETEAM2 , render , 6, font);
+                                }
+                                else if(x >= Logo_Dracula.x && x <= Logo_Dracula.x + Logo_Dracula.w && y >= Logo_Dracula.y && y <= Logo_Dracula.y + Logo_Dracula.h){
+                                    addorkickfromteam(PRETEAM2 , render , 7, font);
+                                }
+                                else if(x >= Logo_Medic.x && x <= Logo_Medic.x + Logo_Medic.w && y >= Logo_Medic.y && y <= Logo_Medic.y + Logo_Medic.h){
+                                    addorkickfromteam(PRETEAM2 , render , 8, font);
+                                }
+
+
+
+                            }
+                            //Right Clicked?
+                            else if(event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_RIGHT){
+                                int x = event.button.x ;
+                                int y = event.button.y ;
+                                //Where?
+                                if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
+                                    showinfoandstats(render , Info_JohnWick , &John_Wick2, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
+                                    showinfoandstats(render , Info_Sans , &Sans2, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
+                                    showinfoandstats(render , Info_Batman , &Batman2, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Hulk.x && x <= Logo_Hulk.x + Logo_Hulk.w && y >= Logo_Hulk.y && y <= Logo_Hulk.y + Logo_Hulk.h){
+                                    showinfoandstats(render , Info_Hulk , &Hulk2, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Snorlax.x && x <= Logo_Snorlax.x + Logo_Snorlax.w && y >= Logo_Snorlax.y && y <= Logo_Snorlax.y + Logo_Snorlax.h){
+                                    showinfoandstats(render , Info_Snorlax , &Snorlax2, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Demolisher.x && x <= Logo_Demolisher.x + Logo_Demolisher.w && y >= Logo_Demolisher.y && y <= Logo_Demolisher.y + Logo_Demolisher.h){
+                                    showinfoandstats(render , Info_Demolisher , &Demolisher2, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Lifeline.x && x <= Logo_Lifeline.x + Logo_Lifeline.w && y >= Logo_Lifeline.y && y <= Logo_Lifeline.y + Logo_Lifeline.h){
+                                    showinfoandstats(render , Info_Lifeline , &Lifeline2, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Dracula.x && x <= Logo_Dracula.x + Logo_Dracula.w && y >= Logo_Dracula.y && y <= Logo_Dracula.y + Logo_Dracula.h){
+                                    showinfoandstats(render , Info_Dracula , &Dracula2, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+                                else if(x >= Logo_Medic.x && x <= Logo_Medic.x + Logo_Medic.w && y >= Logo_Medic.y && y <= Logo_Medic.y + Logo_Medic.h){
+                                    showinfoandstats(render , Info_Medic , &Medic2, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                                }
+
+                        }
+
+                        break;
+                    
+                    case FIGHT:
+                        state = GAMEMODE_SELECTION;
+                        break;
+                    
+                    case END_GAME:
+
+                        break;
+                    
+                    case HOW_TO_PLAY:
+                        SDL_RenderClear(render);
+                        SDL_RenderCopy(render , how_to_play_screen , NULL , NULL);
+                        SDL_RenderPresent(render);
+                        //Music on?
+                        if(currentMusic != 0){
+                            Mix_HaltMusic();
+                            Mix_FadeInMusic(menu_music,-1 , 3000);
+                            currentMusic = 0;
+                        }
+                        //CLICKED?
+                        if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                             int x = event.button.x ;
                             int y = event.button.y ;
-                            //Where?
-                            if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
-                                showinfoandstats(render , Info_JohnWick , &John_Wick, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
-                                showinfoandstats(render , Info_Sans , &Sans, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Batman.x && x <= Logo_Batman.x + Logo_Batman.w && y >= Logo_Batman.y && y <= Logo_Batman.y + Logo_Batman.h){
-                                showinfoandstats(render , Info_Batman , &Batman, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Hulk.x && x <= Logo_Hulk.x + Logo_Hulk.w && y >= Logo_Hulk.y && y <= Logo_Hulk.y + Logo_Hulk.h){
-                                showinfoandstats(render , Info_Hulk , &Hulk, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Snorlax.x && x <= Logo_Snorlax.x + Logo_Snorlax.w && y >= Logo_Snorlax.y && y <= Logo_Snorlax.y + Logo_Snorlax.h){
-                                showinfoandstats(render , Info_Snorlax , &Snorlax, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Demolisher.x && x <= Logo_Demolisher.x + Logo_Demolisher.w && y >= Logo_Demolisher.y && y <= Logo_Demolisher.y + Logo_Demolisher.h){
-                                showinfoandstats(render , Info_Demolisher , &Demolisher, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Lifeline.x && x <= Logo_Lifeline.x + Logo_Lifeline.w && y >= Logo_Lifeline.y && y <= Logo_Lifeline.y + Logo_Lifeline.h){
-                                showinfoandstats(render , Info_Lifeline , &Lifeline, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Dracula.x && x <= Logo_Dracula.x + Logo_Dracula.w && y >= Logo_Dracula.y && y <= Logo_Dracula.y + Logo_Dracula.h){
-                                showinfoandstats(render , Info_Dracula , &Dracula, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
-                            }
-                            else if(x >= Logo_Medic.x && x <= Logo_Medic.x + Logo_Medic.w && y >= Logo_Medic.y && y <= Logo_Medic.y + Logo_Medic.h){
-                                showinfoandstats(render , Info_Medic , &Medic, tick_sound , teamselection_screen , team1_coins , team2_coins , blink_turn , ready_pressed , current_team);
+                            //WHERE?
+                            if( x >= Button_MAINMENU_FROM_SELECTION_HTP.x && x <= Button_MAINMENU_FROM_SELECTION_HTP.x + Button_MAINMENU_FROM_SELECTION_HTP.w && y >= Button_MAINMENU_FROM_SELECTION_HTP.y && y <= Button_MAINMENU_FROM_SELECTION_HTP.y + Button_MAINMENU_FROM_SELECTION_HTP.h){
+                                Mix_PlayChannel(-1 , back_sound , 0);
+                                state = MENU;
                             }
 
-                    }
-
-                    break;
-                
-                case FIGHT:
-                    state = GAMEMODE_SELECTION;
-                    break;
-                
-                case END_GAME:
-
-                    break;
-                
-                case HOW_TO_PLAY:
-                    SDL_RenderClear(render);
-                    SDL_RenderCopy(render , how_to_play_screen , NULL , NULL);
-                    SDL_RenderPresent(render);
-                    //Music on?
-                    if(currentMusic != 0){
-                        Mix_HaltMusic();
-                        Mix_FadeInMusic(menu_music,-1 , 3000);
-                        currentMusic = 0;
-                    }
-                    //CLICKED?
-                    if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
-                        int x = event.button.x ;
-                        int y = event.button.y ;
-                        //WHERE?
-                        if( x >= Button_MAINMENU_FROM_SELECTION_HTP.x && x <= Button_MAINMENU_FROM_SELECTION_HTP.x + Button_MAINMENU_FROM_SELECTION_HTP.w && y >= Button_MAINMENU_FROM_SELECTION_HTP.y && y <= Button_MAINMENU_FROM_SELECTION_HTP.y + Button_MAINMENU_FROM_SELECTION_HTP.h){
-                            Mix_PlayChannel(-1 , back_sound , 0);
-                            state = MENU;
                         }
 
-                    }
+                        break;
 
-                    break;
+                }
 
             }
 
+            }
+            
+
         }
-        
-
-    }
 
 
-    }
 }
+
