@@ -128,10 +128,10 @@ void showinfoandstats(SDL_Renderer* renderer , SDL_Texture* screen , Fighter* fi
     }
 }
 
-int howmanyselected(Fighter* team ){
+int howmanyselected(Fighter** team ){
     int num = 0;
     for (int i= 0 ; i<9 ; i++){
-        if(team[i].selected == 1){
+        if(team[i]->selected == 1){
             num++;
         }
         
@@ -139,9 +139,8 @@ int howmanyselected(Fighter* team ){
     return num;
 }
 
-void rendermessageTEMP(char* message ,SDL_Rect* pos,  SDL_Renderer* renderer , int timeshowing){
+void rendermessageTEMP(char* message ,SDL_Rect* pos,  SDL_Renderer* renderer , int timeshowing , TTF_Font* font ){
     SDL_Color color = {255 , 255 , 255};
-    TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 40);
     if (!font) {
     printf("Failed to load font: %s\n", TTF_GetError());
     exit(1);
@@ -161,13 +160,74 @@ void rendermessageTEMP(char* message ,SDL_Rect* pos,  SDL_Renderer* renderer , i
 
     SDL_RenderCopy(renderer, texture, NULL, pos);
     SDL_RenderPresent(renderer);
-    SDL_Delay(timeshowing);
-
+    Uint32 start = SDL_GetTicks();
+    SDL_Event temp_event;
+    while (SDL_GetTicks() - start < timeshowing) {
+        while (SDL_PollEvent(&temp_event)) {
+            // All clicks during the message showing will be treat , this will stop the number of events going up and crash the game || IMPORTANT!!
+        }
+        SDL_Delay(10); // Delay to prevent using all CPU in during the polling 
+    }
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
 }
 
+void renderlogoselectedfighters(SDL_Renderer* render, Fighter** PRETEAM ,SDL_Texture** All_Logos, int team){
+    SDL_Rect* team1_slots[4] = {&Team1_Member1 , &Team1_Member2 , &Team1_Member3 , &Team1_Member4};
+    SDL_Rect* team2_slots[4] = {&Team2_Member1 , &Team2_Member2 , &Team2_Member3 , &Team2_Member4};
+    int s=0;
+    for (int i=0 ; i<9 ; i++){
+        if(PRETEAM[i]->selected == 1){
+            if(team == 1){
+                SDL_RenderCopy(render , All_Logos[i] , NULL , team1_slots[s]);
+                s++;
+            }
+            else if(team == 2){
+                SDL_RenderCopy(render , All_Logos[i] , NULL , team2_slots[s]);
+                s++;
+            }
+                
+        }
+    }
+}
 
+void addorkickfromteam(Fighter** preteam , SDL_Renderer* render , int character, TTF_Font* font ){
+    if(howmanyselected(preteam) <= 4 && howmanyselected(preteam) >= 0){
+            if(preteam[character]->selected == 0 ){
+                if(howmanyselected(preteam) == 4){
+                    rendermessageTEMP("You only can pick 4" , &MessageSelection , render , 2000 , font );
+                }
+                else{
+                    preteam[character]->selected =1 ;
+                }
+            }
+
+            else if(preteam[character]->selected == 1){
+                if(howmanyselected(preteam) == 0){
+                    rendermessageTEMP("Impossible" , &MessageSelection , render , 2000, font );
+                }
+                else{
+                    preteam[character]->selected = 0;
+                }
+                                        
+            }
+    }
+
+    else{
+        rendermessageTEMP("You need to pick 2 to 4 fighters" , &MessageSelection , render , 2000 , font);
+    }
+
+
+}
+
+
+void unselectallfighters(Fighter** PRETEAM1 , Fighter** PRETEAM2){
+
+    for (int i = 0 ; i<9 ; i++){
+        PRETEAM1[i]->selected = 0 ;
+        PRETEAM2[i]->selected = 0 ;
+    }
+}
 
 
 
