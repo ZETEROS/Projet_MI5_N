@@ -261,7 +261,7 @@ int main(int argc , char** argv){
                         if(current_team == 1){
                             SDL_RenderClear(render);
                             SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
-                            rendercoins(render , team1_coins , &coins1 , 40 , dark_gray);
+                            rendercoins(render , team1_coins , &coins1 , 40 , dark_gray, font);
                             SDL_RenderCopy(render , blink_turn , NULL , &yourturn1);
                             renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , current_team);
                             SDL_RenderPresent(render);
@@ -366,8 +366,8 @@ int main(int argc , char** argv){
                         if(current_team == 2){
                             SDL_RenderClear(render);
                             SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
-                            rendercoins(render , team1_coins , &coins1 , 40 , dark_gray);
-                            rendercoins(render , team2_coins , &coins2 , 40 , dark_gray);
+                            rendercoins(render , team1_coins , &coins1 , 40 , dark_gray, font);
+                            rendercoins(render , team2_coins , &coins2 , 40 , dark_gray, font);
                             SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
                             SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
                             renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , 1);
