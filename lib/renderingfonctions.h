@@ -26,16 +26,12 @@ SDL_Texture* loadTexture(char* path , SDL_Renderer* renderer){
 }
 
 
-void rendercoins(SDL_Renderer* renderer, int coin, SDL_Rect* pos, int size, SDL_Color color) {
+void rendercoins(SDL_Renderer* renderer, int coin, SDL_Rect* pos, int size, SDL_Color color , TTF_Font* font) {
     int x = pos->x ;
     int y = pos->y ;
     char coin_text[10];
     sprintf(coin_text , "%d", coin);
-    TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", size);
-    if (!font) {
-    printf("Failed to load font: %s\n", TTF_GetError());
-    exit(1);
-    } 
+    
     SDL_Surface* surface = TTF_RenderText_Solid(font, coin_text, color); 
     if (!surface) {
         printf("Text surface error: %s\n", TTF_GetError());
@@ -108,15 +104,15 @@ void showinfoandstats(SDL_Renderer* renderer , SDL_Texture* screen , Fighter* fi
         Mix_PlayChannel(-1 , sound , 0);
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer , teamselection_screen , NULL , NULL);
-        rendercoins(renderer , team1_coins , &coins1 , 40 , dark_grey);
+        rendercoins(renderer , team1_coins , &coins1 , 40 , dark_grey, font);
         SDL_RenderCopy(renderer , blink_turn , NULL , &yourturn1);
         SDL_RenderPresent(renderer);
     }
     else if (current_team == 2){
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer , teamselection_screen , NULL , NULL);
-        rendercoins(renderer , team1_coins , &coins1 , 40 , dark_grey);
-        rendercoins(renderer , team2_coins , &coins2 , 40 , dark_grey);
+        rendercoins(renderer , team1_coins , &coins1 , 40 , dark_grey , font);
+        rendercoins(renderer , team2_coins , &coins2 , 40 , dark_grey, font);
         SDL_RenderCopy(renderer , blink_turn , NULL , &yourturn2);
         SDL_RenderCopy(renderer , ready_pressed , NULL ,&ready1);
         SDL_RenderPresent(renderer);
