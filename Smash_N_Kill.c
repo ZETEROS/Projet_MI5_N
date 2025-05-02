@@ -255,8 +255,9 @@ int main(int argc , char** argv){
                         SDL_Color dark_gray = { 70 , 70 , 70};
 
                         if(team1_coins == 0 && team2_coins == 0){
-                            team1_coins = coins_giver();
-                            team2_coins = coins_giver();
+                            int coins_temp = coins_giver();
+                            team1_coins = coins_temp;
+                            team2_coins = coins_temp;
                         }
                         if(current_team == 1){
                             SDL_RenderClear(render);
