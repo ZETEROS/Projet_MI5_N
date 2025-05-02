@@ -55,7 +55,7 @@ void rendercoins(SDL_Renderer* renderer, int coin, SDL_Rect* pos, int size, SDL_
     SDL_DestroyTexture(texture);
 }
 
-void showinfoandstats(SDL_Renderer* renderer , SDL_Texture* screen , Fighter* fighter , Mix_Chunk* sound , SDL_Texture* teamselection_screen , int team1_coins ,int team2_coins, SDL_Texture* blink_turn , SDL_Texture* ready_pressed, int current_team){
+void showinfoandstats(SDL_Renderer* renderer , SDL_Texture* screen , Fighter* fighter , Mix_Chunk* sound , SDL_Texture* teamselection_screen , int team1_coins ,int team2_coins, SDL_Texture* blink_turn , SDL_Texture* ready_pressed, int current_team, TTF_Font* font){
     Mix_PlayChannel(-1 , sound , 0);
     SDL_Color dark_grey = {70 , 70 , 70};
     SDL_RenderClear(renderer);
@@ -71,11 +71,6 @@ void showinfoandstats(SDL_Renderer* renderer , SDL_Texture* screen , Fighter* fi
     char* name_stats[5] = {hp , dmg , def , dodge , speed};
     SDL_Rect* list_stats_pos [5] = {&Info_HP , &Info_DMG , &Info_DEF , &Info_DODGE , &Info_SPEED };
 
-    TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 24);
-    if (!font) {
-    printf("Failed to load font: %s\n", TTF_GetError());
-    exit(1);
-    }
     for (int i = 0 ; i<5 ; i++){
         SDL_Surface* surface = TTF_RenderText_Solid(font, name_stats[i], dark_grey);
          
@@ -141,10 +136,6 @@ int howmanyselected(Fighter** team ){
 
 void rendermessageTEMP(char* message ,SDL_Rect* pos,  SDL_Renderer* renderer , int timeshowing , TTF_Font* font ){
     SDL_Color color = {255 , 255 , 255};
-    if (!font) {
-    printf("Failed to load font: %s\n", TTF_GetError());
-    exit(1);
-    } 
     SDL_Surface* surface = TTF_RenderText_Solid(font, message, color); 
     if (!surface) {
         printf("Text surface error: %s\n", TTF_GetError());
