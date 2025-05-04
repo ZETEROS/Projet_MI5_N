@@ -515,6 +515,9 @@ int main(int argc , char** argv){
                         SDL_RenderCopy(render , visuals[2] , NULL , &Team1_Fighter3);*/
                         renderfighters(render, team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
                         SDL_RenderPresent(render);
+                        /*while(someonealive(team1 , howmanyselected(PRETEAM1)) && someonealive(team2 , howmanyselected(PRETEAM2))){
+
+                        }*/
 
                         
                         
