@@ -276,7 +276,12 @@ void renderfighters(SDL_Renderer* render, Fighter* Team1 , Fighter* Team2 , int 
     
     for (int i = 0; i < team1_count; i++) {
         if (Team1[i].model != NULL) {
-            SDL_RenderCopy(render, Team1[i].model, NULL, team1_slots[i]);
+            if(Team1[i].hp > 0){
+                SDL_RenderCopy(render, Team1[i].model, NULL, team1_slots[i]);
+            }
+            else{
+                SDL_RenderCopy(render, Team1[i].model, NULL, team1_slots[i]);
+            }
         }
     }
     for (int j = 0; j < team2_count; j++) {
@@ -287,6 +292,36 @@ void renderfighters(SDL_Renderer* render, Fighter* Team1 , Fighter* Team2 , int 
     }
 }
 
+int whostarts(Fighter* Team1 , Fighter* Team2 , int team1_count , int team2_count){
+
+    int team1_speed = 0;
+    int team2_speed = 0;
+    for (int i=0 ; i< team1_count ; i++){
+        team1_speed += Team1[i].speed ;
+    }
+    for(int j=0 ; j< team2_count ; j++){
+        team2_speed += Team2[j].speed;
+    }
+
+    if(team1_speed > team2_speed){
+        return 1;
+    }
+    else if(team2_speed > team1_speed){
+        return 2;
+    }
+    else{
+        return 1 + rand() % 2;
+    }
+}
+
+int someonealive(Fighter* Team , int team_count){
+    int total_hp = 0;
+
+    for (int i=0 ; i<team_count ; i++){
+        total_hp += Team[i].hp ;
+    }
+    return total_hp;
+}
 
 
 #endif
