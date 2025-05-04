@@ -54,6 +54,19 @@ SDL_Rect Info_DODGE = {974 , 368+15 , 106 , 39};
 SDL_Rect Info_SPEED = {974 , 424+15 , 106 , 39};
 
 
+//FIGHT
+
+SDL_Rect Team1_Fighter1 = { 310 , 325 , 105 , 165};
+SDL_Rect Team1_Fighter2 = { 290 , 541 , 105 , 165};
+SDL_Rect Team1_Fighter3 = { 177 , 408 , 105 , 165};
+SDL_Rect Team1_Fighter4 = { 39 , 491 , 105 , 165};
+
+SDL_Rect Team2_Fighter1 = {865 ,325 , 105 , 165};
+SDL_Rect Team2_Fighter2= { 885 , 541 , 105 , 165};
+SDL_Rect Team2_Fighter3 = { 998 , 408 , 105 , 165};
+SDL_Rect Team2_Fighter4 = { 1136 , 491 , 105 , 165};
+
+
 
 SDL_Rect Button_SelectPVP = {230 , 472 , 267 , 67};
 SDL_Rect Button_SelectPVB = {780 , 472 , 267 , 67};

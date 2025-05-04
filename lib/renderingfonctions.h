@@ -2,16 +2,17 @@
 #define RENDERING_FONCTIONS_H
 #include <stdlib.h>
 #include <stdio.h>
-#ifndef BUTTONS_COORD_H
-#define BUTTONS_COORD_H
-#include "lib/buttons-coord.h"
-#endif
+#include "buttons-coord.h"
+
 #include "structure.h"
+#include "special_attacks_list.h"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
+
+Fighter importandassign();
 
 SDL_Texture* loadTexture(char* path , SDL_Renderer* renderer){
     SDL_Surface* surface = IMG_Load(path);
@@ -216,6 +217,75 @@ void unselectallfighters(Fighter** PRETEAM1 , Fighter** PRETEAM2){
     }
 }
 
+Fighter* createfinalteam ( Fighter** PRETEAM , SDL_Texture** visuals){
+
+    int numberfighters = howmanyselected(PRETEAM);
+    Fighter* a = malloc(sizeof(Fighter) * numberfighters);
+    int j= 0;
+    for (int i = 0 ; i<9 ; i++){
+        if (PRETEAM[i]->selected == 1){
+            switch(i){
+                case 0:
+                    a[j] = importandassign("Fighters/John_Wick" , visuals);
+                    j++;
+                break;
+                case 1:
+                    a[j] = importandassign("Fighters/Sans", visuals);
+                    j++;
+                break;
+                case 2:
+                    a[j] = importandassign("Fighters/Batman", visuals);
+                    j++;
+                break;
+                case 3:
+                    a[j] = importandassign("Fighters/Hulk", visuals);
+                    j++;
+                break;
+                case 4:
+                    a[j] = importandassign("Fighters/Snorlax", visuals);
+                    j++;
+                break;
+                case 5:
+                    a[j] = importandassign("Fighters/Demolisher", visuals);
+                    j++;
+                break;
+                case 6:
+                    a[j] = importandassign("Fighters/Lifeline", visuals);
+                    j++;
+                break;
+                case 7:
+                    a[j] = importandassign("Fighters/Dracula", visuals);
+                    j++;
+                break;
+                case 8:
+                    a[j] = importandassign("Fighters/The_Medic", visuals);
+                    j++;
+                break;
+                
+            }
+        }
+    }
+
+    return a;
+
+}
+
+void renderfighters(SDL_Renderer* render, Fighter* Team1 , Fighter* Team2 , int team1_count , int team2_count){
+    SDL_Rect* team1_slots[4] = {&Team1_Fighter1 , &Team1_Fighter2 , &Team1_Fighter3 , &Team1_Fighter4};
+    SDL_Rect* team2_slots[4] = {&Team2_Fighter1 , &Team2_Fighter2 , &Team2_Fighter3 , &Team2_Fighter4};
+    
+    for (int i = 0; i < team1_count; i++) {
+        if (Team1[i].model != NULL) {
+            SDL_RenderCopy(render, Team1[i].model, NULL, team1_slots[i]);
+        }
+    }
+    for (int j = 0; j < team2_count; j++) {
+        if (Team2[j].model != NULL) {
+            SDL_RenderCopyEx(render, Team2[j].model, NULL, team2_slots[j] , 0.0 , NULL , SDL_FLIP_HORIZONTAL);
+        }
+    
+    }
+}
 
 
 
