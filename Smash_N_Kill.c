@@ -89,6 +89,7 @@ int main(int argc , char** argv){
     SDL_Texture* how_to_play_screen = loadTexture("assets/how_to_play.png", render);
     SDL_Texture* gamemode_screen = loadTexture("assets/gamemode_selection.png", render);
     SDL_Texture* teamselection_screen= loadTexture("assets/team_selection.png", render);
+    SDL_Texture* fight_scenario = loadTexture("assets/fight/map2_2.0.png" , render);
     SDL_Texture* blink_turn= loadTexture("assets/yourturn.png", render);
     SDL_Texture* ready_pressed= loadTexture("assets/readypressed.png", render);
     SDL_Texture* Info_JohnWick = loadTexture("assets/Info_JohnWick.png", render);
@@ -111,6 +112,8 @@ int main(int argc , char** argv){
     SDL_Texture* Square_Medic = loadTexture("assets/Logos/Logo_Medic.png", render);
     SDL_Texture* All_Logos[9] = {Square_JohnWick , Square_Sans , Square_Batman , Square_Hulk , Square_Snorlax , Square_Demolisher , Square_Lifeline , Square_Dracula , Square_Medic};
 
+    SDL_Texture* visuals[9] = {loadTexture("assets/models/png/John_Wick_model.png" , render) , loadTexture("assets/models/png/Sans_model.png" ,render  ) , loadTexture( "assets/models/png/Batman_model.png",  render) , loadTexture( "assets/models/png/Hulk_model.png", render ) ,loadTexture( "assets/models/png/Snorlax_model.png", render ) ,loadTexture( "assets/models/png/Demolisher_model.png", render ) ,loadTexture( "assets/models/png/Lifeline_model.png", render ) ,loadTexture( "assets/models/png/Dracula_model.png", render ) ,loadTexture( "assets/models/png/Medic_model.png", render ) };
+
     TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 40);
     if(!font){
         printf("Error , unable to load the font || START || : %s", TTF_GetError());
@@ -121,41 +124,51 @@ int main(int argc , char** argv){
     Mix_Chunk* tick_sound = Mix_LoadWAV("assets/tick.ogg");
     Mix_Chunk* back_sound = Mix_LoadWAV("assets/back.ogg");
     Mix_Music* menu_music = Mix_LoadMUS("assets/Stray_Cat.ogg");
-    Mix_Music* combat_music = Mix_LoadMUS("assets/The_Trial.ogg");
+    Mix_Music* selection_music = Mix_LoadMUS("assets/The_Trial.ogg");
+    Mix_Music* fighting_music = Mix_LoadMUS("assets/Point_Zero.ogg");
 
     //FIGHTERS TEAM 2
-    Fighter John_Wick1 = importandassign("Fighters/John_Wick");
-    Fighter Sans1 = importandassign("Fighters/Sans");
-    Fighter Batman1 = importandassign("Fighters/Batman");
-    Fighter Hulk1 = importandassign("Fighters/Hulk");
-    Fighter Snorlax1 = importandassign("Fighters/Snorlax");
-    Fighter Demolisher1 = importandassign("Fighters/Demolisher");
-    Fighter Lifeline1 = importandassign("Fighters/Lifeline");
-    Fighter Dracula1 = importandassign("Fighters/Dracula");
-    Fighter Medic1 = importandassign("Fighters/The_Medic");
+    Fighter John_Wick1 = importandassign("Fighters/John_Wick" , visuals);
+    Fighter Sans1 = importandassign("Fighters/Sans", visuals);
+    Fighter Batman1 = importandassign("Fighters/Batman", visuals);
+    Fighter Hulk1 = importandassign("Fighters/Hulk", visuals);
+    Fighter Snorlax1 = importandassign("Fighters/Snorlax", visuals);
+    Fighter Demolisher1 = importandassign("Fighters/Demolisher", visuals);
+    Fighter Lifeline1 = importandassign("Fighters/Lifeline", visuals);
+    Fighter Dracula1 = importandassign("Fighters/Dracula", visuals);
+    Fighter Medic1 = importandassign("Fighters/The_Medic", visuals);
 
     //FIGHTERS TEAM 2
-    Fighter John_Wick2 = importandassign("Fighters/John_Wick");
-    Fighter Sans2 = importandassign("Fighters/Sans");
-    Fighter Batman2 = importandassign("Fighters/Batman");
-    Fighter Hulk2 = importandassign("Fighters/Hulk");
-    Fighter Snorlax2 = importandassign("Fighters/Snorlax");
-    Fighter Demolisher2 = importandassign("Fighters/Demolisher");
-    Fighter Lifeline2 = importandassign("Fighters/Lifeline");
-    Fighter Dracula2 = importandassign("Fighters/Dracula");
-    Fighter Medic2 = importandassign("Fighters/The_Medic");
+    Fighter John_Wick2 = importandassign("Fighters/John_Wick", visuals);
+    Fighter Sans2 = importandassign("Fighters/Sans", visuals);
+    Fighter Batman2 = importandassign("Fighters/Batman", visuals);
+    Fighter Hulk2 = importandassign("Fighters/Hulk", visuals);
+    Fighter Snorlax2 = importandassign("Fighters/Snorlax", visuals);
+    Fighter Demolisher2 = importandassign("Fighters/Demolisher", visuals);
+    Fighter Lifeline2 = importandassign("Fighters/Lifeline", visuals);
+    Fighter Dracula2 = importandassign("Fighters/Dracula", visuals);
+    Fighter Medic2 = importandassign("Fighters/The_Medic", visuals);
     
 
     //Initial Values 
-    int currentMusic = -1 ; // 0 : menu , 1 : fight music , -1 : none 
+    int currentMusic = -1 ; // 0 : menu , 1 : selection music , 2: fighting music , -1 : none 
+    //Which team needs to choose its fighters?
     int current_team = 1;
+    //Amount of coins team1 has
     int team1_coins = 0;
+    //Amount of coins team2 has
     int team2_coins = 0;
-    int members_team1 = 0;
-    int members_team2 = 0;
+    
     //TEAMS IN SELECTION PHASE , ALL UN-SELECTED HERE
     Fighter* PRETEAM1[9] = {&John_Wick1 , &Sans1 , &Batman1 , &Hulk1 , &Snorlax1 , &Demolisher1 , &Lifeline1 , &Dracula1 , &Medic1};
     Fighter* PRETEAM2[9] = {&John_Wick2 , &Sans2 , &Batman2 , &Hulk2 , &Snorlax2 , &Demolisher2 , &Lifeline2 , &Dracula2 , &Medic2};
+
+    //are the final teams made already or not? 0 is NO , 1 is yes .
+    int team1_made = 0;
+    int team2_made = 0;
+
+    Fighter* team1;
+    Fighter* team2;
 
    
     while(!quit){
@@ -175,6 +188,7 @@ int main(int argc , char** argv){
                         //music ON:
                         if(currentMusic != 0){
                             Mix_HaltMusic();
+                            Mix_VolumeMusic(MIX_MAX_VOLUME * 0.8);
                             Mix_FadeInMusic(menu_music,-1 , 6000);
                             currentMusic = 0;
                         }
@@ -245,10 +259,10 @@ int main(int argc , char** argv){
                     
                     case TEAM_SELECTION :
 
-                        //Fighting music on:
+                        //Selection music on:
                         if(currentMusic != 1){
                             Mix_HaltMusic();
-                            Mix_FadeInMusic(combat_music,-1 , 5000);
+                            Mix_FadeInMusic(selection_music,-1 , 5000);
                             //Mix_PlayMusic(combat_music , -1);
                             currentMusic = 1;
                         }
@@ -388,15 +402,25 @@ int main(int argc , char** argv){
                                     state = GAMEMODE_SELECTION;
                                 }
                                 else if( x >= ready2.x && x <= ready2.x + ready2.w && y >= ready2.y && y <= ready2.y + ready2.h){
-                                    Mix_PlayChannel(-1 , select_sound , 0);
-                                    SDL_RenderClear(render);
-                                    SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
-                                    SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
-                                    SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
-                                    SDL_RenderCopy(render , ready_pressed , NULL , &ready2);
-                                    SDL_RenderPresent(render);
-                                    current_team = 1;
-                                    state= FIGHT;
+                                    if(howmanyselected(PRETEAM2) <= 4 && howmanyselected(PRETEAM2) >= 2){
+                                            Mix_PlayChannel(-1 , select_sound , 0);
+                                            SDL_RenderClear(render);
+                                            SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                                            SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
+                                            SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
+                                            SDL_RenderCopy(render , ready_pressed , NULL , &ready2);
+                                            SDL_RenderPresent(render);
+                                            current_team = 1;
+                                            
+                                            state= FIGHT;
+                                    }
+                                    else {
+                                        if(howmanyselected(PRETEAM2) < 2){
+                                            Mix_PlayChannel(-1 , tick_sound , 0);
+                                            rendermessageTEMP("You need to pick at least 2 fighters" , &MessageSelection , render , 2000 , font);
+                                        }
+
+                                    }
                                 }
                                 else if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
     /*NEED TO CHECK*/             addorkickfromteam(PRETEAM2 , render , 0, font);
@@ -467,7 +491,33 @@ int main(int argc , char** argv){
                         break;
                     
                     case FIGHT:
-                        state = GAMEMODE_SELECTION;
+                        //Fighting music on:
+                        if(currentMusic != 2){
+                            Mix_HaltMusic();
+                            Mix_FadeInMusic(fighting_music,-1 , 2000);
+                            currentMusic = 2;
+                        }
+                        
+                        if(team1_made == 0 && team2_made == 0 ){
+                            team1 = createfinalteam(PRETEAM1 , visuals);
+                            team2 = createfinalteam(PRETEAM2 , visuals);
+                            team1_made = 1 ;
+                            team2_made = 1 ;
+                        }
+                        /*for (int i=0 ; i< 4 ; i++){
+                            printf(" TEAM 1 : %s", team1[i].name);
+                            printf(" TEAM 2 : %s", team2[i].name);
+                        }*///Checking members in team 1 and 2.
+                        SDL_RenderClear(render);
+                        SDL_RenderCopy(render , fight_scenario , NULL , NULL);
+                        /*SDL_RenderCopy(render , visuals[0] , NULL , &Team1_Fighter1);
+                        SDL_RenderCopy(render , visuals[3] , NULL , &Team1_Fighter2);
+                        SDL_RenderCopy(render , visuals[2] , NULL , &Team1_Fighter3);*/
+                        renderfighters(render, team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
+                        SDL_RenderPresent(render);
+
+                        
+                        
                         break;
                     
                     case END_GAME:
