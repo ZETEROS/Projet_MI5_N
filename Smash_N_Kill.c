@@ -174,6 +174,9 @@ int main(int argc , char** argv){
     //finished selecting fighters:
     int selecting_team1 = 0;
     int selecting_team2 = 0;
+
+    //ERROR MESSAGE
+    int error_message_1 = 0;
     //TEAMS IN SELECTION PHASE , ALL UN-SELECTED HERE
     Fighter* PRETEAM1[9] = {&John_Wick1 , &Sans1 , &Batman1 , &Hulk1 , &Snorlax1 , &Demolisher1 , &Lifeline1 , &Dracula1 , &Medic1};
     Fighter* PRETEAM2[9] = {&John_Wick2 , &Sans2 , &Batman2 , &Hulk2 , &Snorlax2 , &Demolisher2 , &Lifeline2 , &Dracula2 , &Medic2};
@@ -309,7 +312,8 @@ int main(int argc , char** argv){
                                     else{
                                         if(howmanyselected(PRETEAM1) < 2){
                                             Mix_PlayChannel(-1 , tick_sound , 0);
-                                            rendermessageTEMP("You need to pick at least 2 fighters" , &MessageSelection , render , 2000 , font);
+                                            error_message_1 = 1;
+                                            
                                         }
                                         
                                     }
@@ -385,15 +389,6 @@ int main(int argc , char** argv){
                             }
                         }
                         if(current_team == 2){
-                            SDL_RenderClear(render);
-                            SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
-                            rendercoins(render , team1_coins , &coins1 , 40 , dark_gray, font);
-                            rendercoins(render , team2_coins , &coins2 , 40 , dark_gray, font);
-                            SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
-                            SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
-                            renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , 1);
-                            renderlogoselectedfighters(render , PRETEAM2 ,All_Logos , current_team);
-                            SDL_RenderPresent(render);
 
                             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                                 int x = event.button.x ;
@@ -410,20 +405,13 @@ int main(int argc , char** argv){
                                 else if( x >= ready2.x && x <= ready2.x + ready2.w && y >= ready2.y && y <= ready2.y + ready2.h){
                                     if(howmanyselected(PRETEAM2) <= 4 && howmanyselected(PRETEAM2) >= 2){
                                             Mix_PlayChannel(-1 , select_sound , 0);
-                                            SDL_RenderClear(render);
-                                            SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
-                                            SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
-                                            SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
-                                            SDL_RenderCopy(render , ready_pressed , NULL , &ready2);
-                                            SDL_RenderPresent(render);
-                                            current_team = 1;
-                                            
-                                            state= FIGHT;
+                                            selecting_team2 = 1;
+                                           
                                     }
                                     else {
                                         if(howmanyselected(PRETEAM2) < 2){
                                             Mix_PlayChannel(-1 , tick_sound , 0);
-                                            rendermessageTEMP("You need to pick at least 2 fighters" , &MessageSelection , render , 2000 , font);
+                                            error_message_1 = 1;
                                         }
 
                                     }
@@ -516,7 +504,8 @@ int main(int argc , char** argv){
                         int fight_running = 0;
                         
                         while(someonealive(team1 , howmanyselected(PRETEAM1)) && someonealive(team2 , howmanyselected(PRETEAM2)) && fight_running == 0){
-                            
+                        
+                            /*----------------------------------------------------------------------------------------MANAGING INPUT FROM USER*/
                             while(SDL_PollEvent(&fighting_event)){
 
                                 if(fighting_event.type == SDL_QUIT){
@@ -524,16 +513,11 @@ int main(int argc , char** argv){
                                     quit = 1;
                 
                                 }
-
+                                
                                 switch(fight){
 
                                     case IN_FIGHT:
-                                        SDL_RenderClear(render);
-                                        SDL_RenderCopy(render , fight_scenario , NULL , NULL);
-                                        renderfighters(render, team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
-                                        rendermessageTEMP("PAUSE",&Pause_button , render , 0 , font);
-                                        SDL_RenderPresent(render);
-
+                                        
                                         if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
                                             int x = fighting_event.button.x ;
                                             int y = fighting_event.button.y;
@@ -546,11 +530,31 @@ int main(int argc , char** argv){
 
                                         break;
                                     case PAUSE:
-                                        rendermessageTEMP("WORKS", &MessageSelection , render , 2000 , font);
+                                        
                                         fight = IN_FIGHT;
                                         break;
                                 }
                             }
+                        /*-----------------------------------------------------------------------RENDERING NON-STOP*/
+                            switch(fight){
+
+                                case IN_FIGHT:
+                                    SDL_RenderClear(render);
+                                    SDL_RenderCopy(render , fight_scenario , NULL , NULL);
+                                    renderfighters(render, team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
+                                    rendermessageTEMP("PAUSE",&Pause_button , render , 0 , font);
+                                    SDL_RenderPresent(render);
+                                    break;
+                                
+                                case PAUSE:
+                                    rendermessageTEMP("WORKS", &MessageSelection , render , 2000 , font);
+                                    break;
+                            
+
+
+                            }
+
+
                         }
 
                         
@@ -562,9 +566,7 @@ int main(int argc , char** argv){
                         break;
                     
                     case HOW_TO_PLAY:
-                        SDL_RenderClear(render);
-                        SDL_RenderCopy(render , how_to_play_screen , NULL , NULL);
-                        SDL_RenderPresent(render);
+                        
                         //Music on?
                         if(currentMusic != 0){
                             Mix_HaltMusic();
@@ -590,7 +592,8 @@ int main(int argc , char** argv){
             }
 
             }
-            
+
+/*-------------------------------------------------------------------------------------------------------*/            
             //always render and show things 
             switch(state){
                     
@@ -603,7 +606,9 @@ int main(int argc , char** argv){
                     break;
                 
                 case HOW_TO_PLAY:
-
+                    SDL_RenderClear(render);
+                    SDL_RenderCopy(render , how_to_play_screen , NULL , NULL);
+                    SDL_RenderPresent(render);
                     break;
 
                 case GAMEMODE_SELECTION:
@@ -621,8 +626,39 @@ int main(int argc , char** argv){
                         renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , current_team);
                         SDL_RenderPresent(render);
                         if(selecting_team1 == 1){
+                            //ready button pressed
                             SDL_RenderCopy(render , ready_pressed , NULL , &ready1);
                             SDL_RenderPresent(render);
+                        }
+                        else if(error_message_1 == 1){
+                            rendermessageTEMP("You need to pick at least 2 fighters" , &MessageSelection , render , 2000 , font);
+                            error_message_1 = 0;
+                        }
+                    
+                    }
+                    else if(current_team ==2){
+                        SDL_RenderClear(render);
+                        SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                        rendercoins(render , team1_coins , &coins1 , 40 , dark_gray, font);
+                        rendercoins(render , team2_coins , &coins2 , 40 , dark_gray, font);
+                        SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
+                        SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
+                        renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , 1);
+                        renderlogoselectedfighters(render , PRETEAM2 ,All_Logos , current_team);
+                        SDL_RenderPresent(render);
+                        if(selecting_team2 == 1){
+                            SDL_RenderClear(render);
+                            SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                            SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
+                            SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
+                            SDL_RenderCopy(render , ready_pressed , NULL , &ready2);
+                            SDL_RenderPresent(render);
+                            current_team = 1;             
+                            state= FIGHT;
+                        }
+                        else if(error_message_1){
+                            rendermessageTEMP("You need to pick at least 2 fighters" , &MessageSelection , render , 2000 , font);
+                            error_message_1 = 0;
                         }
                     }
                     break;
