@@ -65,6 +65,9 @@ int main(int argc , char** argv){
     //
     srand(time(NULL));
 
+    //CLEAR PIXELS
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
+
     //GAME RUNNING
     int quit = 0 ;
     SDL_Event event ;
@@ -119,7 +122,8 @@ int main(int argc , char** argv){
     SDL_Texture* Square_Dracula = loadTexture("assets/Logos/Logo_Dracula.png", render);
     SDL_Texture* Square_Medic = loadTexture("assets/Logos/Logo_Medic.png", render);
     SDL_Texture* All_Logos[9] = {Square_JohnWick , Square_Sans , Square_Batman , Square_Hulk , Square_Snorlax , Square_Demolisher , Square_Lifeline , Square_Dracula , Square_Medic};
-
+    SDL_Texture* fire_animation = loadTexture("assets/anim/fire_fx_v1.0/fire_fx_v1.0/png/orange/loops/burning_loop_3.png", render);
+    SDL_Color dark_gray = { 70 , 70 , 70};
     SDL_Texture* visuals[9] = {loadTexture("assets/models/png/John_Wick_model.png" , render) , loadTexture("assets/models/png/Sans_model.png" ,render  ) , loadTexture( "assets/models/png/Batman_model.png",  render) , loadTexture( "assets/models/png/Hulk_model.png", render ) ,loadTexture( "assets/models/png/Snorlax_model.png", render ) ,loadTexture( "assets/models/png/Demolisher_model.png", render ) ,loadTexture( "assets/models/png/Lifeline_model.png", render ) ,loadTexture( "assets/models/png/Dracula_model.png", render ) ,loadTexture( "assets/models/png/Medic_model.png", render ) };
 
     TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 40);
@@ -167,6 +171,9 @@ int main(int argc , char** argv){
     //Amount of coins team2 has
     int team2_coins = 0;
     
+    //finished selecting fighters:
+    int selecting_team1 = 0;
+    int selecting_team2 = 0;
     //TEAMS IN SELECTION PHASE , ALL UN-SELECTED HERE
     Fighter* PRETEAM1[9] = {&John_Wick1 , &Sans1 , &Batman1 , &Hulk1 , &Snorlax1 , &Demolisher1 , &Lifeline1 , &Dracula1 , &Medic1};
     Fighter* PRETEAM2[9] = {&John_Wick2 , &Sans2 , &Batman2 , &Hulk2 , &Snorlax2 , &Demolisher2 , &Lifeline2 , &Dracula2 , &Medic2};
@@ -190,9 +197,7 @@ int main(int argc , char** argv){
                 switch(state){
 
                     case MENU :
-                        SDL_RenderClear(render);
-                        SDL_RenderCopy(render , menu_screen , NULL , NULL);
-                        SDL_RenderPresent(render);
+                        
                         //music ON:
                         if(currentMusic != 0){
                             Mix_HaltMusic();
@@ -229,9 +234,7 @@ int main(int argc , char** argv){
                         break;
                     
                     case GAMEMODE_SELECTION :
-                        SDL_RenderClear(render);
-                        SDL_RenderCopy(render , gamemode_screen , NULL , NULL);
-                        SDL_RenderPresent(render);
+                       
                         //Music on?
                         if(currentMusic != 0){
                             Mix_HaltMusic();
@@ -274,7 +277,7 @@ int main(int argc , char** argv){
                             //Mix_PlayMusic(combat_music , -1);
                             currentMusic = 1;
                         }
-                        SDL_Color dark_gray = { 70 , 70 , 70};
+                        
 
                         if(team1_coins == 0 && team2_coins == 0){
                             int coins_temp = coins_giver();
@@ -282,12 +285,7 @@ int main(int argc , char** argv){
                             team2_coins = coins_temp;
                         }
                         if(current_team == 1){
-                            SDL_RenderClear(render);
-                            SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
-                            rendercoins(render , team1_coins , &coins1 , 40 , dark_gray, font);
-                            SDL_RenderCopy(render , blink_turn , NULL , &yourturn1);
-                            renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , current_team);
-                            SDL_RenderPresent(render);
+                            
                             //Clicked?
                             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                                 int x = event.button.x ;
@@ -302,9 +300,9 @@ int main(int argc , char** argv){
                                 }
                                 else if( x >= ready1.x && x <= ready1.x + ready1.w && y >= ready1.y && y <= ready1.y + ready1.h){
                                     if(howmanyselected(PRETEAM1) <= 4 && howmanyselected(PRETEAM1) >= 2){
+                                        selecting_team1 = 1;
                                         Mix_PlayChannel(-1 , select_sound , 0);
-                                        SDL_RenderCopy(render , ready_pressed , NULL , &ready1);
-                                        SDL_RenderPresent(render);
+                                        
                                         current_team = 2;
                                         
                                     }
@@ -593,7 +591,54 @@ int main(int argc , char** argv){
 
             }
             
+            //always render and show things 
+            switch(state){
+                    
+                case MENU:
+                    SDL_RenderClear(render);
+                    SDL_RenderCopy(render , menu_screen , NULL , NULL);
+                    render_fire_animation(render, fire_animation , &Fire1 , 10 , 6 );
+                    render_fire_animation(render, fire_animation , &Fire2 , 10 , 6 );
+                    SDL_RenderPresent(render);
+                    break;
+                
+                case HOW_TO_PLAY:
 
+                    break;
+
+                case GAMEMODE_SELECTION:
+                    SDL_RenderClear(render);
+                    SDL_RenderCopy(render , gamemode_screen , NULL , NULL);
+                    SDL_RenderPresent(render);
+                    break;
+                
+                case TEAM_SELECTION:
+                    if(current_team == 1){
+                        SDL_RenderClear(render);
+                        SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                        rendercoins(render , team1_coins , &coins1 , 40 , dark_gray, font);
+                        SDL_RenderCopy(render , blink_turn , NULL , &yourturn1);
+                        renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , current_team);
+                        SDL_RenderPresent(render);
+                        if(selecting_team1 == 1){
+                            SDL_RenderCopy(render , ready_pressed , NULL , &ready1);
+                            SDL_RenderPresent(render);
+                        }
+                    }
+                    break;
+                
+                case FIGHT:
+
+                    break;
+                
+                case END_GAME:
+
+                    break;
+                
+
+                
+                
+            }
         }
 
 
