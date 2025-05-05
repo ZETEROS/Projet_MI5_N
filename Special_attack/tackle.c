@@ -4,5 +4,3 @@ void tackle(Fighter *target, Fighter *attacant){
     attack(Fighter *target, Fighter *attacant);
     target->def=correct_def;
 }
-
-void (*special_move)(Fighter *, Fighter *) = tackle;
