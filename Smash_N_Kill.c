@@ -80,8 +80,16 @@ int main(int argc , char** argv){
         
     }Game_State;
 
+    typedef enum{
+        IN_FIGHT,
+        PAUSE,
+        SELECTING,
+    }Fight_State;
+
     //ALWAYS START IN THE MENU
     Game_State state = MENU ;
+
+    Fight_State fight = IN_FIGHT;
 
 
     //SCREENS , OBJECTS AND SOUND TO RENDER OR REPRODUCE
@@ -504,20 +512,48 @@ int main(int argc , char** argv){
                             team1_made = 1 ;
                             team2_made = 1 ;
                         }
-                        /*for (int i=0 ; i< 4 ; i++){
-                            printf(" TEAM 1 : %s", team1[i].name);
-                            printf(" TEAM 2 : %s", team2[i].name);
-                        }*///Checking members in team 1 and 2.
-                        SDL_RenderClear(render);
-                        SDL_RenderCopy(render , fight_scenario , NULL , NULL);
-                        /*SDL_RenderCopy(render , visuals[0] , NULL , &Team1_Fighter1);
-                        SDL_RenderCopy(render , visuals[3] , NULL , &Team1_Fighter2);
-                        SDL_RenderCopy(render , visuals[2] , NULL , &Team1_Fighter3);*/
-                        renderfighters(render, team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
-                        SDL_RenderPresent(render);
-                        /*while(someonealive(team1 , howmanyselected(PRETEAM1)) && someonealive(team2 , howmanyselected(PRETEAM2))){
+                        
+                        SDL_Event fighting_event ;
+                        
+                        int fight_running = 0;
+                        
+                        while(someonealive(team1 , howmanyselected(PRETEAM1)) && someonealive(team2 , howmanyselected(PRETEAM2)) && fight_running == 0){
+                            
+                            while(SDL_PollEvent(&fighting_event)){
 
-                        }*/
+                                if(fighting_event.type == SDL_QUIT){
+                                    fight_running = 1;
+                                    quit = 1;
+                
+                                }
+
+                                switch(fight){
+
+                                    case IN_FIGHT:
+                                        SDL_RenderClear(render);
+                                        SDL_RenderCopy(render , fight_scenario , NULL , NULL);
+                                        renderfighters(render, team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
+                                        rendermessageTEMP("PAUSE",&Pause_button , render , 0 , font);
+                                        SDL_RenderPresent(render);
+
+                                        if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
+                                            int x = fighting_event.button.x ;
+                                            int y = fighting_event.button.y;
+
+                                            if(x >= Pause_button.x && x <= Pause_button.x + Pause_button.w && y >= Pause_button.y && y <= Pause_button.y + Pause_button.h){
+                                                fight = PAUSE;
+                                            }
+                                            
+                                        }
+
+                                        break;
+                                    case PAUSE:
+                                        rendermessageTEMP("WORKS", &MessageSelection , render , 2000 , font);
+                                        fight = IN_FIGHT;
+                                        break;
+                                }
+                            }
+                        }
 
                         
                         
