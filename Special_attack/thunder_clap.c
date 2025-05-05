@@ -1,5 +1,5 @@
 void thunder_clap(Fighter* attacker, Fighter* defender, Fighter* ally, Fighter* team[]){
-    for(int i=0 ; i<nbr_of_ennemy : i++){
+    for(int i=0 ; i<nbr_of_ennemy ; i++){
         if (team[i]->attack <= 20){
             team[i]->attack = 0;
         }else{
