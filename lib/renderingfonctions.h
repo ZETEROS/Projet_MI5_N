@@ -131,7 +131,7 @@ int howmanyselected(Fighter** team ){
     return num;
 }
 
-void rendermessageTEMP(char* message ,SDL_Rect* pos,  SDL_Renderer* renderer , int timeshowing , TTF_Font* font ){
+void rendermessageTEMP(char* message ,SDL_Rect* pos,  SDL_Renderer* renderer , /*0 for no delay , >0 for delay , this will ignore every input during the showing of the message*/ int timeshowing , TTF_Font* font ){
     SDL_Color color = {255 , 255 , 255};
     SDL_Surface* surface = TTF_RenderText_Solid(font, message, color); 
     if (!surface) {
@@ -148,13 +148,19 @@ void rendermessageTEMP(char* message ,SDL_Rect* pos,  SDL_Renderer* renderer , i
 
     SDL_RenderCopy(renderer, texture, NULL, pos);
     SDL_RenderPresent(renderer);
-    Uint32 start = SDL_GetTicks();
-    SDL_Event temp_event;
-    while (SDL_GetTicks() - start < timeshowing) {
-        while (SDL_PollEvent(&temp_event)) {
-            // All clicks during the message showing will be treat , this will stop the number of events going up and crash the game || IMPORTANT!!
+
+    if(timeshowing >0){
+        Uint32 start = SDL_GetTicks();
+        SDL_Event temp_event;
+        while (SDL_GetTicks() - start < timeshowing) {
+            while (SDL_PollEvent(&temp_event)) {
+                // All clicks during the message showing will be treat , this will stop the number of events going up and crash the game || IMPORTANT!!
+            }
+            SDL_Delay(10); // Delay to prevent using all CPU in during the polling 
         }
-        SDL_Delay(10); // Delay to prevent using all CPU in during the polling 
+    }
+    else{
+        
     }
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);

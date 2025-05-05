@@ -55,16 +55,20 @@ SDL_Rect Info_SPEED = {974 , 424+15 , 106 , 39};
 
 
 //FIGHT
+//Modification size || Resolution native of the models is 105 * 165 px.
+const int my = 40;
+const int mx = 40;
+SDL_Rect Team1_Fighter1 = { 310-mx , 325-my , 105+mx , 165+my};
+SDL_Rect Team1_Fighter2 = { 290-mx , 541-my , 105+mx , 165+my};
+SDL_Rect Team1_Fighter3 = { 177-mx , 408-my , 105+mx , 165+my};
+SDL_Rect Team1_Fighter4 = { 39-mx , 491-my , 105+mx , 165+my};
 
-SDL_Rect Team1_Fighter1 = { 310 , 325 , 105 , 165};
-SDL_Rect Team1_Fighter2 = { 290 , 541 , 105 , 165};
-SDL_Rect Team1_Fighter3 = { 177 , 408 , 105 , 165};
-SDL_Rect Team1_Fighter4 = { 39 , 491 , 105 , 165};
+SDL_Rect Team2_Fighter1 = {865-(mx/4) ,325-my , 105+mx , 165+my};
+SDL_Rect Team2_Fighter2= { 885-(mx/4) , 541-my , 105+mx , 165+my};
+SDL_Rect Team2_Fighter3 = { 998-(mx/4) , 408-my , 105+mx , 165+my};
+SDL_Rect Team2_Fighter4 = { 1136-(mx/4) , 491-my , 105+mx , 165+my};
 
-SDL_Rect Team2_Fighter1 = {865 ,325 , 105 , 165};
-SDL_Rect Team2_Fighter2= { 885 , 541 , 105 , 165};
-SDL_Rect Team2_Fighter3 = { 998 , 408 , 105 , 165};
-SDL_Rect Team2_Fighter4 = { 1136 , 491 , 105 , 165};
+SDL_Rect Pause_button = {1280/2-40 , 720 - 50 , 80 , 40};
 
 
 
