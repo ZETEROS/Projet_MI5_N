@@ -330,4 +330,39 @@ int someonealive(Fighter* Team , int team_count){
 }
 
 
+void render_fire_animation(SDL_Renderer* renderer, SDL_Texture* fire_texture, SDL_Rect* pos, int scale, int num_frames) {
+
+    static Uint32 start_time = 0;
+    if (start_time == 0) start_time = SDL_GetTicks();
+
+    int frame_width = 15;
+    int frame_height = 24;
+    
+    //How much time passed already?
+    Uint32 elapsed = SDL_GetTicks() - start_time;
+
+    // Change frame each 100 ms so 10 fps.
+    int current_frame = (elapsed / 100) % num_frames;
+
+    SDL_Rect src_rect = {
+        .x = current_frame * frame_width,
+        .y = 0,
+        .w = frame_width,
+        .h = frame_height
+    };
+
+    SDL_Rect dest_rect = {
+        .x = (pos->x) ,
+        .y = (pos->y) - (frame_height * scale),
+        .w = frame_width * scale,
+        .h = frame_height * scale
+    };
+
+
+
+    SDL_RenderCopy(renderer, fire_texture, &src_rect , &dest_rect);
+}
+
+
+
 #endif

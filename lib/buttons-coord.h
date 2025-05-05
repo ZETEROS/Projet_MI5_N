@@ -10,6 +10,8 @@ SDL_Rect Button_START = {509 , 404 , 259 , 55};
 SDL_Rect Button_HOWTOPLAY = {509 , 478 , 259 , 55};
 SDL_Rect Button_QUIT = {509 , 553 , 259 , 55};
 SDL_Rect Button_MAINMENU_FROM_SELECTION_HTP = {987 , 637 , 267 , 67};
+SDL_Rect Fire1 ={145 , 223 ,15 , 24 };
+SDL_Rect Fire2 ={968 , 223 ,15 , 24 };
 
 //TEAM SELECTION - LOGOS COORD
 SDL_Rect Logo_John_Wick = {107 , 193 , 90 , 90};
