@@ -122,7 +122,7 @@ int main(int argc , char** argv){
     SDL_Texture* Square_Dracula = loadTexture("assets/Logos/Logo_Dracula.png", render);
     SDL_Texture* Square_Medic = loadTexture("assets/Logos/Logo_Medic.png", render);
     SDL_Texture* All_Logos[9] = {Square_JohnWick , Square_Sans , Square_Batman , Square_Hulk , Square_Snorlax , Square_Demolisher , Square_Lifeline , Square_Dracula , Square_Medic};
-    SDL_Texture* fire_animation = loadTexture("assets/anim/fire_fx_v1.0/png/orange/loops/burning_loop_3.png", render);
+    SDL_Texture* fire_animation = loadTexture("assets/anim/burning_loop_3.png", render);
     SDL_Color dark_gray = { 70 , 70 , 70};
     SDL_Texture* visuals[9] = {loadTexture("assets/models/png/John_Wick_model.png" , render) , loadTexture("assets/models/png/Sans_model.png" ,render  ) , loadTexture( "assets/models/png/Batman_model.png",  render) , loadTexture( "assets/models/png/Hulk_model.png", render ) ,loadTexture( "assets/models/png/Snorlax_model.png", render ) ,loadTexture( "assets/models/png/Demolisher_model.png", render ) ,loadTexture( "assets/models/png/Lifeline_model.png", render ) ,loadTexture( "assets/models/png/Dracula_model.png", render ) ,loadTexture( "assets/models/png/Medic_model.png", render ) };
     SDL_Texture* Pause_button_texture = loadTexture("assets/fight/pause.png", render);
