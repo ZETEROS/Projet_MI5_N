@@ -272,6 +272,10 @@ Fighter* createfinalteam ( Fighter** PRETEAM , SDL_Texture** visuals){
         }
     }
 
+    if(!a){
+        printf("Couldn't create the team from the PRETEAM\n");
+    }
+
     return a;
 
 }
@@ -363,6 +367,18 @@ void render_fire_animation(SDL_Renderer* renderer, SDL_Texture* fire_texture, SD
     SDL_RenderCopy(renderer, fire_texture, &src_rect , &dest_rect);
 }
 
+void init_teams(Fighter** team1, Fighter** team2 , Fighter** PRETEAM1 ,Fighter** PRETEAM2 , SDL_Texture** visuals) {
+    *team1 = createfinalteam(PRETEAM1, visuals);
+    *team2 = createfinalteam(PRETEAM2, visuals);
+}
 
+void cleanup_teams(Fighter** team1, Fighter** team2 , int* team1_coins , int* team2_coins) {
+    free(*team1);
+    *team1 = NULL;
+    free(*team2);
+    *team2 = NULL;
+    *team1_coins = 0;
+    *team2_coins = 0;
+}
 
 #endif
