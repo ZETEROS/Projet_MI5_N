@@ -70,7 +70,10 @@ SDL_Rect Team2_Fighter2= { 885-(mx/4) , 541-my , 105+mx , 165+my};
 SDL_Rect Team2_Fighter3 = { 998-(mx/4) , 408-my , 105+mx , 165+my};
 SDL_Rect Team2_Fighter4 = { 1136-(mx/4) , 491-my , 105+mx , 165+my};
 
-SDL_Rect Pause_button = {1280/2-40 , 720 - 50 , 80 , 40};
+SDL_Rect Pause_button = {1280/2-262/2 , 720 - 69 , 262 , 59};
+SDL_Rect Continue_button_pause= {509 , 260 , 255 , 50};
+SDL_Rect Menu_button_pause= {509 , 339 , 255 , 50};
+SDL_Rect Quit_button_pause= {509 , 418 , 255 , 50};
 
 
 
