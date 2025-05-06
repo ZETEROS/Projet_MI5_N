@@ -127,6 +127,7 @@ int main(int argc , char** argv){
     SDL_Texture* visuals[9] = {loadTexture("assets/models/png/John_Wick_model.png" , render) , loadTexture("assets/models/png/Sans_model.png" ,render  ) , loadTexture( "assets/models/png/Batman_model.png",  render) , loadTexture( "assets/models/png/Hulk_model.png", render ) ,loadTexture( "assets/models/png/Snorlax_model.png", render ) ,loadTexture( "assets/models/png/Demolisher_model.png", render ) ,loadTexture( "assets/models/png/Lifeline_model.png", render ) ,loadTexture( "assets/models/png/Dracula_model.png", render ) ,loadTexture( "assets/models/png/Medic_model.png", render ) };
     SDL_Texture* Pause_button_texture = loadTexture("assets/fight/pause.png", render);
     SDL_Texture* Paused_ui = loadTexture("assets/fight/pauseui.png", render);
+    SDL_Texture* torches = loadTexture("assets/2torches.png" , render);
 
     TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 40);
     if(!font){
@@ -645,6 +646,7 @@ int main(int argc , char** argv){
                     SDL_RenderCopy(render , menu_screen , NULL , NULL);
                     render_fire_animation(render, fire_animation , &Fire1 , 10 , 6 );
                     render_fire_animation(render, fire_animation , &Fire2 , 10 , 6 );
+                    SDL_RenderCopy(render , torches , NULL , NULL);
                     SDL_RenderPresent(render);
                     break;
                 
