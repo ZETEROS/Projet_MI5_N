@@ -122,9 +122,11 @@ int main(int argc , char** argv){
     SDL_Texture* Square_Dracula = loadTexture("assets/Logos/Logo_Dracula.png", render);
     SDL_Texture* Square_Medic = loadTexture("assets/Logos/Logo_Medic.png", render);
     SDL_Texture* All_Logos[9] = {Square_JohnWick , Square_Sans , Square_Batman , Square_Hulk , Square_Snorlax , Square_Demolisher , Square_Lifeline , Square_Dracula , Square_Medic};
-    SDL_Texture* fire_animation = loadTexture("assets/anim/fire_fx_v1.0/fire_fx_v1.0/png/orange/loops/burning_loop_3.png", render);
+    SDL_Texture* fire_animation = loadTexture("assets/anim/fire_fx_v1.0/png/orange/loops/burning_loop_3.png", render);
     SDL_Color dark_gray = { 70 , 70 , 70};
     SDL_Texture* visuals[9] = {loadTexture("assets/models/png/John_Wick_model.png" , render) , loadTexture("assets/models/png/Sans_model.png" ,render  ) , loadTexture( "assets/models/png/Batman_model.png",  render) , loadTexture( "assets/models/png/Hulk_model.png", render ) ,loadTexture( "assets/models/png/Snorlax_model.png", render ) ,loadTexture( "assets/models/png/Demolisher_model.png", render ) ,loadTexture( "assets/models/png/Lifeline_model.png", render ) ,loadTexture( "assets/models/png/Dracula_model.png", render ) ,loadTexture( "assets/models/png/Medic_model.png", render ) };
+    SDL_Texture* Pause_button_texture = loadTexture("assets/fight/pause.png", render);
+    SDL_Texture* Paused_ui = loadTexture("assets/fight/pauseui.png", render);
 
     TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 40);
     if(!font){
@@ -165,15 +167,15 @@ int main(int argc , char** argv){
     //Initial Values 
     int currentMusic = -1 ; // 0 : menu , 1 : selection music , 2: fighting music , -1 : none 
     //Which team needs to choose its fighters?
-    int current_team = 1;
+    int current_team ;
     //Amount of coins team1 has
-    int team1_coins = 0;
+    int team1_coins ;
     //Amount of coins team2 has
-    int team2_coins = 0;
+    int team2_coins ;
     
     //finished selecting fighters:
-    int selecting_team1 = 0;
-    int selecting_team2 = 0;
+    int selecting_team1 ;
+    int selecting_team2 ;
 
     //ERROR MESSAGE
     int error_message_1 = 0;
@@ -185,8 +187,9 @@ int main(int argc , char** argv){
     int team1_made = 0;
     int team2_made = 0;
 
-    Fighter* team1;
-    Fighter* team2;
+    Fighter* team1 = NULL;
+    Fighter* team2= NULL;
+
 
    
     while(!quit){
@@ -200,6 +203,17 @@ int main(int argc , char** argv){
                 switch(state){
 
                     case MENU :
+
+                        if(team1_coins != 0 && team2_coins != 0){
+                           
+                            team1_coins = 0;
+                            team2_coins = 0;
+                        }
+
+                        selecting_team1 = 0;
+                        selecting_team2 = 0;
+
+                        current_team = 1;
                         
                         //music ON:
                         if(currentMusic != 0){
@@ -233,6 +247,32 @@ int main(int argc , char** argv){
 
                         }
 
+
+                        break;
+
+                    case END_GAME:
+
+                        break;
+                    
+                    case HOW_TO_PLAY:
+                        
+                        //Music on?
+                        if(currentMusic != 0){
+                            Mix_HaltMusic();
+                            Mix_FadeInMusic(menu_music,-1 , 3000);
+                            currentMusic = 0;
+                        }
+                        //CLICKED?
+                        if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                            int x = event.button.x ;
+                            int y = event.button.y ;
+                            //WHERE?
+                            if( x >= Button_MAINMENU_FROM_SELECTION_HTP.x && x <= Button_MAINMENU_FROM_SELECTION_HTP.x + Button_MAINMENU_FROM_SELECTION_HTP.w && y >= Button_MAINMENU_FROM_SELECTION_HTP.y && y <= Button_MAINMENU_FROM_SELECTION_HTP.y + Button_MAINMENU_FROM_SELECTION_HTP.h){
+                                Mix_PlayChannel(-1 , back_sound , 0);
+                                state = MENU;
+                            }
+
+                        }
 
                         break;
                     
@@ -303,10 +343,9 @@ int main(int argc , char** argv){
                                 }
                                 else if( x >= ready1.x && x <= ready1.x + ready1.w && y >= ready1.y && y <= ready1.y + ready1.h){
                                     if(howmanyselected(PRETEAM1) <= 4 && howmanyselected(PRETEAM1) >= 2){
-                                        selecting_team1 = 1;
-                                        Mix_PlayChannel(-1 , select_sound , 0);
                                         
-                                        current_team = 2;
+                                        Mix_PlayChannel(-1 , select_sound , 0);
+                                        selecting_team1 = 1;
                                         
                                     }
                                     else{
@@ -388,7 +427,7 @@ int main(int argc , char** argv){
                                 
                             }
                         }
-                        if(current_team == 2){
+                        else if(current_team == 2){
 
                             if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                                 int x = event.button.x ;
@@ -417,7 +456,7 @@ int main(int argc , char** argv){
                                     }
                                 }
                                 else if( x >= Logo_John_Wick.x && x <= Logo_John_Wick.x + Logo_John_Wick.w && y >= Logo_John_Wick.y && y <= Logo_John_Wick.y + Logo_John_Wick.h){
-    /*NEED TO CHECK*/             addorkickfromteam(PRETEAM2 , render , 0, font);
+                                    addorkickfromteam(PRETEAM2 , render , 0, font);
                                 }
                                 else if(x >= Logo_Sans.x && x <= Logo_Sans.x + Logo_Sans.w && y >= Logo_Sans.y && y <= Logo_Sans.y + Logo_Sans.h){
                                     addorkickfromteam(PRETEAM2 , render , 1, font);
@@ -481,6 +520,7 @@ int main(int argc , char** argv){
                                 }
 
                         }
+                        }
 
                         break;
                     
@@ -492,18 +532,22 @@ int main(int argc , char** argv){
                             currentMusic = 2;
                         }
                         
-                        if(team1_made == 0 && team2_made == 0 ){
-                            team1 = createfinalteam(PRETEAM1 , visuals);
-                            team2 = createfinalteam(PRETEAM2 , visuals);
-                            team1_made = 1 ;
-                            team2_made = 1 ;
+
+                        if(team1 == NULL && team2 == NULL ){
+                            init_teams(&team1 , &team2 , PRETEAM1 , PRETEAM2 , visuals);
+
                         }
-                        
-                        SDL_Event fighting_event ;
+
+                        //
+                        SDL_Event fighting_event  ;
+
+                        fight = IN_FIGHT; //IMPORTANT!!! ALWAYS START WITH IN_FIGHT when a match is started.
+
                         
                         int fight_running = 0;
                         
                         while(someonealive(team1 , howmanyselected(PRETEAM1)) && someonealive(team2 , howmanyselected(PRETEAM2)) && fight_running == 0){
+
                         
                             /*----------------------------------------------------------------------------------------MANAGING INPUT FROM USER*/
                             while(SDL_PollEvent(&fighting_event)){
@@ -529,30 +573,53 @@ int main(int argc , char** argv){
                                         }
 
                                         break;
+
                                     case PAUSE:
+                                
+                                        if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
+                                            int x = fighting_event.button.x ;
+                                            int y = fighting_event.button.y;
+
+                                            if(x >= Continue_button_pause.x && x <= Continue_button_pause.x + Continue_button_pause.w && y >= Continue_button_pause.y && y <= Continue_button_pause.y + Continue_button_pause.h){
+                                                fight = IN_FIGHT;
+                                            }
+                                            else if(x >= Menu_button_pause.x && x <= Menu_button_pause.x + Menu_button_pause.w && y >= Menu_button_pause.y && y <= Menu_button_pause.y + Menu_button_pause.h){
+                                                //RESETING ALL VALUES 
+                                                state = MENU;
+                                                fight_running = 1;
+                                                unselectallfighters(PRETEAM1, PRETEAM2);
+                                                cleanup_teams(&team1 , &team2 , &team1_coins , &team2_coins);
+
+                                            }
+                                            else if(x >= Quit_button_pause.x && x <= Quit_button_pause.x + Quit_button_pause.w && y >= Quit_button_pause.y && y <= Quit_button_pause.y + Quit_button_pause.h){
+                                                fight_running=1;
+                                                quit = 1;
+                                            }
+                                            
+                                        }
                                         
-                                        fight = IN_FIGHT;
                                         break;
                                 }
                             }
-                        /*-----------------------------------------------------------------------RENDERING NON-STOP*/
-                            switch(fight){
+                                    /*-----------------------------------------------------------------------RENDERING NON-STOP DURING FIGHT*/
+                                        switch(fight){
 
-                                case IN_FIGHT:
-                                    SDL_RenderClear(render);
-                                    SDL_RenderCopy(render , fight_scenario , NULL , NULL);
-                                    renderfighters(render, team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
-                                    rendermessageTEMP("PAUSE",&Pause_button , render , 0 , font);
-                                    SDL_RenderPresent(render);
-                                    break;
-                                
-                                case PAUSE:
-                                    rendermessageTEMP("WORKS", &MessageSelection , render , 2000 , font);
-                                    break;
-                            
+                                            case IN_FIGHT:
+                                                SDL_RenderClear(render);
+                                                SDL_RenderCopy(render , fight_scenario , NULL , NULL);
+                                                renderfighters(render, team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
+                                                SDL_RenderCopy(render , Pause_button_texture , NULL , &Pause_button);
+                                                SDL_RenderPresent(render);
+                                                break;
+                                            
+                                            case PAUSE:
+                                                SDL_RenderCopy(render , Paused_ui , NULL , NULL);
+                                                SDL_RenderPresent(render);
+                                                break;
+                                        
 
 
-                            }
+                                        }
 
 
                         }
@@ -560,34 +627,10 @@ int main(int argc , char** argv){
                         
                         
                         break;
+                        
                     
-                    case END_GAME:
 
-                        break;
-                    
-                    case HOW_TO_PLAY:
-                        
-                        //Music on?
-                        if(currentMusic != 0){
-                            Mix_HaltMusic();
-                            Mix_FadeInMusic(menu_music,-1 , 3000);
-                            currentMusic = 0;
-                        }
-                        //CLICKED?
-                        if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
-                            int x = event.button.x ;
-                            int y = event.button.y ;
-                            //WHERE?
-                            if( x >= Button_MAINMENU_FROM_SELECTION_HTP.x && x <= Button_MAINMENU_FROM_SELECTION_HTP.x + Button_MAINMENU_FROM_SELECTION_HTP.w && y >= Button_MAINMENU_FROM_SELECTION_HTP.y && y <= Button_MAINMENU_FROM_SELECTION_HTP.y + Button_MAINMENU_FROM_SELECTION_HTP.h){
-                                Mix_PlayChannel(-1 , back_sound , 0);
-                                state = MENU;
-                            }
-
-                        }
-
-                        break;
-
-                }
+                
 
             }
 
@@ -622,13 +665,17 @@ int main(int argc , char** argv){
                         SDL_RenderClear(render);
                         SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
                         rendercoins(render , team1_coins , &coins1 , 40 , dark_gray, font);
+                        rendercoins(render , team2_coins , &coins2 , 40 , dark_gray , font);
+
                         SDL_RenderCopy(render , blink_turn , NULL , &yourturn1);
                         renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , current_team);
                         SDL_RenderPresent(render);
+                        
                         if(selecting_team1 == 1){
                             //ready button pressed
                             SDL_RenderCopy(render , ready_pressed , NULL , &ready1);
                             SDL_RenderPresent(render);
+                            current_team = 2;
                         }
                         else if(error_message_1 == 1){
                             rendermessageTEMP("You need to pick at least 2 fighters" , &MessageSelection , render , 2000 , font);
@@ -646,14 +693,18 @@ int main(int argc , char** argv){
                         renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , 1);
                         renderlogoselectedfighters(render , PRETEAM2 ,All_Logos , current_team);
                         SDL_RenderPresent(render);
+
                         if(selecting_team2 == 1){
                             SDL_RenderClear(render);
                             SDL_RenderCopy(render , teamselection_screen , NULL , NULL);
+                            rendercoins(render , team1_coins , &coins1 , 40 , dark_gray, font);
+                            rendercoins(render , team2_coins , &coins2 , 40 , dark_gray, font);
                             SDL_RenderCopy(render , blink_turn , NULL , &yourturn2);
                             SDL_RenderCopy(render , ready_pressed , NULL ,&ready1);
                             SDL_RenderCopy(render , ready_pressed , NULL , &ready2);
-                            SDL_RenderPresent(render);
-                            current_team = 1;             
+                            renderlogoselectedfighters(render , PRETEAM1 ,All_Logos , 1);
+                            renderlogoselectedfighters(render , PRETEAM2 ,All_Logos , current_team);
+                            SDL_RenderPresent(render);         
                             state= FIGHT;
                         }
                         else if(error_message_1){
@@ -663,9 +714,6 @@ int main(int argc , char** argv){
                     }
                     break;
                 
-                case FIGHT:
-
-                    break;
                 
                 case END_GAME:
 
