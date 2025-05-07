@@ -124,10 +124,11 @@ int main(int argc , char** argv){
     SDL_Texture* All_Logos[9] = {Square_JohnWick , Square_Sans , Square_Batman , Square_Hulk , Square_Snorlax , Square_Demolisher , Square_Lifeline , Square_Dracula , Square_Medic};
     SDL_Texture* fire_animation = loadTexture("assets/anim/burning_loop_3.png", render);
     SDL_Color dark_gray = { 70 , 70 , 70};
-    SDL_Texture* visuals[9] = {loadTexture("assets/models/png/John_Wick_model.png" , render) , loadTexture("assets/models/png/Sans_model.png" ,render  ) , loadTexture( "assets/models/png/Batman_model.png",  render) , loadTexture( "assets/models/png/Hulk_model.png", render ) ,loadTexture( "assets/models/png/Snorlax_model.png", render ) ,loadTexture( "assets/models/png/Demolisher_model.png", render ) ,loadTexture( "assets/models/png/Lifeline_model.png", render ) ,loadTexture( "assets/models/png/Dracula_model.png", render ) ,loadTexture( "assets/models/png/Medic_model.png", render ) };
+    SDL_Texture* visuals[9] = {loadTexture("assets/anim/John_Wick_model_idle.png" , render) , loadTexture("assets/anim/Sans_model_idle.png" ,render  ) , loadTexture( "assets/anim/Batman_model_idle.png",  render) , loadTexture( "assets/anim/Hulk_model_idle.png", render ) ,loadTexture( "assets/anim/Snorlax_model_idle.png", render ) ,loadTexture( "assets/anim/Demolisher_model_idle.png", render ) ,loadTexture( "assets/anim/Lifeline_model_idle.png", render ) ,loadTexture( "assets/anim/Dracula_model_idle.png", render ) ,loadTexture( "assets/anim/Medic_model_idle.png", render ) };
     SDL_Texture* Pause_button_texture = loadTexture("assets/fight/pause.png", render);
     SDL_Texture* Paused_ui = loadTexture("assets/fight/pauseui.png", render);
     SDL_Texture* torches = loadTexture("assets/2torches.png" , render);
+    SDL_Texture* fight_torches_texture = loadTexture("assets/fight/torches_fight.png" , render);
 
     TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 40);
     if(!font){
@@ -610,6 +611,11 @@ int main(int argc , char** argv){
                                                 SDL_RenderCopy(render , fight_scenario , NULL , NULL);
                                                 renderfighters(render, team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
                                                 SDL_RenderCopy(render , Pause_button_texture , NULL , &Pause_button);
+                                                render_animation(render , fire_animation , &fight_torch1 , 15 , 24 , 1 , 6 , 1 , 100);
+                                                render_animation(render , fire_animation , &fight_torch2 , 15 , 24 , 1 , 6 , 1, 100);
+                                                render_animation(render , fire_animation , &fight_torch3 , 15 , 24 , 1 , 6 , 1, 100);
+                                                render_animation(render, fire_animation , &fight_torch4 , 15 , 24 , 1 , 6 , 1, 100);
+                                                SDL_RenderCopy(render , fight_torches_texture , NULL , NULL);
                                                 SDL_RenderPresent(render);
                                                 break;
                                             
@@ -644,8 +650,8 @@ int main(int argc , char** argv){
                 case MENU:
                     SDL_RenderClear(render);
                     SDL_RenderCopy(render , menu_screen , NULL , NULL);
-                    render_fire_animation(render, fire_animation , &Fire1 , 10 , 6 );
-                    render_fire_animation(render, fire_animation , &Fire2 , 10 , 6 );
+                    render_animation(render, fire_animation , &Fire1 , 15 , 24 , 10 , 6 , 1 , 100);
+                    render_animation(render, fire_animation , &Fire2 , 15 , 24 , 10 , 6 , 1 , 100);
                     SDL_RenderCopy(render , torches , NULL , NULL);
                     SDL_RenderPresent(render);
                     break;
