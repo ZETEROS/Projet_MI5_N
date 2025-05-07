@@ -279,6 +279,40 @@ Fighter* createfinalteam ( Fighter** PRETEAM , SDL_Texture** visuals){
     return a;
 
 }
+void render_animation(SDL_Renderer* renderer, SDL_Texture* sprites, SDL_Rect* pos, int frame_width ,int frame_height, int scale, int num_frames , int whatteam , int ms_to_change_frame) {
+
+    static Uint32 start_time = 0;
+    if (start_time == 0) start_time = SDL_GetTicks();
+    
+    //How much time passed already?
+    Uint32 elapsed = SDL_GetTicks() - start_time;
+
+    // Change frame each 100 ms so 10 fps.
+    int current_frame = (elapsed / ms_to_change_frame) % num_frames;
+
+    SDL_Rect src_rect = {
+        .x = current_frame * frame_width,
+        .y = 0,
+        .w = frame_width,
+        .h = frame_height
+    };
+
+    SDL_Rect dest_rect = {
+        .x = (pos->x) ,
+        .y = (pos->y) ,
+        .w = frame_width * scale,
+        .h = frame_height * scale
+    };
+
+
+    if(whatteam == 1){
+        SDL_RenderCopy(renderer, sprites, &src_rect , &dest_rect);
+    }
+    else if(whatteam == 2){
+        SDL_RenderCopyEx(renderer , sprites , &src_rect , &dest_rect , 0.0 , NULL , SDL_FLIP_HORIZONTAL);
+    
+    }
+}
 
 void renderfighters(SDL_Renderer* render, Fighter* Team1 , Fighter* Team2 , int team1_count , int team2_count){
     SDL_Rect* team1_slots[4] = {&Team1_Fighter1 , &Team1_Fighter2 , &Team1_Fighter3 , &Team1_Fighter4};
@@ -287,16 +321,19 @@ void renderfighters(SDL_Renderer* render, Fighter* Team1 , Fighter* Team2 , int 
     for (int i = 0; i < team1_count; i++) {
         if (Team1[i].model != NULL) {
             if(Team1[i].hp > 0){
-                SDL_RenderCopy(render, Team1[i].model, NULL, team1_slots[i]);
+                //SDL_RenderCopy(render, Team1[i].model, NULL, team1_slots[i]);
+                render_animation(render , Team1[i].model , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
             }
             else{
-                SDL_RenderCopy(render, Team1[i].model, NULL, team1_slots[i]);
+                //SDL_RenderCopy(render, Team1[i].model, NULL, team1_slots[i]);
+                render_animation(render , Team1[i].model , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
             }
         }
     }
     for (int j = 0; j < team2_count; j++) {
         if (Team2[j].model != NULL) {
-            SDL_RenderCopyEx(render, Team2[j].model, NULL, team2_slots[j] , 0.0 , NULL , SDL_FLIP_HORIZONTAL);
+            //SDL_RenderCopyEx(render, Team2[j].model, NULL, team2_slots[j] , 0.0 , NULL , SDL_FLIP_HORIZONTAL);
+            render_animation(render , Team2[j].model , team2_slots[j] , 105 , 165 , 1 , 5 , 2 , 200);
         }
     
     }
@@ -334,38 +371,9 @@ int someonealive(Fighter* Team , int team_count){
 }
 
 
-void render_fire_animation(SDL_Renderer* renderer, SDL_Texture* fire_texture, SDL_Rect* pos, int scale, int num_frames) {
-
-    static Uint32 start_time = 0;
-    if (start_time == 0) start_time = SDL_GetTicks();
-
-    int frame_width = 15;
-    int frame_height = 24;
-    
-    //How much time passed already?
-    Uint32 elapsed = SDL_GetTicks() - start_time;
-
-    // Change frame each 100 ms so 10 fps.
-    int current_frame = (elapsed / 100) % num_frames;
-
-    SDL_Rect src_rect = {
-        .x = current_frame * frame_width,
-        .y = 0,
-        .w = frame_width,
-        .h = frame_height
-    };
-
-    SDL_Rect dest_rect = {
-        .x = (pos->x) ,
-        .y = (pos->y) - (frame_height * scale),
-        .w = frame_width * scale,
-        .h = frame_height * scale
-    };
 
 
 
-    SDL_RenderCopy(renderer, fire_texture, &src_rect , &dest_rect);
-}
 
 void init_teams(Fighter** team1, Fighter** team2 , Fighter** PRETEAM1 ,Fighter** PRETEAM2 , SDL_Texture** visuals) {
     *team1 = createfinalteam(PRETEAM1, visuals);
@@ -380,5 +388,7 @@ void cleanup_teams(Fighter** team1, Fighter** team2 , int* team1_coins , int* te
     *team1_coins = 0;
     *team2_coins = 0;
 }
+
+
 
 #endif
