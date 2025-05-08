@@ -34,6 +34,12 @@ void special_attack(Fighter* Attacker, Fighter* Target) {
         Target->dmg = (int)(Target->dmg * 0.8);  // Reduces dmg by 20%
     } else if (strcmp(Attacker->name, "Lifeline") == 0) {
         Attacker->hp = (Attacker->hp + 25 > 100) ? 100 : Attacker->hp + 25;
+        /* can also be read like this : 
+            if (Attacker->hp + 25 > Attacker->hp_max) {
+                Attacker->hp = Attacker->hp_max;
+            } else {
+                Attacker->hp += 25;
+            } */
     } else if (strcmp(Attacker->name, "Sans") == 0) {
         Target->dodge /= 2;  // Reduces dodge by half
     } else if (strcmp(Attacker->name, "Ronflex") == 0) {
