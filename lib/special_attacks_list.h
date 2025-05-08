@@ -27,7 +27,7 @@ void assign_special(Fighter* a){
 }
 
 //Fonction to import the fighter and to use the assign fonction saw before.
-Fighter importandassign(char* file , SDL_Texture** visuals){
+Fighter importandassign(char* file , SDL_Texture** visuals , SDL_Texture** visuals_selected){
     Fighter a;
     FILE* doc = fopen(file , "rb");
     if(doc == NULL){
@@ -44,10 +44,11 @@ Fighter importandassign(char* file , SDL_Texture** visuals){
 
     for (int i= 0 ; i<9 ; i++){
         if(strcmp(names[i] , a.name) == 0){
-            a.model = visuals[i];
+            a.sprite = visuals[i];
+            a.sprite_selected = visuals_selected[i];
         }
     }
-    if(!a.model){
+    if(!a.sprite || !a.sprite_selected){
         printf("Couldn't assign the visual model to , at least , a fighter. Maybe the binary file has the wrong name for the fighter or the .png is missing.");
         exit(10);
     }

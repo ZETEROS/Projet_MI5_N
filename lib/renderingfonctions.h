@@ -222,8 +222,15 @@ void unselectallfighters(Fighter** PRETEAM1 , Fighter** PRETEAM2){
         PRETEAM2[i]->selected = 0 ;
     }
 }
+void FIGHT_unselectallfighters(Fighter* team_to_unselect1 , Fighter* team_to_unselect2){
 
-Fighter* createfinalteam ( Fighter** PRETEAM , SDL_Texture** visuals){
+    for (int i = 0 ; i<9 ; i++){
+        team_to_unselect1[i].selected = 0 ;
+        team_to_unselect2[i].selected = 0 ;
+    }
+}
+
+Fighter* createfinalteam ( Fighter** PRETEAM , SDL_Texture** visuals , SDL_Texture** visuals_selected){
 
     int numberfighters = howmanyselected(PRETEAM);
     Fighter* a = malloc(sizeof(Fighter) * numberfighters);
@@ -232,39 +239,39 @@ Fighter* createfinalteam ( Fighter** PRETEAM , SDL_Texture** visuals){
         if (PRETEAM[i]->selected == 1){
             switch(i){
                 case 0:
-                    a[j] = importandassign("Fighters/John_Wick" , visuals);
+                    a[j] = importandassign("Fighters/John_Wick" , visuals , visuals_selected);
                     j++;
                 break;
                 case 1:
-                    a[j] = importandassign("Fighters/Sans", visuals);
+                    a[j] = importandassign("Fighters/Sans", visuals, visuals_selected);
                     j++;
                 break;
                 case 2:
-                    a[j] = importandassign("Fighters/Batman", visuals);
+                    a[j] = importandassign("Fighters/Batman", visuals, visuals_selected);
                     j++;
                 break;
                 case 3:
-                    a[j] = importandassign("Fighters/Hulk", visuals);
+                    a[j] = importandassign("Fighters/Hulk", visuals, visuals_selected);
                     j++;
                 break;
                 case 4:
-                    a[j] = importandassign("Fighters/Snorlax", visuals);
+                    a[j] = importandassign("Fighters/Snorlax", visuals, visuals_selected);
                     j++;
                 break;
                 case 5:
-                    a[j] = importandassign("Fighters/Demolisher", visuals);
+                    a[j] = importandassign("Fighters/Demolisher", visuals, visuals_selected);
                     j++;
                 break;
                 case 6:
-                    a[j] = importandassign("Fighters/Lifeline", visuals);
+                    a[j] = importandassign("Fighters/Lifeline", visuals, visuals_selected);
                     j++;
                 break;
                 case 7:
-                    a[j] = importandassign("Fighters/Dracula", visuals);
+                    a[j] = importandassign("Fighters/Dracula", visuals, visuals_selected);
                     j++;
                 break;
                 case 8:
-                    a[j] = importandassign("Fighters/The_Medic", visuals);
+                    a[j] = importandassign("Fighters/The_Medic", visuals, visuals_selected);
                     j++;
                 break;
                 
@@ -319,21 +326,29 @@ void renderfighters(SDL_Renderer* render, Fighter* Team1 , Fighter* Team2 , int 
     SDL_Rect* team2_slots[4] = {&Team2_Fighter1 , &Team2_Fighter2 , &Team2_Fighter3 , &Team2_Fighter4};
     
     for (int i = 0; i < team1_count; i++) {
-        if (Team1[i].model != NULL) {
+        if (Team1[i].sprite != NULL || Team1[i].sprite_selected != NULL) {
             if(Team1[i].hp > 0){
-                //SDL_RenderCopy(render, Team1[i].model, NULL, team1_slots[i]);
-                render_animation(render , Team1[i].model , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
-            }
+                if(Team1[i].selected == 1){
+                    render_animation(render , Team1[i].sprite_selected , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
+                }
+                else{
+                    render_animation(render , Team1[i].sprite , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
+                }
+            }   
             else{
-                //SDL_RenderCopy(render, Team1[i].model, NULL, team1_slots[i]);
-                render_animation(render , Team1[i].model , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
+                
+                render_animation(render , Team1[i].sprite , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
             }
         }
     }
     for (int j = 0; j < team2_count; j++) {
-        if (Team2[j].model != NULL) {
-            //SDL_RenderCopyEx(render, Team2[j].model, NULL, team2_slots[j] , 0.0 , NULL , SDL_FLIP_HORIZONTAL);
-            render_animation(render , Team2[j].model , team2_slots[j] , 105 , 165 , 1 , 5 , 2 , 200);
+        if (Team2[j].sprite != NULL || Team2[j].sprite_selected != NULL) {
+            if(Team2[j].selected == 1){
+                render_animation(render , Team2[j].sprite_selected , team2_slots[j] , 105 , 165 , 1 , 5 , 2 , 200);
+            }
+            else{
+                render_animation(render , Team2[j].sprite , team2_slots[j] , 105 , 165 , 1 , 5 , 2 , 200);
+            }
         }
     
     }
@@ -375,9 +390,9 @@ int someonealive(Fighter* Team , int team_count){
 
 
 
-void init_teams(Fighter** team1, Fighter** team2 , Fighter** PRETEAM1 ,Fighter** PRETEAM2 , SDL_Texture** visuals) {
-    *team1 = createfinalteam(PRETEAM1, visuals);
-    *team2 = createfinalteam(PRETEAM2, visuals);
+void init_teams(Fighter** team1, Fighter** team2 , Fighter** PRETEAM1 ,Fighter** PRETEAM2 , SDL_Texture** visuals , SDL_Texture ** visuals_selected) {
+    *team1 = createfinalteam(PRETEAM1, visuals , visuals_selected);
+    *team2 = createfinalteam(PRETEAM2, visuals , visuals_selected);
 }
 
 void cleanup_teams(Fighter** team1, Fighter** team2 , int* team1_coins , int* team2_coins) {

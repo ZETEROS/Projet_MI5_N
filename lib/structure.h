@@ -13,7 +13,8 @@ struct Fighter {
     float hp , hp_max , dmg , def , dodge , speed ;
 
     //Visual model
-    SDL_Texture* model;
+    SDL_Texture* sprite;
+    SDL_Texture* sprite_selected;
 
 
     char special_attack_name[20];
