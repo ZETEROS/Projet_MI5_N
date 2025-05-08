@@ -20,6 +20,14 @@ From now on at the team building stage, when you right click on a character's lo
 The next step will be to program the actual team formation so we can move on to the combat phase. When we get there, I guess I'll have to draw the combat location and more. Anxious to see how this turns out.
 Also, I forgot to mention that I added a background music and sound effects when you click on the buttons. These sounds are in the “assets” folder of course along with the rest of the content to be rendered. These same sounds were selected from the page Itch.io, the authors AlexMdle and ArcOfDream leave these pixel art style music free to use, both commercial and professional.
 
+### 08 - 05 - 2025
+We are still working on the game and multiple modifications in graphics and textures were applied. Now we have created several functions that allow us to play animation on screen, this is easily done using spritesheets created with Piskel, a pixel art tool that allows you to create animation and export these in a spritesheet format (each frame next to the previous one) which allows to use the same function that takes this spritesheet and renders part by part on the x-axis of the image which makes the animation effect. These spritesheets were drawn for each character adding an idle animation for them, and also all the characters have a version with white edges that will be reproduced when a click on the character is detected allowing to have a visual reference on who we have selected during the game.
+Not to forget to mention also the addition of a third background music that will be played during combat, while the previous one that we thought would also be played during combat will only be played during the fighter selection for the teams.
+We have also added animations of lit torches in the menu giving a touch of movement in the menu that was missing, these same torches were added in the background during the combat part giving also a bit of life to the background while the combat is going on, if the time is enough we can draw a ship or a whale that appears in the background which is the sea.
+Now we are concentrating on programming the combat and then we will add the details.
+
+
+
 
 
 ## SETUP
