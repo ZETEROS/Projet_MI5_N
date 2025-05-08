@@ -27,7 +27,7 @@ void assign_special(Fighter* a){
 }
 
 // Normal attack function for each character
-void normal_attack(Fighter* Attacker, Fighter* Target) { //don't forget the case where the character dodge
+void normal_attack(Fighter* Attacker, Fighter* Target) { //to use when the character didn't dodge
     float dmg = Attacker->dmg * Target->def;
     Target->hp -= dmg;
     if (Target->hp < 0) Target->hp = 0;  // Prevent negative HP
