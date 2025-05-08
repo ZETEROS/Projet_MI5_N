@@ -26,6 +26,13 @@ void assign_special(Fighter* a){
     //}
 }
 
+// Normal attack function for each character
+void normal_attack(Fighter* Attacker, Fighter* Target) { //don't forget the case where the character dodge
+    float dmg = Attacker->dmg * Target->def;
+    Target->hp -= dmg;
+    if (Target->hp < 0) Target->hp = 0;  // Prevent negative HP
+}
+
 void special_attack(Fighter* Attacker, Fighter* Target) {
     if (strcmp(Attacker->name, "John_Wick") == 0) {
         int dmg = (int)(Attacker->dmg * 0.75);  // 75% damage per shot
