@@ -125,6 +125,7 @@ int main(int argc , char** argv){
     SDL_Texture* fire_animation = loadTexture("assets/anim/burning_loop_3.png", render);
     SDL_Color dark_gray = { 70 , 70 , 70};
     SDL_Texture* visuals[9] = {loadTexture("assets/anim/John_Wick_model_idle.png" , render) , loadTexture("assets/anim/Sans_model_idle.png" ,render  ) , loadTexture( "assets/anim/Batman_model_idle.png",  render) , loadTexture( "assets/anim/Hulk_model_idle.png", render ) ,loadTexture( "assets/anim/Snorlax_model_idle.png", render ) ,loadTexture( "assets/anim/Demolisher_model_idle.png", render ) ,loadTexture( "assets/anim/Lifeline_model_idle.png", render ) ,loadTexture( "assets/anim/Dracula_model_idle.png", render ) ,loadTexture( "assets/anim/Medic_model_idle.png", render ) };
+    SDL_Texture* visuals_selected[9] = {loadTexture("assets/anim/John_Wick_model_idle_selected.png" , render) , loadTexture("assets/anim/Sans_model_idle_selected.png" ,render  ) , loadTexture( "assets/anim/Batman_model_idle_selected.png",  render) , loadTexture( "assets/anim/Hulk_model_idle_selected.png", render ) ,loadTexture( "assets/anim/Snorlax_model_idle_selected.png", render ) ,loadTexture( "assets/anim/Demolisher_model_idle_selected.png", render ) ,loadTexture( "assets/anim/Lifeline_model_idle_selected.png", render ) ,loadTexture( "assets/anim/Dracula_model_idle_selected.png", render ) ,loadTexture( "assets/anim/Medic_model_idle_selected.png", render ) };
     SDL_Texture* Pause_button_texture = loadTexture("assets/fight/pause.png", render);
     SDL_Texture* Paused_ui = loadTexture("assets/fight/pauseui.png", render);
     SDL_Texture* torches = loadTexture("assets/2torches.png" , render);
@@ -144,26 +145,26 @@ int main(int argc , char** argv){
     Mix_Music* fighting_music = Mix_LoadMUS("assets/Point_Zero.ogg");
 
     //FIGHTERS TEAM 2
-    Fighter John_Wick1 = importandassign("Fighters/John_Wick" , visuals);
-    Fighter Sans1 = importandassign("Fighters/Sans", visuals);
-    Fighter Batman1 = importandassign("Fighters/Batman", visuals);
-    Fighter Hulk1 = importandassign("Fighters/Hulk", visuals);
-    Fighter Snorlax1 = importandassign("Fighters/Snorlax", visuals);
-    Fighter Demolisher1 = importandassign("Fighters/Demolisher", visuals);
-    Fighter Lifeline1 = importandassign("Fighters/Lifeline", visuals);
-    Fighter Dracula1 = importandassign("Fighters/Dracula", visuals);
-    Fighter Medic1 = importandassign("Fighters/The_Medic", visuals);
+    Fighter John_Wick1 = importandassign("Fighters/John_Wick" , visuals , visuals_selected);
+    Fighter Sans1 = importandassign("Fighters/Sans", visuals, visuals_selected);
+    Fighter Batman1 = importandassign("Fighters/Batman", visuals, visuals_selected);
+    Fighter Hulk1 = importandassign("Fighters/Hulk", visuals, visuals_selected);
+    Fighter Snorlax1 = importandassign("Fighters/Snorlax", visuals, visuals_selected);
+    Fighter Demolisher1 = importandassign("Fighters/Demolisher", visuals, visuals_selected);
+    Fighter Lifeline1 = importandassign("Fighters/Lifeline", visuals, visuals_selected);
+    Fighter Dracula1 = importandassign("Fighters/Dracula", visuals, visuals_selected);
+    Fighter Medic1 = importandassign("Fighters/The_Medic", visuals, visuals_selected);
 
     //FIGHTERS TEAM 2
-    Fighter John_Wick2 = importandassign("Fighters/John_Wick", visuals);
-    Fighter Sans2 = importandassign("Fighters/Sans", visuals);
-    Fighter Batman2 = importandassign("Fighters/Batman", visuals);
-    Fighter Hulk2 = importandassign("Fighters/Hulk", visuals);
-    Fighter Snorlax2 = importandassign("Fighters/Snorlax", visuals);
-    Fighter Demolisher2 = importandassign("Fighters/Demolisher", visuals);
-    Fighter Lifeline2 = importandassign("Fighters/Lifeline", visuals);
-    Fighter Dracula2 = importandassign("Fighters/Dracula", visuals);
-    Fighter Medic2 = importandassign("Fighters/The_Medic", visuals);
+    Fighter John_Wick2 = importandassign("Fighters/John_Wick", visuals, visuals_selected);
+    Fighter Sans2 = importandassign("Fighters/Sans", visuals, visuals_selected);
+    Fighter Batman2 = importandassign("Fighters/Batman", visuals, visuals_selected);
+    Fighter Hulk2 = importandassign("Fighters/Hulk", visuals, visuals_selected);
+    Fighter Snorlax2 = importandassign("Fighters/Snorlax", visuals, visuals_selected);
+    Fighter Demolisher2 = importandassign("Fighters/Demolisher", visuals, visuals_selected);
+    Fighter Lifeline2 = importandassign("Fighters/Lifeline", visuals, visuals_selected);
+    Fighter Dracula2 = importandassign("Fighters/Dracula", visuals, visuals_selected);
+    Fighter Medic2 = importandassign("Fighters/The_Medic", visuals, visuals_selected);
     
 
     //Initial Values 
@@ -536,7 +537,7 @@ int main(int argc , char** argv){
                         
 
                         if(team1 == NULL && team2 == NULL ){
-                            init_teams(&team1 , &team2 , PRETEAM1 , PRETEAM2 , visuals);
+                            init_teams(&team1 , &team2 , PRETEAM1 , PRETEAM2 , visuals , visuals_selected);
 
                         }
 
@@ -547,11 +548,15 @@ int main(int argc , char** argv){
 
                         
                         int fight_running = 0;
+                        //DECIDES AT THE BEGINNING WHO STARTS ATTACKING IN FONCTION OF WHAT TEAM HAS THE FASTEST FIGHTERS
+                        int turn_to_attack = whostarts(team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
                         
+/*__________________________________________________________________________________________________FIGHT LOOP STARTS HERE_____________________________________________________________________________________________________________*/
+                       
                         while(someonealive(team1 , howmanyselected(PRETEAM1)) && someonealive(team2 , howmanyselected(PRETEAM2)) && fight_running == 0){
 
                         
-                            /*----------------------------------------------------------------------------------------MANAGING INPUT FROM USER*/
+            /*_____________________________________________________________MANAGING INPUT FROM USER FOR THE FIGHT__________________________________________________________________*/
                             while(SDL_PollEvent(&fighting_event)){
 
                                 if(fighting_event.type == SDL_QUIT){
@@ -563,18 +568,68 @@ int main(int argc , char** argv){
                                 switch(fight){
 
                                     case IN_FIGHT:
-                                        
-                                        if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
-                                            int x = fighting_event.button.x ;
-                                            int y = fighting_event.button.y;
+                                        /*_________________________________________TEAM 1 _________________________________________*/
+                                        if(turn_to_attack == 1){
+                                            if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
+                                                int x = fighting_event.button.x ;
+                                                int y = fighting_event.button.y;
 
-                                            if(x >= Pause_button.x && x <= Pause_button.x + Pause_button.w && y >= Pause_button.y && y <= Pause_button.y + Pause_button.h){
-                                                fight = PAUSE;
+                                                if(x >= Pause_button.x && x <= Pause_button.x + Pause_button.w && y >= Pause_button.y && y <= Pause_button.y + Pause_button.h){
+                                                    fight = PAUSE;
+                                                }
+                                                else if(x >= Team1_Fighter1.x && x <= Team1_Fighter1.x + Team1_Fighter1.w && y >= Team1_Fighter1.y && y <= Team1_Fighter1.y + Team1_Fighter1.h){
+                                                    FIGHT_unselectallfighters(team1 , team2);
+                                                    team1[0].selected = 1;
+
+                                                }
+                                                else if(x >= Team1_Fighter2.x && x <= Team1_Fighter2.x + Team1_Fighter2.w && y >= Team1_Fighter2.y && y <= Team1_Fighter2.y + Team1_Fighter2.h){
+                                                    FIGHT_unselectallfighters(team1 , team2);
+                                                    team1[1].selected = 1;
+                                                }
+                                                else if(x >= Team1_Fighter3.x && x <= Team1_Fighter3.x + Team1_Fighter3.w && y >= Team1_Fighter3.y && y <= Team1_Fighter3.y + Team1_Fighter3.h && howmanyselected(PRETEAM1) >= 3){
+                                                    FIGHT_unselectallfighters(team1 , team2);
+                                                    team1[2].selected = 1;
+                                                }
+                                                else if(x >= Team1_Fighter4.x && x <= Team1_Fighter4.x + Team1_Fighter4.w && y >= Team1_Fighter4.y && y <= Team1_Fighter4.y + Team1_Fighter4.h && howmanyselected(PRETEAM1) == 4){
+                                                    FIGHT_unselectallfighters(team1 , team2);
+                                                    team1[3].selected = 1;
+                                                }
+                                                
                                             }
-                                            
+                                        }
+                                        /*_________________________________________TEAM 2 _________________________________________*/
+                                        else if(turn_to_attack == 2){
+                                            if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
+                                                int x = fighting_event.button.x ;
+                                                int y = fighting_event.button.y;
+
+                                                if(x >= Pause_button.x && x <= Pause_button.x + Pause_button.w && y >= Pause_button.y && y <= Pause_button.y + Pause_button.h){
+                                                    fight = PAUSE;
+                                                }
+                                                else if(x >= Team2_Fighter1.x && x <= Team2_Fighter1.x + Team2_Fighter1.w && y >= Team2_Fighter1.y && y <= Team2_Fighter1.y + Team2_Fighter1.h){
+                                                    FIGHT_unselectallfighters(team1 , team2);
+                                                    team2[0].selected = 1;
+                                                }
+                                                else if(x >= Team2_Fighter2.x && x <= Team2_Fighter2.x + Team2_Fighter2.w && y >= Team2_Fighter2.y && y <= Team2_Fighter2.y + Team2_Fighter2.h){
+                                                    FIGHT_unselectallfighters(team1 , team2);
+                                                    team2[1].selected = 1;
+                                                }
+                                                else if(x >= Team2_Fighter3.x && x <= Team2_Fighter3.x + Team2_Fighter3.w && y >= Team2_Fighter3.y && y <= Team2_Fighter3.y + Team2_Fighter3.h && howmanyselected(PRETEAM2) >= 3){
+                                                    FIGHT_unselectallfighters(team1 , team2);
+                                                    team2[2].selected = 1;
+                                                }
+                                                else if(x >= Team2_Fighter4.x && x <= Team2_Fighter4.x + Team2_Fighter4.w && y >= Team2_Fighter4.y && y <= Team2_Fighter4.y + Team2_Fighter4.h && howmanyselected(PRETEAM2) == 4){
+                                                    FIGHT_unselectallfighters(team1 , team2);
+                                                    team2[3].selected = 1;
+                                                }
+                                                
+                                            }
                                         }
 
                                         break;
+
+                                    
+                                    /*_______________________________________________________PAUSE____________________________________________________________________________________________*/
 
                                     case PAUSE:
                                 
@@ -603,7 +658,8 @@ int main(int argc , char** argv){
                                         break;
                                 }
                             }
-                                    /*-----------------------------------------------------------------------RENDERING NON-STOP DURING FIGHT*/
+                     /*_____________________________________________________________RENDERING THE FIGHT NON STOP __________________________________________________________________*/
+
                                         switch(fight){
 
                                             case IN_FIGHT:
@@ -643,7 +699,7 @@ int main(int argc , char** argv){
 
             }
 
-/*-------------------------------------------------------------------------------------------------------*/            
+/*---------------------------RENDER EVERYTHING EXCEPT THE FIGHT , THE FIGHT HAS ITS OWN RENDERING LOOP AND EVENT POLLING-------------------------------------------------------*/            
             //always render and show things 
             switch(state){
                     
