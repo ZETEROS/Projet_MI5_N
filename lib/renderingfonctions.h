@@ -130,6 +130,16 @@ int howmanyselected(Fighter** team ){
     }
     return num;
 }
+int FIGHT_didselectedsomeone(Fighter* team ){
+    int num = 0;
+    for (int i= 0 ; i<9 ; i++){
+        if(team[i].selected == 1){
+            return 1;
+        }
+        
+    }
+    return 0;
+}
 
 void rendermessageTEMP(char* message ,SDL_Rect* pos,  SDL_Renderer* renderer , /*0 for no delay , >0 for delay , this will ignore every input during the showing of the message*/ int timeshowing , TTF_Font* font ){
     SDL_Color color = {255 , 255 , 255};
@@ -185,22 +195,26 @@ void renderlogoselectedfighters(SDL_Renderer* render, Fighter** PRETEAM ,SDL_Tex
     }
 }
 
-void addorkickfromteam(Fighter** preteam , SDL_Renderer* render , int character, TTF_Font* font ){
+void addorkickfromteam(Fighter** preteam , SDL_Renderer* render , int character, TTF_Font* font , Mix_Chunk* tick_sound){
     if(howmanyselected(preteam) <= 4 && howmanyselected(preteam) >= 0){
             if(preteam[character]->selected == 0 ){
                 if(howmanyselected(preteam) == 4){
+                    Mix_PlayChannel(-1 , tick_sound , 0);
                     rendermessageTEMP("You only can pick 4" , &MessageSelection , render , 2000 , font );
                 }
                 else{
+                    Mix_PlayChannel(-1 , tick_sound , 0);
                     preteam[character]->selected =1 ;
                 }
             }
 
             else if(preteam[character]->selected == 1){
                 if(howmanyselected(preteam) == 0){
+                    Mix_PlayChannel(-1 , tick_sound , 0);
                     rendermessageTEMP("Impossible" , &MessageSelection , render , 2000, font );
                 }
                 else{
+                    Mix_PlayChannel(-1 , tick_sound , 0);
                     preteam[character]->selected = 0;
                 }
                                         
@@ -208,6 +222,7 @@ void addorkickfromteam(Fighter** preteam , SDL_Renderer* render , int character,
     }
 
     else{
+        Mix_PlayChannel(-1 , tick_sound , 0);
         rendermessageTEMP("You need to pick 2 to 4 fighters" , &MessageSelection , render , 2000 , font);
     }
 
@@ -321,7 +336,38 @@ void render_animation(SDL_Renderer* renderer, SDL_Texture* sprites, SDL_Rect* po
     }
 }
 
-void renderfighters(SDL_Renderer* render, Fighter* Team1 , Fighter* Team2 , int team1_count , int team2_count){
+void render_hp(SDL_Renderer* render , SDL_Texture* hp_sprite , SDL_Rect* pos , Fighter fighter ){
+    int frame_width = 29;
+    int frame_height = 4 ;
+    int scale = 4;
+
+    int half_hearts = fighter.hp / 10;
+
+    int num_frame = 10 - half_hearts; 
+
+    
+    if (num_frame > 10) num_frame = 10;
+    if (num_frame < 0) num_frame = 0;
+    
+    if (num_frame == 10) num_frame = 9;
+
+    SDL_Rect src = {
+        .x = num_frame * frame_width,
+        .y = 0,
+        .w = frame_width,
+        .h = frame_height
+    };
+    SDL_Rect above_fighter = {
+        .x = (pos -> x) + (105/2) - (frame_width*scale /2) ,
+        .y = (pos->y) - frame_height * scale,
+        .w =  frame_width * scale ,
+        .h = frame_height * scale
+    };
+
+    SDL_RenderCopy(render, hp_sprite, &src, &above_fighter);
+}
+
+void renderfighters(SDL_Renderer* render,SDL_Texture* hp_sprite , Fighter* Team1 , Fighter* Team2 , int team1_count , int team2_count ){
     SDL_Rect* team1_slots[4] = {&Team1_Fighter1 , &Team1_Fighter2 , &Team1_Fighter3 , &Team1_Fighter4};
     SDL_Rect* team2_slots[4] = {&Team2_Fighter1 , &Team2_Fighter2 , &Team2_Fighter3 , &Team2_Fighter4};
     
@@ -330,14 +376,17 @@ void renderfighters(SDL_Renderer* render, Fighter* Team1 , Fighter* Team2 , int 
             if(Team1[i].hp > 0){
                 if(Team1[i].selected == 1){
                     render_animation(render , Team1[i].sprite_selected , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
+                    render_hp(render , hp_sprite , team1_slots[i],Team1[i] );
                 }
                 else{
                     render_animation(render , Team1[i].sprite , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
+                    render_hp(render , hp_sprite , team1_slots[i],Team1[i] );
                 }
             }   
             else{
                 
                 render_animation(render , Team1[i].sprite , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
+                render_hp(render , hp_sprite , team1_slots[i],Team1[i] );
             }
         }
     }
@@ -345,9 +394,11 @@ void renderfighters(SDL_Renderer* render, Fighter* Team1 , Fighter* Team2 , int 
         if (Team2[j].sprite != NULL || Team2[j].sprite_selected != NULL) {
             if(Team2[j].selected == 1){
                 render_animation(render , Team2[j].sprite_selected , team2_slots[j] , 105 , 165 , 1 , 5 , 2 , 200);
+                render_hp(render , hp_sprite , team2_slots[j],Team2[j]);
             }
             else{
                 render_animation(render , Team2[j].sprite , team2_slots[j] , 105 , 165 , 1 , 5 , 2 , 200);
+                render_hp(render , hp_sprite , team2_slots[j],Team2[j] );
             }
         }
     
