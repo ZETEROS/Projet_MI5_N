@@ -660,6 +660,36 @@ int main(int argc , char** argv){
 
                                         break;
 
+                                    case SELECTING_ATTACK:
+                                        if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
+                                            int x = fighting_event.button.x ;
+                                            int y = fighting_event.button.y;
+
+                                            if(x >= Pause_button.x && x <= Pause_button.x + Pause_button.w && y >= Pause_button.y && y <= Pause_button.y + Pause_button.h){
+                                                fight = PAUSE;
+                                                Mix_PlayChannel(-1 , tick_sound , 0);
+                                                
+                                            }
+                                            else if(x >= Basic_Attack.x && x <= Basic_Attack.x + Basic_Attack.w && y >= Basic_Attack.y && y <= Basic_Attack.y + Basic_Attack.h){
+                                                
+                                                Mix_PlayChannel(-1 , tick_sound , 0);
+                                                fight = SELECTING_FIGHTER;
+                                            }
+                                            else if(x >= Special_Attack.x && x <= Special_Attack.x + Special_Attack.w && y >= Special_Attack.y && y <= Special_Attack.y + Special_Attack.h){
+                                                Mix_PlayChannel(-1 , tick_sound , 0);
+                                                fight = SELECTING_FIGHTER;
+                                            }
+                                            else if(x >= Ultimate_Attack.x && x <= Ultimate_Attack.x + Ultimate_Attack.w && y >= Ultimate_Attack.y && y <= Ultimate_Attack.y + Ultimate_Attack.h && howmanyselected(PRETEAM2) >= 3){
+                                                Mix_PlayChannel(-1 , tick_sound , 0);
+                                                fight = SELECTING_FIGHTER;
+                                            }
+                                            else if(x >= No_Attack.x && x <= No_Attack.x + No_Attack.w && y >= No_Attack.y && y <= No_Attack.y + No_Attack.h && howmanyselected(PRETEAM2) == 4){
+                                                Mix_PlayChannel(-1 , tick_sound , 0);
+                                                fight = SELECTING_FIGHTER;
+                                            }
+                                            
+                                        }
+                                        break;        
                                     
                                     /*_______________________________________________________PAUSE____________________________________________________________________________________________*/
 
@@ -735,36 +765,16 @@ int main(int argc , char** argv){
                                             
                                             
                                             case SELECTING_ATTACK:
-                                                SDL_RenderClear(render);
-                                                SDL_RenderCopy(render , fight_scenario , NULL , NULL);
+                                                SDL_RenderCopy(render , attack_options , NULL , NULL);
                                                 renderfighters(render, hp_sprite , team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2) );
-                                                SDL_RenderCopy(render , Pause_button_texture , NULL , &Pause_button);
                                                 render_animation(render , fire_animation , &fight_torch1 , 15 , 24 , 1 , 6 , 1 , 100);
                                                 render_animation(render , fire_animation , &fight_torch2 , 15 , 24 , 1 , 6 , 1, 100);
                                                 render_animation(render , fire_animation , &fight_torch3 , 15 , 24 , 1 , 6 , 1, 100);
                                                 render_animation(render, fire_animation , &fight_torch4 , 15 , 24 , 1 , 6 , 1, 100);
                                                 SDL_RenderCopy(render , fight_torches_texture , NULL , NULL);
-                                                if(turn_to_attack == 1){
-                                                    SDL_RenderCopy(render, turn_team1 , NULL , NULL);
-                                                    if(FIGHT_didselectedsomeone(team1) == 0){
-                                                        SDL_RenderCopy(render , instruction1 , NULL , NULL);
-                                                        
-                                                    }
-                                                    else if(FIGHT_didselectedsomeone(team1) == 1){
-                                                        SDL_RenderCopy(render , instruction2 , NULL , NULL);
-                                                    }
-                                                }
 
-                                                else if(turn_to_attack == 2){
-                                                    SDL_RenderCopy(render, turn_team2 , NULL , NULL);
-                                                    if(FIGHT_didselectedsomeone(team2) == 0){
-                                                        SDL_RenderCopy(render , instruction1 , NULL , NULL);
-                                                    }
-                                                    else if (FIGHT_didselectedsomeone(team2) == 1){
-                                                        SDL_RenderCopy(render , instruction2 , NULL , NULL);
-                                                    }
-                                                }
-                                                break;
+
+                                                SDL_RenderPresent(render);
 
                                             case PAUSE:
                                                 SDL_RenderCopy(render , Paused_ui , NULL , NULL);
