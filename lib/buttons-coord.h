@@ -44,6 +44,10 @@ SDL_Rect ready2 = {918 , 667 , 187 , 39};
 SDL_Rect yourturn2 = {926 , 357 , 169 , 33};
 
 
+SDL_Rect Button_SelectPVP = {230 , 472 , 267 , 67};
+SDL_Rect Button_SelectPVB = {780 , 472 , 267 , 67};
+
+
 //ERROR MESSAGES
 SDL_Rect MessageSelection = {485 ,420 , 310 , 40};
 
@@ -65,12 +69,12 @@ SDL_Rect Team1_Fighter2 = { 290 , 541-my , 105+mx , 165+my};
 SDL_Rect Team1_Fighter3 = { 177 , 408-my , 105+mx , 165+my};
 SDL_Rect Team1_Fighter4 = { 39, 491-my , 105+mx , 165+my};
 
-SDL_Rect Team2_Fighter1 = {865-(mx/4) ,325-my , 105+mx , 165+my};
-SDL_Rect Team2_Fighter2= { 885-(mx/4) , 541-my , 105+mx , 165+my};
-SDL_Rect Team2_Fighter3 = { 998-(mx/4) , 408-my , 105+mx , 165+my};
-SDL_Rect Team2_Fighter4 = { 1136-(mx/4) , 491-my , 105+mx , 165+my};
+SDL_Rect Team2_Fighter1 = {865 ,325-my , 105+mx , 165+my};
+SDL_Rect Team2_Fighter2= { 885 , 541-my , 105+mx , 165+my};
+SDL_Rect Team2_Fighter3 = { 998 , 408-my , 105+mx , 165+my};
+SDL_Rect Team2_Fighter4 = { 1136 , 491-my , 105+mx , 165+my};
 
-SDL_Rect Pause_button = {1280/2-262/2 , 720 - 69 , 262 , 59};
+SDL_Rect Pause_button = {1280/2-262/2 , 10 , 262 , 59};
 SDL_Rect Continue_button_pause= {509 , 260 , 255 , 50};
 SDL_Rect Menu_button_pause= {509 , 339 , 255 , 50};
 SDL_Rect Quit_button_pause= {509 , 418 , 255 , 50};
@@ -80,9 +84,13 @@ SDL_Rect fight_torch2 = {477 , 172-24 , 15 , 24};
 SDL_Rect fight_torch3 = {787 , 172-24 , 15 , 24};
 SDL_Rect fight_torch4 = {1002 , 172-24 , 15 , 24};
 
+SDL_Rect Basic_Attack = {404 , 594 , 110 , 106};
+SDL_Rect Special_Attack = {524 , 594 , 110 , 106};
+SDL_Rect Ultimate_Attack = {644 , 594 , 110 , 106};
+SDL_Rect No_Attack = {764 , 594 , 110 , 106};
+
+SDL_Rect Coin_ammount = {1094 , 102 , 47 , 28};
 
 
-SDL_Rect Button_SelectPVP = {230 , 472 , 267 , 67};
-SDL_Rect Button_SelectPVB = {780 , 472 , 267 , 67};
 
 #endif
