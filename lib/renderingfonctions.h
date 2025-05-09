@@ -237,11 +237,15 @@ void unselectallfighters(Fighter** PRETEAM1 , Fighter** PRETEAM2){
         PRETEAM2[i]->selected = 0 ;
     }
 }
-void FIGHT_unselectallfighters(Fighter* team_to_unselect1 , Fighter* team_to_unselect2){
+void FIGHT_unselectallfighters(Fighter* team_to_unselect1 , Fighter* team_to_unselect2 , int team1_count , int team2_count){
 
-    for (int i = 0 ; i<9 ; i++){
+    for (int i = 0 ; i<team1_count ; i++){
         team_to_unselect1[i].selected = 0 ;
-        team_to_unselect2[i].selected = 0 ;
+        
+    }
+    for (int j = 0 ; j<team2_count ; j++){
+        
+        team_to_unselect2[j].selected = 0 ;
     }
 }
 
@@ -453,6 +457,14 @@ void cleanup_teams(Fighter** team1, Fighter** team2 , int* team1_coins , int* te
     *team2 = NULL;
     *team1_coins = 0;
     *team2_coins = 0;
+}
+
+void FIGHT_fire_in_background(SDL_Renderer* render , SDL_Texture* fire_animation ,SDL_Texture* fight_torches_texture){
+    render_animation(render , fire_animation , &fight_torch1 , 15 , 24 , 1 , 6 , 1 , 100);
+    render_animation(render , fire_animation , &fight_torch2 , 15 , 24 , 1 , 6 , 1, 100);
+    render_animation(render , fire_animation , &fight_torch3 , 15 , 24 , 1 , 6 , 1, 100);
+    render_animation(render, fire_animation , &fight_torch4 , 15 , 24 , 1 , 6 , 1, 100);
+    SDL_RenderCopy(render , fight_torches_texture , NULL , NULL);
 }
 
 
