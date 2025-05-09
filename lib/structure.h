@@ -10,7 +10,7 @@ typedef struct Fighter Fighter ;
 struct Fighter {
     char name[20];
     int class ; //1: Attacker ; 2: Tank ; 3: Healer
-    float hp , hp_max , dmg , def , dodge , speed ;
+    float hp , hp_max , dmg , def , dodge , speed , price ;
 
     //Visual model
     SDL_Texture* sprite;
