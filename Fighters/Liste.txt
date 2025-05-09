@@ -60,8 +60,8 @@ Ultimate - Bones
 ➤ 6 attacks of a power reduced by 30% damage with 0.50% hit each time
 
 -------------
-💤 Ronflex (Class: Defender)
-Name : Ronflex
+💤 Snorlax (Class: Defender)
+Name : Snorlax
 Max HP : 100
 Attack : 50
 Defense: 75
