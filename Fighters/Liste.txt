@@ -5,6 +5,7 @@ Max HP : 100
 Attack : 70
 Defense : 20
 Dodge : 0.35
+Speed : 9
 Special attack - Double Tap
 ➤ 2 shots at 75% damage each
 
@@ -17,6 +18,7 @@ Max HP : 100
 Attack : 45
 Defense : 75
 Dodge : 0.05
+Speed : 3
 Special attack - Thunder Clap
 ➤ Area attack + -20% enemy attack for 1 turn
 
@@ -29,6 +31,7 @@ Max HP : 100
 Attack : 25
 Defense : 35
 Dodge : 0.25
+Speed : 6
 Special attack - Drone Heal
 ➤ Heals 25 HP to an ally, removes negative effects
 
@@ -45,6 +48,7 @@ Max HP : 100
 Attack : 60
 Defense : 10
 Dodge : 0.6
+Speed : 10
 Special attack - immobilization
 ➤ lowers an opponent's dodge by half (or by two-thirds if it's not strong enough) for 3 rounds.
 
@@ -57,7 +61,8 @@ Name : Ronflex
 Max HP : 100
 Attack : 50
 Defense: 75
-Dodge : 0.00
+Dodge : 0.01
+Speed : 1
 Special attack - Tackle
 ➤ attack decreasing the opponent's Defense by 30% at the moment of the attack
 
@@ -70,6 +75,7 @@ Max HP : 100
 Attack : 25
 Defense : 10
 Dodge : 0.15
+Speed : 5
 Special attack - Drainage
 ➤ ignores enemy Defense/ 40% of damage inflicted is given to an ally for healing
 
@@ -88,6 +94,7 @@ Max HP : 100
 Attack : 50
 Defense : 30
 Dodge : 0.50
+Speed : 9
 Special attack - In The Shadows
 ➤ Batman goes into the shadows and become invisible to the enemies for one turn.
 
@@ -101,6 +108,7 @@ Max HP : 100
 Attack : 35
 Defense : 65
 Dodge : 0.1
+Speed : 3
 Special attack - Rock Throw
 ➤ The Demolisher throws a huge rock pulled out from the ground and throws it to the target.
 
@@ -115,6 +123,7 @@ Max HP : 100
 Attack : 15
 Defense : 25
 Dodge : 0.6
+Speed : 7
 Special attack - Crusader's Crossbow
 ➤ The Medic can shoot it's crossbow to an aly Healing the aly with 30 hp.
 
