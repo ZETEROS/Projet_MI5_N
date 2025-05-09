@@ -101,7 +101,7 @@ Attack : 50
 Defense : 30
 Dodge : 0.50
 Speed : 9
-Price : 35
+Price : 45
 Special attack - In The Shadows
 ➤ Batman goes into the shadows and become invisible to the enemies for one turn.
 
