@@ -467,6 +467,16 @@ void FIGHT_fire_in_background(SDL_Renderer* render , SDL_Texture* fire_animation
     SDL_RenderCopy(render , fight_torches_texture , NULL , NULL);
 }
 
+int targetsselected(Fighter* team , int team_count , Fighter exception ){
+
+    for (int i= 0 ; i< team_count ; i++){
+        if(team[i].selected == 1 && strcmp(team[i].name , exception.name ) != 0){
+            return 1;
+        }
+    }
+    return 0;
+}
+
 
 
 #endif
