@@ -45,7 +45,7 @@ SDL_Rect yourturn2 = {926 , 357 , 169 , 33};
 
 
 SDL_Rect Button_SelectPVP = {230 , 472 , 267 , 67};
-SDL_Rect Button_SelectPVB = {780 , 472 , 267 , 67};
+//SDL_Rect Button_SelectPVB = {780 , 472 , 267 , 67};
 
 
 //ERROR MESSAGES
@@ -89,8 +89,16 @@ SDL_Rect Special_Attack = {524 , 594 , 110 , 106};
 SDL_Rect Ultimate_Attack = {644 , 594 , 110 , 106};
 SDL_Rect No_Attack = {764 , 594 , 110 , 106};
 
+SDL_Rect ATTACK_BUTTON = {585 , 642 , 108 , 78};
+
 SDL_Rect Coin_ammount = {1094 , 102 , 47 , 28};
 
+//END GAME
 
+SDL_Rect Main_Menu_Button_From_EndGame = {20 , 24 , 260 , 55};
+SDL_Rect END_GAME_Fighter1 = { 328 ,459 , 105 , 165};
+SDL_Rect END_GAME_Fighter2 = { 473 , 459, 105 , 165};
+SDL_Rect END_GAME_Fighter3 = { 703 , 459, 105 , 165};
+SDL_Rect END_GAME_Fighter4 = { 847, 459, 105 , 165};
 
 #endif

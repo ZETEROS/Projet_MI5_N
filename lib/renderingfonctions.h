@@ -432,12 +432,19 @@ int whostarts(Fighter* Team1 , Fighter* Team2 , int team1_count , int team2_coun
 }
 
 int someonealive(Fighter* Team , int team_count){
-    int total_hp = 0;
+    float total_hp = 0;
 
     for (int i=0 ; i<team_count ; i++){
-        total_hp += Team[i].hp ;
+        if(Team[i].hp < 0 ){
+            total_hp += 0;
+        }
+        else{
+            total_hp += Team[i].hp ;
+        }
+        
     }
-    return total_hp;
+    if(total_hp <= 0)return 0;
+    else if(total_hp > 0) return 1;
 }
 
 
@@ -467,16 +474,72 @@ void FIGHT_fire_in_background(SDL_Renderer* render , SDL_Texture* fire_animation
     SDL_RenderCopy(render , fight_torches_texture , NULL , NULL);
 }
 
-int targetsselected(Fighter* team , int team_count , Fighter exception ){
+int OnlyOneTargetsSelected(Fighter* enemy_team , int team_count , Fighter exception ){
 
     for (int i= 0 ; i< team_count ; i++){
-        if(team[i].selected == 1 && strcmp(team[i].name , exception.name ) != 0){
+        if(enemy_team[i].selected == 1 && strcmp(enemy_team[i].name , exception.name ) != 0){
             return 1;
         }
     }
     return 0;
 }
 
+int AnyTargetSelected(Fighter* enemy_team , int team_count){
+    for (int i= 0 ; i< team_count ; i++){
+        if(enemy_team[i].selected == 1 ){
+            return 1;
+        }
+    }
+    return 0;
+}
+
+Fighter* WhoIsSelected(Fighter* team , int team_count){
+    for (int i= 0 ; i< team_count ; i++){
+        if(team[i].selected == 1) return &team[i];
+    }
+}
+
+int Dodged(Fighter* target ){
+    if( (rand() % 10001)/ 100.0 <=  target->dodge * 100){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+int if_still_alive_only(Fighter fighter){
+    if(fighter.hp > 0){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+
+void END_GAME_renderfighters(SDL_Renderer* render , Fighter* winning_team , int team_count ){
+    SDL_Rect* team1_slots[4] = {&END_GAME_Fighter1 , &END_GAME_Fighter2 , &END_GAME_Fighter3 , &END_GAME_Fighter4};
+    
+    for (int i = 0; i < team_count; i++) {
+        if (winning_team[i].sprite != NULL || winning_team[i].sprite_selected != NULL) {
+            if(winning_team[i].hp > 0){
+                if(winning_team[i].selected == 1){
+                    render_animation(render , winning_team[i].sprite_selected , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
+                    
+                }
+                else{
+                    render_animation(render , winning_team[i].sprite , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
+                    
+                }   
+            }
+            else{
+                
+                render_animation(render , winning_team[i].sprite , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
+                
+            }
+        }
+    }
+}
 
 
 #endif
