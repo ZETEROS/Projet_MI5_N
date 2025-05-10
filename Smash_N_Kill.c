@@ -581,6 +581,7 @@ int main(int argc , char** argv){
                         int did_dodge = 0;
                         int hit = 0;
                         winning_soundeffect_reproduced = 0;
+                        winner = 0;
                         //Making sure any fighter is selected.
                         FIGHT_unselectallfighters(team1 , team2 , team1_count , team2_count); 
 /*__________________________________________________________________________________________________FIGHT LOOP STARTS HERE_____________________________________________________________________________________________________________*/
@@ -1053,10 +1054,13 @@ int main(int argc , char** argv){
                        
                     case END_GAME:
                         if(winner == 0 && someonealive(team1 , team1_count) == 0 && someonealive(team2 , team2_count) == 1 && fight_running == 0){
+
                             winner = 2;
+                            printf("winner = %d" , winner);
                         }
                         else if(winner == 0 && someonealive(team1 , team1_count) == 1 && someonealive(team2 , team2_count) == 0 && fight_running == 0){
                             winner = 1;
+                            printf("winner = %d" , winner);
                         }
                         if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
                                 int x = event.button.x ;
@@ -1071,6 +1075,7 @@ int main(int argc , char** argv){
                                 winning_soundeffect_reproduced = 0;
                             }
                         }
+                        if(winner != 2 && winner != 1)printf("Problem in endgame input management");
                         break;
                     
                     
@@ -1170,7 +1175,7 @@ int main(int argc , char** argv){
                 
                 case END_GAME:
                     if(winner != 0){
-                        printf("winner != 0");
+                        
                         SDL_RenderClear(render);
                         Mix_HaltMusic();
                         if(winning_soundeffect_reproduced == 0){
@@ -1180,12 +1185,12 @@ int main(int argc , char** argv){
                         }
                         
                         if(winner == 1){
-                            printf("winner = 1");
+                            
                             SDL_RenderCopy(render , winner_team1 , NULL , NULL);
                             END_GAME_renderfighters(render, team1 , howmanyselected(PRETEAM1));
                         }
-                        else if(winner == 0){
-                            printf("winner = 2");
+                        else if(winner == 2){
+                            
                             SDL_RenderCopy(render , winner_team2 , NULL , NULL);
                             END_GAME_renderfighters(render, team2 , howmanyselected(PRETEAM2));
                         }
