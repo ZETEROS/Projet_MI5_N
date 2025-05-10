@@ -93,6 +93,8 @@ SDL_Rect ATTACK_BUTTON = {585 , 642 , 108 , 78};
 
 SDL_Rect Coin_ammount = {1094 , 102 , 47 , 28};
 
+SDL_Rect hitordodge = { 889 , 122 , 165 , 21};
+
 //END GAME
 
 SDL_Rect Main_Menu_Button_From_EndGame = {20 , 24 , 260 , 55};
