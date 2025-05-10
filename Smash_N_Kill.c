@@ -142,6 +142,10 @@ int main(int argc , char** argv){
     SDL_Texture* turn_team2 = loadTexture("assets/fight/turn_team2.png" , render);
     SDL_Texture* hp_sprite = loadTexture("assets/anim/hp_sprite.png" , render);
     SDL_Texture* attack_options = loadTexture("assets/fight/Choosetheattack.png",render);
+    SDL_Texture* attack_button = loadTexture("assets/fight/attack_button.png", render);
+    SDL_Texture* attack_button_pressed = loadTexture("assets/fight/attack_button_pressed.png", render);
+    SDL_Texture* winner_team1 = loadTexture("assets/fight/winner_team1.png" , render);
+    SDL_Texture* winner_team2 = loadTexture("assets/fight/winner_team2.png" , render);
 
     TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 40);
     if(!font){
@@ -152,10 +156,11 @@ int main(int argc , char** argv){
     Mix_Chunk* select_sound = Mix_LoadWAV("assets/select.ogg");
     Mix_Chunk* tick_sound = Mix_LoadWAV("assets/tick.ogg");
     Mix_Chunk* back_sound = Mix_LoadWAV("assets/back.ogg");
+    Mix_Chunk* win_sound = Mix_LoadWAV("assets/win_sound_effect.wav");
     Mix_Music* menu_music = Mix_LoadMUS("assets/Stray_Cat.ogg");
     Mix_Music* selection_music = Mix_LoadMUS("assets/The_Trial.ogg");
     Mix_Music* fighting_music = Mix_LoadMUS("assets/Point_Zero.ogg");
-
+    Mix_Chunk* hit_fx = Mix_LoadWAV("assets/Hit.wav");
     //FIGHTERS TEAM 2
     Fighter John_Wick1 = importandassign("Fighters/John_Wick" , visuals , visuals_selected);
     Fighter Sans1 = importandassign("Fighters/Sans", visuals, visuals_selected);
@@ -204,6 +209,9 @@ int main(int argc , char** argv){
 
     Fighter* team1 = NULL;
     Fighter* team2= NULL;
+
+    int winning_soundeffect_reproduced = 0;
+    int winner = 0;
 
 
    
@@ -264,9 +272,7 @@ int main(int argc , char** argv){
 
                         break;
 
-                    case END_GAME:
-
-                        break;
+                    
                     
                     case HOW_TO_PLAY:
                         
@@ -309,11 +315,11 @@ int main(int argc , char** argv){
                                 Mix_PlayChannel(-1 , select_sound , 0);
                                 state = TEAM_SELECTION;
                             }
-                            else if( x >= Button_SelectPVB.x && x <= Button_SelectPVB.x + Button_SelectPVB.w && y >= Button_SelectPVB.y && y <= Button_SelectPVB.y + Button_SelectPVB.h){
+                            /*else if( x >= Button_SelectPVB.x && x <= Button_SelectPVB.x + Button_SelectPVB.w && y >= Button_SelectPVB.y && y <= Button_SelectPVB.y + Button_SelectPVB.h){
                                 //Go to the next part , the TEAM SELECTION SCREEN.
                                 Mix_PlayChannel(-1 , select_sound , 0);
                                 state = TEAM_SELECTION;
-                            }
+                            }*///PLAYER VS BOT MODE NOT HERE YET
                             else if( x >= Button_MAINMENU_FROM_SELECTION_HTP.x && x <= Button_MAINMENU_FROM_SELECTION_HTP.x + Button_MAINMENU_FROM_SELECTION_HTP.w && y >= Button_MAINMENU_FROM_SELECTION_HTP.y && y <= Button_MAINMENU_FROM_SELECTION_HTP.y + Button_MAINMENU_FROM_SELECTION_HTP.h){
                                 Mix_PlayChannel(-1 , back_sound , 0);
                                 state = MENU;
@@ -571,6 +577,10 @@ int main(int argc , char** argv){
                         //DECIDES AT THE BEGINNING WHO STARTS ATTACKING IN FONCTION OF WHAT TEAM HAS THE FASTEST FIGHTERS
                         int turn_to_attack = whostarts(team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2));
 
+                        int attack_now = 0;
+                        int did_dodge = 0;
+                        int hit = 0;
+                        winning_soundeffect_reproduced = 0;
                         //Making sure any fighter is selected.
                         FIGHT_unselectallfighters(team1 , team2 , team1_count , team2_count); 
 /*__________________________________________________________________________________________________FIGHT LOOP STARTS HERE_____________________________________________________________________________________________________________*/
@@ -600,27 +610,26 @@ int main(int argc , char** argv){
                                                     fight = PAUSE;
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
                                                 }
-                                                else if(x >= Team1_Fighter1.x && x <= Team1_Fighter1.x + Team1_Fighter1.w && y >= Team1_Fighter1.y && y <= Team1_Fighter1.y + Team1_Fighter1.h){
+                                                else if(x >= Team1_Fighter1.x && x <= Team1_Fighter1.x + Team1_Fighter1.w && y >= Team1_Fighter1.y && y <= Team1_Fighter1.y + Team1_Fighter1.h && if_still_alive_only(team1[0])){
                                                     FIGHT_unselectallfighters(team1 , team2 , team1_count , team2_count);
                                                     team1[0].selected = 1;
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
                                                     fight = SELECTING_ATTACK;
 
                                                 }
-                                                else if(x >= Team1_Fighter2.x && x <= Team1_Fighter2.x + Team1_Fighter2.w && y >= Team1_Fighter2.y && y <= Team1_Fighter2.y + Team1_Fighter2.h){
+                                                else if(x >= Team1_Fighter2.x && x <= Team1_Fighter2.x + Team1_Fighter2.w && y >= Team1_Fighter2.y && y <= Team1_Fighter2.y + Team1_Fighter2.h && if_still_alive_only(team1[1])){
                                                     FIGHT_unselectallfighters(team1 , team2, team1_count , team2_count);
                                                     team1[1].selected = 1;
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
                                                     fight = SELECTING_ATTACK;
                                                 }
-                                                else if(x >= Team1_Fighter3.x && x <= Team1_Fighter3.x + Team1_Fighter3.w && y >= Team1_Fighter3.y && y <= Team1_Fighter3.y + Team1_Fighter3.h && howmanyselected(PRETEAM1) >= 3){
+                                                else if(x >= Team1_Fighter3.x && x <= Team1_Fighter3.x + Team1_Fighter3.w && y >= Team1_Fighter3.y && y <= Team1_Fighter3.y + Team1_Fighter3.h && howmanyselected(PRETEAM1) >= 3 && if_still_alive_only(team1[2])){
                                                     FIGHT_unselectallfighters(team1 , team2, team1_count , team2_count);
                                                     team1[2].selected = 1;
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
                                                     fight = SELECTING_ATTACK;
                                                 }
-                                                else if(x >= Team1_Fighter4.x && x <= Team1_Fighter4.x + Team1_Fighter4.w && y >= Team1_Fighter4.y && y <= Team1_Fighter4.y + Team1_Fighter4.h && howmanyselected(PRETEAM1) == 4){
-                                                    FIGHT_unselectallfighters(team1 , team2, team1_count , team2_count);
+                                                else if(x >= Team1_Fighter4.x && x <= Team1_Fighter4.x + Team1_Fighter4.w && y >= Team1_Fighter4.y && y <= Team1_Fighter4.y + Team1_Fighter4.h && howmanyselected(PRETEAM1) == 4 && if_still_alive_only(team1[3])){
                                                     team1[3].selected = 1;
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
                                                     fight = SELECTING_ATTACK;
@@ -639,25 +648,25 @@ int main(int argc , char** argv){
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
                                                     
                                                 }
-                                                else if(x >= Team2_Fighter1.x && x <= Team2_Fighter1.x + Team2_Fighter1.w && y >= Team2_Fighter1.y && y <= Team2_Fighter1.y + Team2_Fighter1.h){
+                                                else if(x >= Team2_Fighter1.x && x <= Team2_Fighter1.x + Team2_Fighter1.w && y >= Team2_Fighter1.y && y <= Team2_Fighter1.y + Team2_Fighter1.h && if_still_alive_only(team2[0])){
                                                     FIGHT_unselectallfighters(team1 , team2, team1_count , team2_count);
                                                     team2[0].selected = 1;
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
                                                     fight = SELECTING_ATTACK;
                                                 }
-                                                else if(x >= Team2_Fighter2.x && x <= Team2_Fighter2.x + Team2_Fighter2.w && y >= Team2_Fighter2.y && y <= Team2_Fighter2.y + Team2_Fighter2.h){
+                                                else if(x >= Team2_Fighter2.x && x <= Team2_Fighter2.x + Team2_Fighter2.w && y >= Team2_Fighter2.y && y <= Team2_Fighter2.y + Team2_Fighter2.h && if_still_alive_only(team2[1])){
                                                     FIGHT_unselectallfighters(team1 , team2, team1_count , team2_count);
                                                     team2[1].selected = 1;
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
                                                     fight = SELECTING_ATTACK;
                                                 }
-                                                else if(x >= Team2_Fighter3.x && x <= Team2_Fighter3.x + Team2_Fighter3.w && y >= Team2_Fighter3.y && y <= Team2_Fighter3.y + Team2_Fighter3.h && howmanyselected(PRETEAM2) >= 3){
+                                                else if(x >= Team2_Fighter3.x && x <= Team2_Fighter3.x + Team2_Fighter3.w && y >= Team2_Fighter3.y && y <= Team2_Fighter3.y + Team2_Fighter3.h && howmanyselected(PRETEAM2) >= 3 && if_still_alive_only(team2[2])){
                                                     FIGHT_unselectallfighters(team1 , team2, team1_count , team2_count);
                                                     team2[2].selected = 1;
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
                                                     fight = SELECTING_ATTACK;
                                                 }
-                                                else if(x >= Team2_Fighter4.x && x <= Team2_Fighter4.x + Team2_Fighter4.w && y >= Team2_Fighter4.y && y <= Team2_Fighter4.y + Team2_Fighter4.h && howmanyselected(PRETEAM2) == 4){
+                                                else if(x >= Team2_Fighter4.x && x <= Team2_Fighter4.x + Team2_Fighter4.w && y >= Team2_Fighter4.y && y <= Team2_Fighter4.y + Team2_Fighter4.h && howmanyselected(PRETEAM2) == 4 && if_still_alive_only(team2[3])){
                                                     FIGHT_unselectallfighters(team1 , team2, team1_count , team2_count);
                                                     team2[3].selected = 1;
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
@@ -755,7 +764,8 @@ int main(int argc , char** argv){
                                         }
                                         break;        
                                     
-                                    case SELECTING_TARGET:
+                                    case SELECTING_TARGET: 
+
                                         switch(attack){
                                             case BASIC_ATTACK:
                                                 if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
@@ -769,7 +779,7 @@ int main(int argc , char** argv){
                                                     }
 
                                                     else if(turn_to_attack == 1){
-                                                        if(x >= Team2_Fighter1.x && x <= Team2_Fighter1.x + Team2_Fighter1.w && y >= Team2_Fighter1.y && y <= Team2_Fighter1.y + Team2_Fighter1.h && targetsselected(team2 , team2_count , team2[0]) == 0){
+                                                        if(x >= Team2_Fighter1.x && x <= Team2_Fighter1.x + Team2_Fighter1.w && y >= Team2_Fighter1.y && y <= Team2_Fighter1.y + Team2_Fighter1.h && OnlyOneTargetsSelected(team2 , team2_count , team2[0]) == 0 && if_still_alive_only(team2[0])){
                                                             if(team2[0].selected == 0){
                                                                 team2[0].selected = 1;
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
@@ -779,7 +789,7 @@ int main(int argc , char** argv){
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
                                                             }
                                                         }
-                                                        else if(x >= Team2_Fighter2.x && x <= Team2_Fighter2.x + Team2_Fighter2.w && y >= Team2_Fighter2.y && y <= Team2_Fighter2.y + Team2_Fighter2.h && targetsselected(team2 , team2_count , team2[1]) == 0){
+                                                        else if(x >= Team2_Fighter2.x && x <= Team2_Fighter2.x + Team2_Fighter2.w && y >= Team2_Fighter2.y && y <= Team2_Fighter2.y + Team2_Fighter2.h && OnlyOneTargetsSelected(team2 , team2_count , team2[1]) == 0 && if_still_alive_only(team2[1])){
                                                             if(team2[1].selected == 0){
                                                                 team2[1].selected = 1;
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
@@ -790,7 +800,7 @@ int main(int argc , char** argv){
                                                             }
                                                             
                                                         }
-                                                        else if(x >= Team2_Fighter3.x && x <= Team2_Fighter3.x + Team2_Fighter3.w && y >= Team2_Fighter3.y && y <= Team2_Fighter3.y + Team2_Fighter3.h && howmanyselected(PRETEAM2) >= 3 && targetsselected(team2 , team2_count , team2[2]) == 0){
+                                                        else if(x >= Team2_Fighter3.x && x <= Team2_Fighter3.x + Team2_Fighter3.w && y >= Team2_Fighter3.y && y <= Team2_Fighter3.y + Team2_Fighter3.h && howmanyselected(PRETEAM2) >= 3 && OnlyOneTargetsSelected(team2 , team2_count , team2[2]) == 0 && if_still_alive_only(team2[2])){
                                                             if(team2[2].selected == 0){
                                                                 team2[2].selected = 1;
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
@@ -800,7 +810,7 @@ int main(int argc , char** argv){
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
                                                             }
                                                         }
-                                                        else if(x >= Team2_Fighter4.x && x <= Team2_Fighter4.x + Team2_Fighter4.w && y >= Team2_Fighter4.y && y <= Team2_Fighter4.y + Team2_Fighter4.h && howmanyselected(PRETEAM2) == 4 && targetsselected(team2 , team2_count , team2[3]) == 0){
+                                                        else if(x >= Team2_Fighter4.x && x <= Team2_Fighter4.x + Team2_Fighter4.w && y >= Team2_Fighter4.y && y <= Team2_Fighter4.y + Team2_Fighter4.h && howmanyselected(PRETEAM2) == 4 && OnlyOneTargetsSelected(team2 , team2_count , team2[3]) == 0 && if_still_alive_only(team2[3])){
                                                             if(team2[3].selected == 0){
                                                                 team2[3].selected = 1;
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
@@ -810,10 +820,36 @@ int main(int argc , char** argv){
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
                                                             }
                                                         }
+
+                                                        else if(AnyTargetSelected(team2 , team2_count)){
+                                                            
+                                                            if(x >= ATTACK_BUTTON.x && x <= ATTACK_BUTTON.x + ATTACK_BUTTON.w && y >= ATTACK_BUTTON.y && y <= ATTACK_BUTTON.y + ATTACK_BUTTON.h){
+                                                                attack_now = 1;
+                                                                if(Dodged(WhoIsSelected(team2 , team2_count))){
+                                                                    did_dodge = 1;
+                                                                }
+                                                                else{
+                                                                    hit = 1;
+                                                                    Mix_Volume(hit , MIX_MAX_VOLUME * 0.5);
+                                                                    Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                    (WhoIsSelected(team2 , team2_count))->hp -= (WhoIsSelected(team1 , team1_count)->dmg)*(100-(WhoIsSelected(team2, team2_count))->def)/100;
+
+                                                                }
+                                                            }
+                                                        }
+
+
+
+
                                                     }
                                                     
                                                     else if(turn_to_attack == 2){
-                                                        if(x >= Team1_Fighter1.x && x <= Team1_Fighter1.x + Team1_Fighter1.w && y >= Team1_Fighter1.y && y <= Team1_Fighter1.y + Team1_Fighter1.h && targetsselected(team1 , team1_count , team1[0]) == 0){
+
+                                                        if(x >= Pause_button.x && x <= Pause_button.x + Pause_button.w && y >= Pause_button.y && y <= Pause_button.y + Pause_button.h){
+                                                        fight = PAUSE;
+                                                        Mix_PlayChannel(-1 , tick_sound , 0);
+                                                        }
+                                                        else if(x >= Team1_Fighter1.x && x <= Team1_Fighter1.x + Team1_Fighter1.w && y >= Team1_Fighter1.y && y <= Team1_Fighter1.y + Team1_Fighter1.h && OnlyOneTargetsSelected(team1 , team1_count , team1[0]) == 0 && if_still_alive_only(team1[0])){
                                                             if(team1[0].selected == 0){
                                                                 team1[0].selected = 1;
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
@@ -823,7 +859,7 @@ int main(int argc , char** argv){
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
                                                             }
                                                         }
-                                                        else if(x >= Team1_Fighter2.x && x <= Team1_Fighter2.x + Team1_Fighter2.w && y >= Team1_Fighter2.y && y <= Team1_Fighter2.y + Team1_Fighter2.h && targetsselected(team1 , team1_count , team1[1]) == 0){
+                                                        else if(x >= Team1_Fighter2.x && x <= Team1_Fighter2.x + Team1_Fighter2.w && y >= Team1_Fighter2.y && y <= Team1_Fighter2.y + Team1_Fighter2.h && OnlyOneTargetsSelected(team1 , team1_count , team1[1]) == 0 && if_still_alive_only(team1[1])){
                                                             if(team1[1].selected == 0){
                                                                 team1[1].selected = 1;
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
@@ -834,7 +870,7 @@ int main(int argc , char** argv){
                                                             }
                                                             
                                                         }
-                                                        else if(x >= Team1_Fighter3.x && x <= Team1_Fighter3.x + Team1_Fighter3.w && y >= Team1_Fighter3.y && y <= Team1_Fighter3.y + Team1_Fighter3.h && howmanyselected(PRETEAM2) >= 3 && targetsselected(team1 , team1_count , team1[2]) == 0){
+                                                        else if(x >= Team1_Fighter3.x && x <= Team1_Fighter3.x + Team1_Fighter3.w && y >= Team1_Fighter3.y && y <= Team1_Fighter3.y + Team1_Fighter3.h && howmanyselected(PRETEAM2) >= 3 && OnlyOneTargetsSelected(team1 , team1_count , team1[2]) == 0 && if_still_alive_only(team1[2])){
                                                             if(team1[2].selected == 0){
                                                                 team1[2].selected = 1;
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
@@ -844,7 +880,7 @@ int main(int argc , char** argv){
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
                                                             }
                                                         }
-                                                        else if(x >= Team1_Fighter4.x && x <= Team1_Fighter4.x + Team1_Fighter4.w && y >= Team1_Fighter4.y && y <= Team1_Fighter4.y + Team1_Fighter4.h && howmanyselected(PRETEAM2) == 4 && targetsselected(team1 , team1_count , team1[3]) == 0){
+                                                        else if(x >= Team1_Fighter4.x && x <= Team1_Fighter4.x + Team1_Fighter4.w && y >= Team1_Fighter4.y && y <= Team1_Fighter4.y + Team1_Fighter4.h && howmanyselected(PRETEAM2) == 4 && OnlyOneTargetsSelected(team1 , team1_count , team1[3]) == 0 && if_still_alive_only(team1[3])){
                                                             if(team1[3].selected == 0){
                                                                 team1[3].selected = 1;
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
@@ -852,6 +888,21 @@ int main(int argc , char** argv){
                                                             else if(team1[3].selected == 1){
                                                                 team1[3].selected = 0;
                                                                 Mix_PlayChannel(-1 , tick_sound , 0);
+                                                            }
+                                                        }
+                                                        else if(AnyTargetSelected(team1 , team1_count)){
+                                                            
+                                                            if(x >= ATTACK_BUTTON.x && x <= ATTACK_BUTTON.x + ATTACK_BUTTON.w && y >= ATTACK_BUTTON.y && y <= ATTACK_BUTTON.y + ATTACK_BUTTON.h){
+                                                                attack_now = 1;
+                                                                if(Dodged(WhoIsSelected(team1 , team1_count))){
+                                                                    did_dodge = 1;
+                                                                }
+                                                                else{
+                                                                    hit = 1;
+                                                                    Mix_Volume(hit , MIX_MAX_VOLUME * 0.5);
+                                                                    Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                    (WhoIsSelected(team1 , team1_count))->hp -= (WhoIsSelected(team2 , team2_count)->dmg)*(100-(WhoIsSelected(team1 , team1_count))->def)/100;
+                                                                }
                                                             }
                                                         }
 
@@ -915,7 +966,7 @@ int main(int argc , char** argv){
                                             case SELECTING_FIGHTER:
                                                 SDL_RenderClear(render);
                                                 SDL_RenderCopy(render , fight_scenario , NULL , NULL);
-                                                renderfighters(render, hp_sprite , team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2) );
+                                                renderfighters(render, hp_sprite , team1 , team2 , team1_count , team2_count );
                                                 SDL_RenderCopy(render , Pause_button_texture , NULL , &Pause_button);
                                                 FIGHT_fire_in_background(render, fire_animation , fight_torches_texture);
                                                 
@@ -933,14 +984,14 @@ int main(int argc , char** argv){
                                                 SDL_RenderClear(render);
                                                 SDL_RenderCopy(render , fight_scenario , NULL , NULL);
                                                 SDL_RenderCopy(render , attack_options , NULL , NULL);
-                                                renderfighters(render, hp_sprite , team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2) );
+                                                renderfighters(render, hp_sprite , team1 , team2 , team1_count , team2_count );
                                                 SDL_RenderCopy(render , Pause_button_texture , NULL , &Pause_button);
                                                 FIGHT_fire_in_background(render, fire_animation , fight_torches_texture);
                                                 
                                                 SDL_RenderCopy(render , instruction2 , NULL , NULL);
 
                                                 (turn_to_attack == 1) ? SDL_RenderCopy(render,turn_team1 , NULL ,NULL) : SDL_RenderCopy(render,turn_team2 , NULL ,NULL) ;
-
+        
                                                 SDL_RenderPresent(render);
                                             
                                                 break;
@@ -948,16 +999,38 @@ int main(int argc , char** argv){
                                             case SELECTING_TARGET:
                                                 SDL_RenderClear(render);
                                                 SDL_RenderCopy(render , fight_scenario , NULL , NULL);
-                                                renderfighters(render, hp_sprite , team1 , team2 , howmanyselected(PRETEAM1) , howmanyselected(PRETEAM2) );
+                                                renderfighters(render, hp_sprite , team1 , team2 , team1_count , team2_count );
                                                 SDL_RenderCopy(render , Pause_button_texture , NULL , &Pause_button);
                                                 FIGHT_fire_in_background(render, fire_animation , fight_torches_texture);
 
                                                 SDL_RenderCopy(render , instruction3 , NULL ,NULL);
 
-                                                (turn_to_attack == 1) ? SDL_RenderCopy(render,turn_team1 , NULL ,NULL) : SDL_RenderCopy(render,turn_team2 , NULL ,NULL) ;
+                                                
+                                                if(turn_to_attack == 1){
+                                                    SDL_RenderCopy(render,turn_team1 , NULL ,NULL) ;
+                                                    if(AnyTargetSelected(team2 , team2_count && attack_now == 0)) SDL_RenderCopy(render , attack_button , NULL , NULL) ;
+                                                    
+                                                    
+                                                }
+                                                
+
+                                                else if(turn_to_attack == 2) {
+                                                    SDL_RenderCopy(render,turn_team2 , NULL ,NULL) ;
+                                                    if(AnyTargetSelected(team1 , team1_count) && attack_now == 0) SDL_RenderCopy(render , attack_button , NULL , NULL) ;
+                                                }
+                                                
+                                                if(attack_now == 1) {
+                                                    SDL_RenderCopy(render , attack_button_pressed , NULL , NULL); 
+                                                    fight = SELECTING_FIGHTER;
+
+                                                    turn_to_attack = (turn_to_attack == 1)? 2 : 1;
+                                                    FIGHT_unselectallfighters(team1 , team2 , team1_count , team2_count);
+                                                    attack_now = 0;
+                                                }
+
+                                            
 
                                                 SDL_RenderPresent(render);
-
                                                 break;
 
                                             case PAUSE:
@@ -971,11 +1044,37 @@ int main(int argc , char** argv){
                         
                         
                         }
+                        //DID THE FIGHT END?
+                        if((someonealive(team1 , team1_count) == 0 && someonealive(team2 , team2_count) == 1 && fight_running == 0) || (someonealive(team1 , team1_count) == 1 && someonealive(team2 , team2_count) == 0 && fight_running == 0)){
+                            state = END_GAME;
+                        }
 
+                    break; //BREAKING FIGHT CASE
                        
+                    case END_GAME:
+                        if(winner == 0 && someonealive(team1 , team1_count) == 0 && someonealive(team2 , team2_count) == 1 && fight_running == 0){
+                            winner = 2;
+                        }
+                        else if(winner == 0 && someonealive(team1 , team1_count) == 1 && someonealive(team2 , team2_count) == 0 && fight_running == 0){
+                            winner = 1;
+                        }
+                        if (event.type == SDL_MOUSEBUTTONDOWN && event.button.button == SDL_BUTTON_LEFT){
+                                int x = event.button.x ;
+                                int y = event.button.y ;
+                            if(x >= Main_Menu_Button_From_EndGame.x && x <= Main_Menu_Button_From_EndGame.x + Main_Menu_Button_From_EndGame.w && y >= Main_Menu_Button_From_EndGame.y && y <= Main_Menu_Button_From_EndGame.y + Main_Menu_Button_From_EndGame.h){
+                                //RESETING ALL VALUES 
+                                state = MENU;
+                                fight_running = 1;
+                                unselectallfighters(PRETEAM1, PRETEAM2);
+                                cleanup_teams(&team1 , &team2 , &team1_coins , &team2_coins);
+                                Mix_PlayChannel(-1 , tick_sound , 0);
+                                winning_soundeffect_reproduced = 0;
+                            }
+                        }
+                        break;
                     
                     
-                    }
+                }
 
                         
                         
@@ -1070,6 +1169,29 @@ int main(int argc , char** argv){
                 
                 
                 case END_GAME:
+                    if(winner != 0){
+                        printf("winner != 0");
+                        SDL_RenderClear(render);
+                        Mix_HaltMusic();
+                        if(winning_soundeffect_reproduced == 0){
+                            Mix_VolumeChunk(win_sound , MIX_MAX_VOLUME * 0.5);
+                            Mix_PlayChannel(-1 , win_sound ,0);
+                            winning_soundeffect_reproduced = 1;
+                        }
+                        
+                        if(winner == 1){
+                            printf("winner = 1");
+                            SDL_RenderCopy(render , winner_team1 , NULL , NULL);
+                            END_GAME_renderfighters(render, team1 , howmanyselected(PRETEAM1));
+                        }
+                        else if(winner == 0){
+                            printf("winner = 2");
+                            SDL_RenderCopy(render , winner_team2 , NULL , NULL);
+                            END_GAME_renderfighters(render, team2 , howmanyselected(PRETEAM2));
+                        }
+
+                        SDL_RenderPresent(render);
+                    }
 
                     break;
                 
