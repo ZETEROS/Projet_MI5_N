@@ -236,6 +236,7 @@ void unselectallfighters(Fighter** PRETEAM1 , Fighter** PRETEAM2){
         PRETEAM1[i]->selected = 0 ;
         PRETEAM2[i]->selected = 0 ;
     }
+    printf("PRETEAMS Cleaned!");
 }
 void FIGHT_unselectallfighters(Fighter* team_to_unselect1 , Fighter* team_to_unselect2 , int team1_count , int team2_count){
 
@@ -371,7 +372,7 @@ void render_hp(SDL_Renderer* render , SDL_Texture* hp_sprite , SDL_Rect* pos , F
     SDL_RenderCopy(render, hp_sprite, &src, &above_fighter);
 }
 
-void renderfighters(SDL_Renderer* render,SDL_Texture* hp_sprite , Fighter* Team1 , Fighter* Team2 , int team1_count , int team2_count ){
+void renderfighters(SDL_Renderer* render,SDL_Texture* hp_sprite ,SDL_Texture* grave, Fighter* Team1 , Fighter* Team2 , int team1_count , int team2_count ){
     SDL_Rect* team1_slots[4] = {&Team1_Fighter1 , &Team1_Fighter2 , &Team1_Fighter3 , &Team1_Fighter4};
     SDL_Rect* team2_slots[4] = {&Team2_Fighter1 , &Team2_Fighter2 , &Team2_Fighter3 , &Team2_Fighter4};
     
@@ -389,20 +390,25 @@ void renderfighters(SDL_Renderer* render,SDL_Texture* hp_sprite , Fighter* Team1
             }   
             else{
                 
-                render_animation(render , Team1[i].sprite , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
-                render_hp(render , hp_sprite , team1_slots[i],Team1[i] );
+                SDL_RenderCopy(render , grave , NULL , team1_slots[i]);
             }
         }
     }
     for (int j = 0; j < team2_count; j++) {
         if (Team2[j].sprite != NULL || Team2[j].sprite_selected != NULL) {
-            if(Team2[j].selected == 1){
-                render_animation(render , Team2[j].sprite_selected , team2_slots[j] , 105 , 165 , 1 , 5 , 2 , 200);
-                render_hp(render , hp_sprite , team2_slots[j],Team2[j]);
+            if(Team2[j].hp > 0){
+                if(Team2[j].selected == 1){
+                    render_animation(render , Team2[j].sprite_selected , team2_slots[j] , 105 , 165 , 1 , 5 , 2 , 200);
+                    render_hp(render , hp_sprite , team2_slots[j],Team2[j]);
+                }
+                else{
+                    render_animation(render , Team2[j].sprite , team2_slots[j] , 105 , 165 , 1 , 5 , 2 , 200);
+                    render_hp(render , hp_sprite , team2_slots[j],Team2[j] );
+                    
+                }
             }
             else{
-                render_animation(render , Team2[j].sprite , team2_slots[j] , 105 , 165 , 1 , 5 , 2 , 200);
-                render_hp(render , hp_sprite , team2_slots[j],Team2[j] );
+                SDL_RenderCopyEx(render , grave , NULL , team2_slots[j] , 0.0 ,NULL , SDL_FLIP_HORIZONTAL);
             }
         }
     
@@ -434,17 +440,22 @@ int whostarts(Fighter* Team1 , Fighter* Team2 , int team1_count , int team2_coun
 int someonealive(Fighter* Team , int team_count){
     float total_hp = 0;
 
-    for (int i=0 ; i<team_count ; i++){
-        if(Team[i].hp < 0 ){
-            total_hp += 0;
+    if(Team != NULL){
+        for (int i=0 ; i<team_count ; i++){
+            if(Team[i].hp < 0 ){
+                total_hp += 0;
+            }
+            else{
+                total_hp += Team[i].hp ;
+            }
+            
         }
-        else{
-            total_hp += Team[i].hp ;
-        }
-        
+        if(total_hp <= 0)return 0;
+        else if(total_hp > 0) return 1;
     }
-    if(total_hp <= 0)return 0;
-    else if(total_hp > 0) return 1;
+    else{
+        return 3;
+    }
 }
 
 
@@ -464,6 +475,7 @@ void cleanup_teams(Fighter** team1, Fighter** team2 , int* team1_coins , int* te
     *team2 = NULL;
     *team1_coins = 0;
     *team2_coins = 0;
+    printf("Team1 and 2 adresses freed , and coins set to 0 again.\n");
 }
 
 void FIGHT_fire_in_background(SDL_Renderer* render , SDL_Texture* fire_animation ,SDL_Texture* fight_torches_texture){
@@ -517,7 +529,7 @@ int if_still_alive_only(Fighter fighter){
     }
 }
 
-void END_GAME_renderfighters(SDL_Renderer* render , Fighter* winning_team , int team_count ){
+void END_GAME_renderfighters(SDL_Renderer* render , Fighter* winning_team ,SDL_Texture* grave ,  int team_count ){
     SDL_Rect* team1_slots[4] = {&END_GAME_Fighter1 , &END_GAME_Fighter2 , &END_GAME_Fighter3 , &END_GAME_Fighter4};
     
     for (int i = 0; i < team_count; i++) {
@@ -534,7 +546,7 @@ void END_GAME_renderfighters(SDL_Renderer* render , Fighter* winning_team , int 
             }
             else{
                 
-                render_animation(render , winning_team[i].sprite , team1_slots[i] , 105 , 165 , 1 , 5 , 1 , 200);
+                SDL_RenderCopy(render , grave , NULL , team1_slots[i]);
                 
             }
         }
