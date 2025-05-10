@@ -147,6 +147,8 @@ int main(int argc , char** argv){
     SDL_Texture* winner_team1 = loadTexture("assets/fight/winner_team1.png" , render);
     SDL_Texture* winner_team2 = loadTexture("assets/fight/winner_team2.png" , render);
     SDL_Texture* grave = loadTexture("assets/fight/grave.png" , render);
+    SDL_Texture* Dodged_text = loadTexture("assets/fight/dodged.png" , render);
+    SDL_Texture* hit_text = loadTexture("assets/fight/hit.png" , render);
 
     TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 40);
     if(!font){
@@ -162,6 +164,8 @@ int main(int argc , char** argv){
     Mix_Music* selection_music = Mix_LoadMUS("assets/The_Trial.ogg");
     Mix_Music* fighting_music = Mix_LoadMUS("assets/Point_Zero.ogg");
     Mix_Chunk* hit_fx = Mix_LoadWAV("assets/Hit.wav");
+    Mix_Chunk* dodge_fx = Mix_LoadWAV("assets/dodge.wav");
+    
     //FIGHTERS TEAM 2
     Fighter John_Wick1 = importandassign("Fighters/John_Wick" , visuals , visuals_selected);
     Fighter Sans1 = importandassign("Fighters/Sans", visuals, visuals_selected);
@@ -839,6 +843,8 @@ int main(int argc , char** argv){
                                                                     attack_now = 1;
                                                                     if(Dodged(WhoIsSelected(team2 , team2_count))){
                                                                         did_dodge = 1;
+                                                                        Mix_Volume(hit , MIX_MAX_VOLUME * 0.5);
+                                                                        Mix_PlayChannel(-1 , dodge_fx , 0);
                                                                     }
                                                                     else{
                                                                         hit = 1;
@@ -908,6 +914,8 @@ int main(int argc , char** argv){
                                                                     attack_now = 1;
                                                                     if(Dodged(WhoIsSelected(team1 , team1_count))){
                                                                         did_dodge = 1;
+                                                                        Mix_Volume(hit , MIX_MAX_VOLUME * 0.5);
+                                                                        Mix_PlayChannel(-1 , dodge_fx , 0);
                                                                     }
                                                                     else{
                                                                         hit = 1;
@@ -1021,9 +1029,12 @@ int main(int argc , char** argv){
                                                     if(turn_to_attack == 1){
                                                         SDL_RenderCopy(render,turn_team1 , NULL ,NULL) ;
                                                         if(AnyTargetSelected(team2 , team2_count && attack_now == 0)) SDL_RenderCopy(render , attack_button , NULL , NULL) ;
+
                                                         
                                                         
                                                     }
+
+                                                    
                                                     
 
                                                     else if(turn_to_attack == 2) {
@@ -1040,9 +1051,26 @@ int main(int argc , char** argv){
                                                         attack_now = 0;
                                                     }
 
-                                                
-
                                                     SDL_RenderPresent(render);
+                                                    
+                                                    if(hit || did_dodge){
+
+                                                        if(hit) SDL_RenderCopy(render , hit_text , NULL , &hitordodge);
+                                                        else if(did_dodge)SDL_RenderCopy(render , Dodged_text , NULL , &hitordodge);
+                                                        SDL_RenderPresent(render);
+                                                        hit = 0;
+                                                        did_dodge = 0;
+                                                        Uint32 start = SDL_GetTicks();
+                                                        SDL_Event temp_event;
+                                                        while(SDL_GetTicks() - start < 200){
+                                                            while(SDL_PollEvent(&temp_event)){
+
+                                                            }
+                                                            SDL_Delay(20);
+                                                        }
+                                                    }
+
+                                                    
                                                     break;
 
                                                 case PAUSE:
