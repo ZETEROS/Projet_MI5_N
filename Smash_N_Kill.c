@@ -150,6 +150,7 @@ int main(int argc , char** argv){
     SDL_Texture* grave = loadTexture("assets/fight/grave.png" , render);
     SDL_Texture* Dodged_text = loadTexture("assets/fight/dodged.png" , render);
     SDL_Texture* hit_text = loadTexture("assets/fight/hit.png" , render);
+    SDL_Texture* heal_text = loadTexture("assets/fight/heal.png" , render);
 
     TTF_Font* font = TTF_OpenFont("assets/pixel_font.ttf", 40);
     if(!font){
@@ -203,6 +204,7 @@ int main(int argc , char** argv){
     int selecting_team1 ;
     int selecting_team2 ;
 
+    
     //ERROR MESSAGE
     int error_message_1 = 0;
     //TEAMS IN SELECTION PHASE , ALL UN-SELECTED HERE
@@ -597,6 +599,8 @@ int main(int argc , char** argv){
                         int attack_now = 0;
                         int did_dodge = 0;
                         int hit = 0;
+                        int heal = 0;
+
                         winning_soundeffect_reproduced = 0;
                         winner = 0;
                         //Making sure any fighter is selected.
@@ -966,7 +970,7 @@ int main(int argc , char** argv){
                                                                 if(is_Healer(Attacker)){
                                                                     special_attack(Attacker , Target);
                                                                         attack_now = 1;
-                                                                        hit = 1;
+                                                                        heal = 0;
                                                                         Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
                                                                         Mix_PlayChannel(-1 , hit_fx , 0);
                                                                 }
@@ -1009,7 +1013,7 @@ int main(int argc , char** argv){
                                                                 if(is_Healer(Attacker)){
                                                                     special_attack(Attacker , Target);
                                                                         attack_now = 1;
-                                                                        hit = 1;
+                                                                        heal = 1;
                                                                         Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
                                                                         Mix_PlayChannel(-1 , hit_fx , 0);
                                                                 }
@@ -1155,13 +1159,15 @@ int main(int argc , char** argv){
 
                                                     SDL_RenderPresent(render);
                                                     
-                                                    if(hit || did_dodge){
+                                                    if(hit || did_dodge || heal){
 
                                                         if(hit) SDL_RenderCopy(render , hit_text , NULL , &hitordodge);
                                                         else if(did_dodge)SDL_RenderCopy(render , Dodged_text , NULL , &hitordodge);
+                                                        else if(heal)SDL_RenderCopy(render , heal_text , NULL , &hitordodge);
                                                         SDL_RenderPresent(render);
                                                         hit = 0;
                                                         did_dodge = 0;
+                                                        heal = 0;
                                                         Uint32 start = SDL_GetTicks();
                                                         SDL_Event temp_event;
                                                         while(SDL_GetTicks() - start < 200){
