@@ -5,8 +5,8 @@
 After installing the file, extract it to your PC.
 Then open your terminal.
 To compile the game please use in Ubuntu : 
-**gcc 'Smash_N_Kill.c' -o 'Smash&Kill' -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf**
-To run the program enter the following command: **./Smash&Kill**
+**gcc 'Smash_N_Kill.c' -o Smash_N_Kill -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf**
+To run the program enter the following command: **./Smash_N_Kill**
 
 ### IF YOU DON'T HAVE THE SDL LIBRARY
 💻 For Linux (Ubuntu/Debian)
