@@ -1,5 +1,7 @@
 # SMASH & KILL
-### PROJECT_MI5_N## Project Progress
+### PROJECT_MI5_N
+
+## Project Progress
 ### 06 - 04 - 2025
 So far, we've organized ourselves to try and create a base of operations and concepts. **We've created a list of characters with some stats that are still in Beta**, we'll have to look at them later once the fighting system is established in case the character stats are too unbalanced.
 **We've implemented 2 toolcodes that will allow us to create a Fighter structure** , which we can save in a binary file in the folder of the same name, Fighters. And, of course, another code allows us to load the Fighter into RAM from the binary file and then manipulate it.
