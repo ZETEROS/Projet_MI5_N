@@ -1,3 +1,4 @@
+#define SDL_MAIN_HANDLED
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -8,11 +9,10 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "lib/enum.h"
-#include "lib/structure.h"
+#include "lib/prototypes_and_enums.h"
 #include "lib/buttons-coord.h"
-#include "lib/special_attacks_list.h"
-#include "lib/renderingfonctions.h"
+#include "lib/price_special_attack.h"
+
 
 //Dimensions
 #define WIDTH 1280
@@ -48,7 +48,7 @@ int main(int argc , char** argv){
     }
 
     //SET VOLUME OF MUSIC 
-    Mix_VolumeMusic(MIX_MAX_VOLUME *0.3);
+    Mix_VolumeMusic(MIX_MAX_VOLUME *0.6);
 
     //Create Window
 
@@ -129,7 +129,6 @@ int main(int argc , char** argv){
     SDL_Texture* hp_sprite = loadTexture("assets/anim/hp_sprite.png" , render);
     SDL_Texture* attack_options = loadTexture("assets/fight/Choosetheattack.png",render);
     SDL_Texture* attack_button = loadTexture("assets/fight/attack_button.png", render);
-    SDL_Texture* attack_button_pressed = loadTexture("assets/fight/attack_button_pressed.png", render);
     SDL_Texture* winner_team1 = loadTexture("assets/fight/winner_team1.png" , render);
     SDL_Texture* winner_team2 = loadTexture("assets/fight/winner_team2.png" , render);
     SDL_Texture* grave = loadTexture("assets/fight/grave.png" , render);
@@ -196,9 +195,7 @@ int main(int argc , char** argv){
     Fighter* PRETEAM1[9] = {&John_Wick1 , &Sans1 , &Batman1 , &Hulk1 , &Snorlax1 , &Demolisher1 , &Lifeline1 , &Dracula1 , &Medic1};
     Fighter* PRETEAM2[9] = {&John_Wick2 , &Sans2 , &Batman2 , &Hulk2 , &Snorlax2 , &Demolisher2 , &Lifeline2 , &Dracula2 , &Medic2};
 
-    //are the final teams made already or not? 0 is NO , 1 is yes .
-    int team1_made = 0;
-    int team2_made = 0;
+   
     int spins_in_Menu = 0;
 
     Fighter* team1 = NULL;
@@ -579,7 +576,7 @@ int main(int argc , char** argv){
                         int did_dodge = 0;
                         int hit = 0;
                         int heal = 0;
-                        int not_enough_coins = 0;
+                        
 
                         winning_soundeffect_reproduced = 0;
                         winner = 0;
@@ -1014,6 +1011,8 @@ int main(int argc , char** argv){
                                                         }
                                                     }
                                                     break;
+                                                    case NO_ATTACK:
+                                                    break;
                                                 
                                             
                                             }
@@ -1115,6 +1114,8 @@ int main(int argc , char** argv){
                                                         break;
                                                         case SPECIAL_ATTACK:
 
+                                                        break;
+                                                        case NO_ATTACK:
                                                         break;     
                                                     }
 
@@ -1296,7 +1297,9 @@ int main(int argc , char** argv){
 
                     break;
                 
-                
+                case FIGHT:
+                break;
+
                 case END_GAME:
                     if(winner != 0){
                         
@@ -1328,6 +1331,9 @@ int main(int argc , char** argv){
                 
              }   
         }
+
+
+    return 0;
 }
 
 
