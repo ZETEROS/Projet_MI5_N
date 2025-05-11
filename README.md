@@ -26,6 +26,16 @@ Not to forget to mention also the addition of a third background music that will
 We have also added animations of lit torches in the menu giving a touch of movement in the menu that was missing, these same torches were added in the background during the combat part giving also a bit of life to the background while the combat is going on, if the time is enough we can draw a ship or a whale that appears in the background which is the sea.
 Now we are concentrating on programming the combat and then we will add the details.
 
+### 09 - 05 - 2025
+We chose the value of the characters and their speed, trying to keep things totally balanced and logical: the more powerful a character is, the more he's worth. We then changed the value of these characters in their files and by changing the Fighter structure. We also coded the characters' special attacks, which we stored individually in several .C files.
+
+
+### 10 - 05 - 2025
+We've continued with the battle mechanics, in particular with the application of basic attacks in combat. The last images have been integrated into the asset folder, the tombs when characters die and the background that appears at the end of the game. The game can be finished, but there are segmentation problems ('Segment false' error) that prevent their use. We've also added sound effects when one of the teams wins.
+
+### 11 - 05 - 2025
+We have corrected the special attack error, and the code is now 100% functional.
+
 
 
 
