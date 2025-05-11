@@ -35,3 +35,4 @@ We've continued with the battle mechanics, in particular with the application of
 ### 11 - 05 - 2025
 We have corrected the special attack error, and the code is now 100% functional. We found a value for special attacks while trying to maintain a balance, then we defined the value of
 coin gain, which is .. if the player decides to pass their turn.We also configured the choice of characters according to their value by preventing the user from choosing a character if it costs too much
+we return the project as such
