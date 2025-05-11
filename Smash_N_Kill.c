@@ -11,7 +11,7 @@
 #include "lib/structure.h"
 #include "lib/buttons-coord.h"
 #include "lib/special_attacks_list.h"
-#include "lib/renderingfonctions.h"
+#include "lib/fonctions.h"
 
 //Dimensions
 #define WIDTH 1280
@@ -60,7 +60,7 @@ int main(int argc , char** argv){
 
     //Create Renderer
 
-    SDL_Renderer* render = SDL_CreateRenderer(Game , -1 , SDL_RENDERER_ACCELERATED);
+    SDL_Renderer* render = SDL_CreateRenderer(Game , -1 , SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if(!render){
         printf("Error , unable to create renderer.\n");
         exit(5);
