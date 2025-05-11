@@ -19,6 +19,10 @@ Fighter creator(char* name){
     scanf("%f",&a.def);
     printf("\nDodging: ");
     scanf("%f",&a.dodge);
+    printf("\nSpeed: ");
+    scanf("%f",&a.speed);
+    printf("\nPrice: ");
+    scanf("%d",&a.price);
     printf("\nSpecial Attack: ");
     scanf("%f",&a.special_attack_name);
     //a.speed = 0;
