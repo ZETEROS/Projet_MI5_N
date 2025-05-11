@@ -586,6 +586,7 @@ int main(int argc , char** argv){
 
                         fight = SELECTING_FIGHTER; //IMPORTANT!!! ALWAYS START WITH SELECTING_FIGHTER when a match is started.
 
+                        int number_turn = 1;
                         int team1_count = howmanyselected(PRETEAM1);
                         int team2_count = howmanyselected(PRETEAM2);
                         int fight_running = 0;
@@ -934,11 +935,25 @@ int main(int argc , char** argv){
                                                     
                                                     break;
                                                 case SPECIAL_ATTACK:
-                                                    fight = SELECTING_FIGHTER;
+                                                    if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
+                                                        int x = fighting_event.button.x;
+                                                        int y = fighting_event.button.y;
+                                                        
+                                                        if(turn_to_attack == 1){
+                                                            Fighter* Attacker = WhoIsSelected(team1 , team1_count);
+                                                            if(Attacker != NULL){
+                                                                special_attack(Attacker , select_target_for_special_attack(x , y ,Attacker , team1 , team2 , team1_count , team2_count , turn_to_attack , number_turn));
+                                                            }
+                                                        }
+                                                        else if(turn_to_attack == 2){
+                                                            Fighter* Attacker = WhoIsSelected(team2 , team2_count);
+                                                            if(Attacker != NULL){
+                                                                special_attack(Attacker , select_target_for_special_attack(x , y ,Attacker , team2 , team1 , team2_count , team1_count , turn_to_attack , number_turn));
+                                                            }
+                                                        }
+                                                    }
                                                     break;
-                                                case ULTIMATE_ATTACK:
-                                                    fight = SELECTING_FIGHTER;
-                                                    break;
+                                                
                                             
                                             }
 
@@ -1047,6 +1062,8 @@ int main(int argc , char** argv){
                                                         fight = SELECTING_FIGHTER;
 
                                                         turn_to_attack = (turn_to_attack == 1)? 2 : 1;
+                                                        number_turn++;
+
                                                         FIGHT_unselectallfighters(team1 , team2 , team1_count , team2_count);
                                                         attack_now = 0;
                                                     }
