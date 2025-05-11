@@ -2,14 +2,14 @@
 #define PRICES_H
 #include <stdio.h>
 
-int price_double_tap = 90;
-int price_immobilization = 35;
-int price_in_the_shadows = 50;
-int price_thunder_clap = 15;
-int price_tackle = 75;
-int price_rock_throw = 80;
-int price_drone_heal = 20;
-int price_drainage = 100;
-int price_crusaders_crossbow = 35;
+extern    int price_double_tap ;
+extern    int price_immobilization ;
+extern    int price_in_the_shadows ;
+extern    int price_thunder_clap ;
+extern    int price_tackle ;
+extern    int price_rock_throw ;
+extern    int price_drone_heal ;
+extern    int price_drainage ;
+extern    int price_crusaders_crossbow ;
 
 #endif
