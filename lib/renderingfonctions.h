@@ -574,7 +574,7 @@ Fighter* select_target_for_special_attack(int x_click , int y_click , Fighter* A
         }
         
 
-        if(strcmp(Attacker->name , "Lifeline") == 0 || strcmp(Attacker->name , "Medic") == 0){
+        if(strcmp(Attacker->name , "Lifeline") == 0 || strcmp(Attacker->name , "The_Medic") == 0){
             
             for (int i=0 ; i < aly_count ; i++){
                 if(x_click >= aly_pos[i]->x && x_click <= (aly_pos[i]-> x + aly_pos[i]-> w) && y_click >= aly_pos[i]->y && y_click <= (aly_pos[i]-> y + aly_pos[i] -> h ) && i != position_of_attacker && if_still_alive_only(aly_team[i])){
@@ -632,7 +632,7 @@ Fighter* select_target_for_special_attack(int x_click , int y_click , Fighter* A
             printf("Attacker not found in ally team by pointer.\n");
             return NULL;
         }
-        if(strcmp(Attacker->name , "Lifeline") == 0 ||strcmp(Attacker->name , "Medic") == 0){
+        if(strcmp(Attacker->name , "Lifeline") == 0 ||strcmp(Attacker->name , "The_Medic") == 0){
             
             for (int i=0 ; i < aly_count ; i++){
                 printf("In for loop Lifeline and Medic\n");
