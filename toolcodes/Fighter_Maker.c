@@ -30,7 +30,7 @@ Fighter creator(char* name){
     return a;
 }
 void show_stats(Fighter a){
-    printf("Name = %s\nHP: %.2f\nHP_MAX:%.2f\nDMG:%.2f\nDEF:%.2f\nDODGE:%.2f\nSPEED:%.2f\n",a.name,a.hp,a.hp_max,a.dmg,a.dmg,a.def,a.dodge,a.speed);
+    printf("Name = %s\nHP: %.2f\nHP_MAX:%.2f\nDMG:%.2f\nDEF:%.2f\nDODGE:%.2f\nSPEED:%2.d\nPRICE:%.2f\n",a.name,a.hp,a.hp_max,a.dmg,a.dmg,a.def,a.dodge,a.price,a.speed);
 }
 void export_fighter(Fighter a , char* file){
     FILE* doc = fopen(file , "wb");
