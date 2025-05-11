@@ -1,0 +1,9 @@
+price_touble_tap=90
+price_thunder_clap=15
+price_drone_heal=20
+price_immobilization=35
+price_tackle=75
+price_drainage=100
+price_in_the_shadows=50
+price_rock_throw=80
+price_crusaders_crossbow=35
