@@ -561,12 +561,17 @@ Fighter* select_target_for_special_attack(int x_click , int y_click , Fighter* A
     if(turn_to_attack == 1){
         SDL_Rect* aly_pos[4] = {&Team1_Fighter1 , &Team1_Fighter2 , &Team1_Fighter3 , &Team1_Fighter4};
         SDL_Rect* enemy_pos[4] = {&Team2_Fighter1 , &Team2_Fighter2 , &Team2_Fighter3 , &Team2_Fighter4};
+        int found_target = 0;
         //In what position of the team is the attacker?
         int position_of_attacker = 0;
-        while(position_of_attacker < aly_count && strcmp(Attacker->name , aly_team[position_of_attacker].name) != 0){
+        while (position_of_attacker < aly_count && Attacker != &aly_team[position_of_attacker]) {
             position_of_attacker++;
         }
-        if (position_of_attacker == aly_count) return NULL;
+        printf("Position of attacker in team 1 = %d" , position_of_attacker);
+        if (position_of_attacker == aly_count) {
+            printf("Attacker not found in ally team by pointer.\n");
+            return NULL;
+        }
         
 
         if(strcmp(Attacker->name , "Lifeline") == 0 || strcmp(Attacker->name , "Medic") == 0){
@@ -575,8 +580,13 @@ Fighter* select_target_for_special_attack(int x_click , int y_click , Fighter* A
                 if(x_click >= aly_pos[i]->x && x_click <= (aly_pos[i]-> x + aly_pos[i]-> w) && y_click >= aly_pos[i]->y && y_click <= (aly_pos[i]-> y + aly_pos[i] -> h ) && i != position_of_attacker && if_still_alive_only(aly_team[i])){
                     aly_team[i].selected = ( aly_team[i].selected == 1) ? 0 : 1 ;
                     printf("In if(lifeline or Medic)\n");
+                    found_target = 1;
                     return &aly_team[i];
                 }
+            }
+            if(found_target == 0){
+                printf("Didn't click in a valid target\n");
+                return NULL;
             }
         }
 
@@ -585,8 +595,13 @@ Fighter* select_target_for_special_attack(int x_click , int y_click , Fighter* A
                 if(x_click >= enemy_pos[i]->x && x_click <= (enemy_pos[i]-> x + enemy_pos[i]-> w) && y_click >= enemy_pos[i]->y && y_click <= (enemy_pos[i]-> y + enemy_pos[i] -> h ) && if_still_alive_only(enemy_team[i])){
                     enemy_team[i].selected = ( enemy_team[i].selected == 1) ? 0 : 1 ;
                     printf("In if(John_Wick , Sans , etc)\n");
+                    found_target = 1;
                     return &enemy_team[i];
                 }
+            }
+            if(found_target == 0){
+                printf("Didn't click in a valid target\n");
+                return NULL;
             }
         }
 
@@ -604,21 +619,33 @@ Fighter* select_target_for_special_attack(int x_click , int y_click , Fighter* A
     else if(turn_to_attack == 2){
         SDL_Rect* aly_pos[4] = {&Team2_Fighter1 , &Team2_Fighter2 , &Team2_Fighter3 , &Team2_Fighter4};
         SDL_Rect* enemy_pos[4] = {&Team1_Fighter1 , &Team1_Fighter2 , &Team1_Fighter3 , &Team1_Fighter4};
+
+        int found_target = 0;
         //In what position of the team is the attacker?
         int position_of_attacker = 0;
-        while(position_of_attacker < aly_count && strcmp(Attacker->name , aly_team[position_of_attacker].name) != 0){
+        while (position_of_attacker < aly_count && Attacker != &aly_team[position_of_attacker]) {
             position_of_attacker++;
+            
         }
-        if (position_of_attacker == aly_count) return NULL;
-
+        printf("Position of attacker in team 2 = %d" , position_of_attacker);
+        if (position_of_attacker == aly_count) {
+            printf("Attacker not found in ally team by pointer.\n");
+            return NULL;
+        }
         if(strcmp(Attacker->name , "Lifeline") == 0 ||strcmp(Attacker->name , "Medic") == 0){
             
             for (int i=0 ; i < aly_count ; i++){
+                printf("In for loop Lifeline and Medic\n");
                 if(x_click >= aly_pos[i]->x && x_click <= (aly_pos[i]-> x + aly_pos[i]-> w) && y_click >= aly_pos[i]->y && y_click <= (aly_pos[i]-> y + aly_pos[i] -> h ) && i != position_of_attacker && if_still_alive_only(aly_team[i])){
                     aly_team[i].selected = ( aly_team[i].selected == 1) ? 0 : 1 ;
                     printf("In if(lifeline or Medic)\n");
+                    found_target = 1;
                     return &aly_team[i];
                 }
+            }
+            if(found_target == 0){
+                printf("Didn't click in a valid target\n");
+                return NULL;
             }
         }
         else if(strcmp(Attacker->name , "John_Wick") == 0 || strcmp(Attacker->name , "Sans") == 0 || strcmp(Attacker->name , "Hulk") == 0 || strcmp(Attacker->name , "Snorlax") == 0|| strcmp(Attacker->name , "Demolisher") == 0 || strcmp(Attacker->name , "Dracula") == 0 ) {
@@ -626,8 +653,13 @@ Fighter* select_target_for_special_attack(int x_click , int y_click , Fighter* A
                 if(x_click >= enemy_pos[i]->x && x_click <= (enemy_pos[i]-> x + enemy_pos[i]-> w) && y_click >= enemy_pos[i]->y && y_click <= (enemy_pos[i]-> y + enemy_pos[i] -> h ) && if_still_alive_only(enemy_team[i])){
                     enemy_team[i].selected = ( enemy_team[i].selected == 1) ? 0 : 1 ;
                     printf("In if(John_Wick , Sans , etc)\n");
+                    found_target = 1;
                     return &enemy_team[i];
                 }
+            }
+            if(found_target == 0){
+                printf("Didn't click in a valid target\n");
+                return NULL;
             }
         }
         else if(strcmp(Attacker->name , "Batman") == 0){
@@ -651,6 +683,7 @@ Fighter* select_target_for_special_attack(int x_click , int y_click , Fighter* A
     
 
 }
+
 
 
 

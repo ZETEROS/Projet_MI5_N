@@ -43,7 +43,7 @@ void special_attack(Fighter* Attacker, Fighter* Target) {
             Target->dmg = (int)(Target->dmg * 0.8);  // Reduces dmg by 20%
 
         } else if (strcmp(Attacker->name, "Lifeline") == 0) {
-            Attacker->hp = (Attacker->hp + 25 > 100) ? 100 : Attacker->hp + 25;
+            Target->hp = (Attacker->hp + 25 > 100) ? 100 : Attacker->hp + 25;
             
         } else if (strcmp(Attacker->name, "Sans") == 0) {
             Target->dodge /= 2;  // Reduces dodge by half
@@ -64,7 +64,7 @@ void special_attack(Fighter* Attacker, Fighter* Target) {
             Target->hp -= dmg;
             
         } else if (strcmp(Attacker->name, "Medic") == 0) {
-            Attacker->hp = (Attacker->hp + 30 > 100) ? 100 : Attacker->hp + 30;
+            Target->hp = (Attacker->hp + 30 > 100) ? 100 : Attacker->hp + 30;
         }
     }
     else{
@@ -103,6 +103,15 @@ Fighter importandassign(char* file , SDL_Texture** visuals , SDL_Texture** visua
 }
 void show_stats(Fighter a){
     printf("Name = %s\nHP: %.2f\nHP_MAX:%.2f\nDMG:%.2f\nDEF:%.2f\nDODGE:%.2f\nSPEED:%.2f\n\n",a.name,a.hp,a.hp_max,a.dmg,a.dmg,a.def,a.dodge,a.speed);
+}
+
+int is_Healer(Fighter* Attacker){
+    if(strcmp(Attacker->name , "Lifeline") == 0 || strcmp(Attacker->name , "Medic") == 0){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }
 
 #endif
