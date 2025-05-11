@@ -33,5 +33,6 @@ We chose the value of the characters and their speed, trying to keep things tota
 We've continued with the battle mechanics, in particular with the application of basic attacks in combat. The last images have been integrated into the asset folder, the tombs when characters die and the background that appears at the end of the game. The game can be finished, but there are segmentation problems ('Segment false' error) that prevent their use. We've also added sound effects when one of the teams wins.
 
 ### 11 - 05 - 2025
-We have corrected the special attack error, and the code is now 100% functional.
+We have corrected the special attack error, and the code is now 100% functional. Nous avons trouver une valeurs pour les attaques spéciales en essayant de respecter un équilibre puis nous avons défini la valeur de
+gain de pièce qui est de .. si le joueur décide de passer son tour
 
