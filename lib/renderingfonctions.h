@@ -20,11 +20,12 @@ SDL_Texture* loadTexture(char* path , SDL_Renderer* renderer){
         printf("Image not found.\n%s\n",IMG_GetError());
         return NULL;
     }
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer , surface);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface (renderer , surface);
     SDL_FreeSurface(surface);
     return texture;
 
 }
+
 
 
 void rendercoins(SDL_Renderer* renderer, int coin, SDL_Rect* pos, int size, SDL_Color color , TTF_Font* font) {
@@ -52,6 +53,13 @@ void rendercoins(SDL_Renderer* renderer, int coin, SDL_Rect* pos, int size, SDL_
     SDL_DestroyTexture(texture);
 }
 
+void showprices(SDL_Renderer* render , Fighter** PRETEAM , TTF_Font* font){
+    SDL_Rect* positions_for_prices[9] = {&Price_John_Wick , &Price_Sans , &Price_Batman , &Price_Hulk , &Price_Snorlax , &Price_Demolisher , &Price_Lifeline , &Price_Dracula , &Price_The_Medic};
+    SDL_Color white = {255 , 255 , 255};
+    for (int i =0 ; i<9 ;i++){
+        rendercoins(render , PRETEAM[i]->price , positions_for_prices[i] , 30 , white , font);
+    }
+}
 void showinfoandstats(SDL_Renderer* renderer , SDL_Texture* screen , Fighter* fighter , Mix_Chunk* sound , SDL_Texture* teamselection_screen , int team1_coins ,int team2_coins, SDL_Texture* blink_turn , SDL_Texture* ready_pressed, int current_team, TTF_Font* font){
     Mix_PlayChannel(-1 , sound , 0);
     SDL_Color dark_grey = {70 , 70 , 70};
@@ -195,16 +203,23 @@ void renderlogoselectedfighters(SDL_Renderer* render, Fighter** PRETEAM ,SDL_Tex
     }
 }
 
-void addorkickfromteam(Fighter** preteam , SDL_Renderer* render , int character, TTF_Font* font , Mix_Chunk* tick_sound){
-    if(howmanyselected(preteam) <= 4 && howmanyselected(preteam) >= 0){
+void addorkickfromteam(Fighter** preteam , SDL_Renderer* render , int character, TTF_Font* font , Mix_Chunk* tick_sound , int* team_coins){
+    if(howmanyselected(preteam) <= 4 && howmanyselected(preteam) >= 0 ){
             if(preteam[character]->selected == 0 ){
                 if(howmanyselected(preteam) == 4){
                     Mix_PlayChannel(-1 , tick_sound , 0);
                     rendermessageTEMP("You only can pick 4" , &MessageSelection , render , 2000 , font );
                 }
                 else{
-                    Mix_PlayChannel(-1 , tick_sound , 0);
-                    preteam[character]->selected =1 ;
+                    if(*team_coins >= preteam[character]->price){
+                        Mix_PlayChannel(-1 , tick_sound , 0);
+                        preteam[character]->selected =1 ;
+                        *team_coins -= preteam[character]->price;
+                    }
+                    else{
+                        printf("team coins = %d , fighter price = %d" , *team_coins , preteam[character]->price);
+                        rendermessageTEMP("Too expensive!" , &MessageSelection , render , 2000 , font );
+                    }
                 }
             }
 
@@ -216,6 +231,7 @@ void addorkickfromteam(Fighter** preteam , SDL_Renderer* render , int character,
                 else{
                     Mix_PlayChannel(-1 , tick_sound , 0);
                     preteam[character]->selected = 0;
+                    *team_coins += preteam[character]->price;
                 }
                                         
             }
@@ -682,6 +698,15 @@ Fighter* select_target_for_special_attack(int x_click , int y_click , Fighter* A
     
     
 
+}
+
+void no_attack(int turn , int* team1_coins , int* team2_coins){
+    if(turn == 1){
+        *team1_coins += 30;
+    }
+    else if(turn == 2){
+        *team2_coins += 30;
+    }
 }
 
 

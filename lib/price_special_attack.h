@@ -1,3 +1,5 @@
+#ifndef PRICES_H
+#define PRICES_H
 #include <stdio.h>
 
 int price_double_tap = 90;
@@ -9,3 +11,5 @@ int price_rock_throw = 80;
 int price_drone_heal = 20;
 int price_drainage = 100;
 int price_crusaders_crossbow = 35;
+
+#endif
