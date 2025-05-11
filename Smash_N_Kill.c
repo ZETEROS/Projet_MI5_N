@@ -8,10 +8,11 @@
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_ttf.h>
 
+#include "lib/enum.h"
 #include "lib/structure.h"
 #include "lib/buttons-coord.h"
 #include "lib/special_attacks_list.h"
-#include "lib/fonctions.h"
+#include "lib/renderingfonctions.h"
 
 //Dimensions
 #define WIDTH 1280
@@ -76,23 +77,7 @@ int main(int argc , char** argv){
     int quit = 0 ;
     SDL_Event event ;
 
-    //GAME STATES (MOMENTS)
-    typedef enum{
-        MENU,
-        GAMEMODE_SELECTION,
-        TEAM_SELECTION,
-        FIGHT,
-        END_GAME,
-        HOW_TO_PLAY,
-        
-    }Game_State;
 
-    typedef enum{
-        SELECTING_FIGHTER,
-        PAUSE,
-        SELECTING_ATTACK,
-        SELECTING_TARGET,
-    }Fight_State;
 
     //ALWAYS START IN THE MENU
     Game_State state = MENU ;
@@ -235,7 +220,6 @@ int main(int argc , char** argv){
                 switch(state){
 
                     case MENU :
-                        Mix_HaltMusic();
                         if(spins_in_Menu == 0 && (!team1 || !team2) ) printf("Team1 and Team2 are NULL\n");
                         spins_in_Menu++;
                         if(team1_coins != 0 && team2_coins != 0){
@@ -570,12 +554,7 @@ int main(int argc , char** argv){
                             currentMusic = 2;
                         }
                         
-                        typedef enum{
-                            BASIC_ATTACK ,
-                            SPECIAL_ATTACK,
-                            ULTIMATE_ATTACK,
-                            NO_ATTACK,
-                        }Type_attack;
+                        
 
                         Type_attack attack;
 
@@ -600,6 +579,7 @@ int main(int argc , char** argv){
                         int did_dodge = 0;
                         int hit = 0;
                         int heal = 0;
+                        int not_enough_coins = 0;
 
                         winning_soundeffect_reproduced = 0;
                         winner = 0;
@@ -627,6 +607,7 @@ int main(int argc , char** argv){
                                                 if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
                                                     int x = fighting_event.button.x ;
                                                     int y = fighting_event.button.y;
+                                                    
 
                                                     if(x >= Pause_button.x && x <= Pause_button.x + Pause_button.w && y >= Pause_button.y && y <= Pause_button.y + Pause_button.h){
                                                         fight = PAUSE;
@@ -668,6 +649,7 @@ int main(int argc , char** argv){
                                                 if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
                                                     int x = fighting_event.button.x ;
                                                     int y = fighting_event.button.y;
+                                                    
 
                                                     if(x >= Pause_button.x && x <= Pause_button.x + Pause_button.w && y >= Pause_button.y && y <= Pause_button.y + Pause_button.h){
                                                         fight = PAUSE;
@@ -709,6 +691,7 @@ int main(int argc , char** argv){
                                             break;
 
                                         case SELECTING_ATTACK:
+                                           
                                             if(fighting_event.type ==  SDL_MOUSEBUTTONDOWN && fighting_event.button.button == SDL_BUTTON_LEFT){
                                                 int x = fighting_event.button.x ;
                                                 int y = fighting_event.button.y;
@@ -733,10 +716,10 @@ int main(int argc , char** argv){
                                                 else if(x >= No_Attack.x && x <= No_Attack.x + No_Attack.w && y >= No_Attack.y && y <= No_Attack.y + No_Attack.h ){
                                                     Mix_PlayChannel(-1 , tick_sound , 0);
                                                     fight = SELECTING_FIGHTER;
-                                                    turn_to_attack = (turn_to_attack == 1)? 2 : 1;
                                                     number_turn++;
                                                     no_attack(turn_to_attack , &team1_coins , &team2_coins);
-                                                    
+                                                    FIGHT_unselectallfighters(team1 , team2 ,team1_count ,team2_count );
+                                                    turn_to_attack = (turn_to_attack == 1)? 2 : 1;
                                                 }
 
                                                 //If a clicked is detected in a already selected fighter , it will be unselected and go back to the SELECTING_FIGHTER case:
@@ -967,11 +950,11 @@ int main(int argc , char** argv){
                                                             if(Attacker != NULL && Target != NULL){
 
                                                                 if(is_Healer(Attacker)){
-                                                                    special_attack(Attacker , Target);
                                                                         attack_now = 1;
-                                                                        heal = 0;
+                                                                        heal = 1;
                                                                         Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
                                                                         Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                        special_attack(Attacker , Target , &team1_coins, &fight , render , font, team1 , team2 , team1_count , team2_count, &attack_now, &hit , &heal , &did_dodge, hit_fx , dodge_fx);
                                                                 }
                                                                 else{
                                                                     if(Dodged(Target)){
@@ -981,11 +964,11 @@ int main(int argc , char** argv){
                                                                         Mix_PlayChannel(-1 , dodge_fx , 0);
                                                                     }
                                                                     else{
-                                                                        special_attack(Attacker , Target);
                                                                         attack_now = 1;
                                                                         hit = 1;
                                                                         Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
                                                                         Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                        special_attack(Attacker , Target ,&team1_coins, &fight , render , font, team1 , team2 , team1_count , team2_count, &attack_now, &hit , &heal, &did_dodge, hit_fx , dodge_fx);
                                                                     }
                                                                 }
                                                             }
@@ -1008,29 +991,21 @@ int main(int argc , char** argv){
                                                             }
                                                             show_stats(*Target);
                                                             if(Attacker != NULL && Target != NULL){
-
-                                                                if(is_Healer(Attacker)){
-                                                                    special_attack(Attacker , Target);
-                                                                        attack_now = 1;
-                                                                        heal = 1;
-                                                                        Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
-                                                                        Mix_PlayChannel(-1 , hit_fx , 0);
-                                                                }
-                                                                else{
-                                                                    if(Dodged(Target)){
-                                                                        attack_now = 1;
-                                                                        did_dodge = 1;
-                                                                        Mix_VolumeChunk(dodge_fx , MIX_MAX_VOLUME * 0.5);
-                                                                        Mix_PlayChannel(-1 , dodge_fx , 0);
+                                                                    if(is_Healer(Attacker)){
+                                                                            attack_now = 1;
+                                                                            heal = 1;
+                                                                            Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
+                                                                            Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                            special_attack(Attacker , Target , &team2_coins , &fight , render , font , team1 , team2 , team1_count , team2_count , &attack_now, &hit , &heal, &did_dodge, hit_fx , dodge_fx);
                                                                     }
                                                                     else{
-                                                                        special_attack(Attacker , Target);
-                                                                        attack_now = 1;
-                                                                        hit = 1;
-                                                                        Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
-                                                                        Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                            attack_now = 1;
+                                                                            Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
+                                                                            Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                            special_attack(Attacker , Target, &team2_coins, &fight , render , font, team1 , team2 , team1_count , team2_count, &attack_now , &hit , &heal, &did_dodge , hit_fx , dodge_fx);
+                                                                        
                                                                     }
-                                                                }
+                                                                
                                                             }
                                                             else{
                                                                 printf("Attacker in team 2 is NULL or Target is NULL , exiting :\n");
