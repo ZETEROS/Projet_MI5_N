@@ -44,6 +44,19 @@ SDL_Rect ready2 = {918 , 667 , 187 , 39};
 SDL_Rect yourturn2 = {926 , 357 , 169 , 33};
 
 
+//PRICES POSITIONS
+SDL_Rect Price_John_Wick= {111+30 , 156 , 32 , 32};
+SDL_Rect Price_Sans = {230+30 , 156 , 32 , 32};
+SDL_Rect Price_Batman = {351+30 , 156 , 32 , 32};
+SDL_Rect Price_Hulk = {479+30 , 156 , 32 , 32};
+SDL_Rect Price_Snorlax = {597+30 , 156 , 32 , 32};
+SDL_Rect Price_Demolisher = {718+30 , 156 , 32 , 32};
+SDL_Rect Price_Lifeline = {847+30 , 156 , 32 , 32};
+SDL_Rect Price_Dracula = {966+30 , 156 , 32 , 32};
+SDL_Rect Price_The_Medic = {1088+30 , 156 , 32 , 32};
+
+
+
 SDL_Rect Button_SelectPVP = {230 , 472 , 267 , 67};
 //SDL_Rect Button_SelectPVB = {780 , 472 , 267 , 67};
 
@@ -84,14 +97,14 @@ SDL_Rect fight_torch2 = {477 , 172-24 , 15 , 24};
 SDL_Rect fight_torch3 = {787 , 172-24 , 15 , 24};
 SDL_Rect fight_torch4 = {1002 , 172-24 , 15 , 24};
 
-SDL_Rect Basic_Attack = {404 , 594 , 110 , 106};
-SDL_Rect Special_Attack = {524 , 594 , 110 , 106};
-SDL_Rect Ultimate_Attack = {644 , 594 , 110 , 106};
-SDL_Rect No_Attack = {764 , 594 , 110 , 106};
+SDL_Rect Basic_Attack = {467 , 594 , 110 , 106};
+SDL_Rect Special_Attack = {586 , 594 , 110 , 106};
+//SDL_Rect Ultimate_Attack = {644 , 594 , 110 , 106};
+SDL_Rect No_Attack = {707 , 594 , 110 , 106};
 
 SDL_Rect ATTACK_BUTTON = {585 , 642 , 108 , 78};
 
-SDL_Rect Coin_ammount = {1094 , 102 , 47 , 28};
+SDL_Rect Coin_ammount = {1100 , 110 , 47 , 28};
 
 SDL_Rect hitordodge = { 889 , 122 , 165 , 21};
 
