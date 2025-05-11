@@ -961,18 +961,28 @@ int main(int argc , char** argv){
                                                             }
                                                             show_stats(*Target);
                                                             if(Attacker != NULL && Target != NULL){
-                                                                if(Dodged(Target)){
-                                                                    attack_now = 1;
-                                                                    did_dodge = 1;
-                                                                    Mix_VolumeChunk(dodge_fx , MIX_MAX_VOLUME * 0.5);
-                                                                    Mix_PlayChannel(-1 , dodge_fx , 0);
+
+                                                                if(is_Healer(Attacker)){
+                                                                    special_attack(Attacker , Target);
+                                                                        attack_now = 1;
+                                                                        hit = 1;
+                                                                        Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
+                                                                        Mix_PlayChannel(-1 , hit_fx , 0);
                                                                 }
                                                                 else{
-                                                                    special_attack(Attacker , Target);
-                                                                    attack_now = 1;
-                                                                    hit = 1;
-                                                                    Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
-                                                                    Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                    if(Dodged(Target)){
+                                                                        attack_now = 1;
+                                                                        did_dodge = 1;
+                                                                        Mix_VolumeChunk(dodge_fx , MIX_MAX_VOLUME * 0.5);
+                                                                        Mix_PlayChannel(-1 , dodge_fx , 0);
+                                                                    }
+                                                                    else{
+                                                                        special_attack(Attacker , Target);
+                                                                        attack_now = 1;
+                                                                        hit = 1;
+                                                                        Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
+                                                                        Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                    }
                                                                 }
                                                             }
                                                             else{
@@ -994,19 +1004,28 @@ int main(int argc , char** argv){
                                                             }
                                                             show_stats(*Target);
                                                             if(Attacker != NULL && Target != NULL){
-                                                                if(Dodged(Target)){
-                                                                    attack_now = 1;
-                                                                    did_dodge = 1;
-                                                                    Mix_VolumeChunk(dodge_fx , MIX_MAX_VOLUME * 0.5);
-                                                                    Mix_PlayChannel(-1 , dodge_fx , 0);
+
+                                                                if(is_Healer(Attacker)){
+                                                                    special_attack(Attacker , Target);
+                                                                        attack_now = 1;
+                                                                        hit = 1;
+                                                                        Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
+                                                                        Mix_PlayChannel(-1 , hit_fx , 0);
                                                                 }
                                                                 else{
-                                                                    
-                                                                    special_attack(Attacker , Target);
-                                                                    attack_now = 1;
-                                                                    hit = 1;
-                                                                    Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
-                                                                    Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                    if(Dodged(Target)){
+                                                                        attack_now = 1;
+                                                                        did_dodge = 1;
+                                                                        Mix_VolumeChunk(dodge_fx , MIX_MAX_VOLUME * 0.5);
+                                                                        Mix_PlayChannel(-1 , dodge_fx , 0);
+                                                                    }
+                                                                    else{
+                                                                        special_attack(Attacker , Target);
+                                                                        attack_now = 1;
+                                                                        hit = 1;
+                                                                        Mix_VolumeChunk(hit_fx , MIX_MAX_VOLUME * 0.5);
+                                                                        Mix_PlayChannel(-1 , hit_fx , 0);
+                                                                    }
                                                                 }
                                                             }
                                                             else{
