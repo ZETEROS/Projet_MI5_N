@@ -509,6 +509,7 @@ Fighter* WhoIsSelected(Fighter* team , int team_count){
     for (int i= 0 ; i< team_count ; i++){
         if(team[i].selected == 1) return &team[i];
     }
+    return NULL;
 }
 
 int Dodged(Fighter* target ){
@@ -552,6 +553,90 @@ void END_GAME_renderfighters(SDL_Renderer* render , Fighter* winning_team ,SDL_T
         }
     }
 }
+
+Fighter* select_target_for_special_attack(int x_click , int y_click , Fighter* Attacker , Fighter* aly_team , Fighter* enemy_team , int aly_count ,int enemy_count, int turn_to_attack , int number_turn){
+
+    
+    if(turn_to_attack == 1){
+        SDL_Rect* aly_pos[4] = {&Team1_Fighter1 , &Team1_Fighter2 , &Team1_Fighter3 , &Team1_Fighter4};
+        SDL_Rect* enemy_pos[4] = {&Team2_Fighter1 , &Team2_Fighter2 , &Team2_Fighter3 , &Team2_Fighter4};
+        //In what position of the team is the attacker?
+        int position_of_attacker = 0;
+        while(position_of_attacker < aly_count && strcmp(Attacker->name , aly_team[position_of_attacker].name) != 0){
+            position_of_attacker++;
+        }
+        if(position_of_attacker == aly_count)
+
+        if(strcmp(Attacker->name , "Lifeline") == 0 ||strcmp(Attacker->name , "Medic") == 0){
+            
+            for (int i=0 ; i < aly_count ; i++){
+                if(x_click >= aly_pos[i]->x && x_click <= (aly_pos[i]-> x + aly_pos[i]-> w) && y_click >= aly_pos[i]->y && y_click <= (aly_pos[i]-> y + aly_pos[i] -> h ) && i != position_of_attacker && if_still_alive_only(aly_team[i])){
+                    aly_team[i].selected = ( aly_team[i].selected == 1) ? 0 : 1 ;
+                    return &aly_team[i];
+                }
+            }
+        }
+        else if(strcmp(Attacker->name , "John_Wick") == 0 || strcmp(Attacker->name , "Sans") == 0 || strcmp(Attacker->name , "Hulk") == 0 || strcmp(Attacker->name , "Snorlax") == 0|| strcmp(Attacker->name , "Demolisher") == 0 || strcmp(Attacker->name , "Dracula") == 0 ) {
+            for (int i=0 ; i < enemy_count ; i++){
+                if(x_click >= enemy_pos[i]->x && x_click <= (enemy_pos[i]-> x + enemy_pos[i]-> w) && y_click >= enemy_pos[i]->y && y_click <= (enemy_pos[i]-> y + enemy_pos[i] -> h ) && if_still_alive_only(enemy_team[i])){
+                    enemy_team[i].selected = ( enemy_team[i].selected == 1) ? 0 : 1 ;
+                    return &enemy_team[i];
+                }
+            }
+        }
+        else if(strcmp(Attacker->name , "Batman")){
+            return &aly_team[position_of_attacker];
+        }
+        else{
+            return NULL;
+        }
+
+    }
+    else if(turn_to_attack == 2){
+        SDL_Rect* aly_pos[4] = {&Team2_Fighter1 , &Team2_Fighter2 , &Team2_Fighter3 , &Team2_Fighter4};
+        SDL_Rect* enemy_pos[4] = {&Team1_Fighter1 , &Team1_Fighter2 , &Team1_Fighter3 , &Team1_Fighter4};
+        //In what position of the team is the attacker?
+        int position_of_attacker = 0;
+        while(strcmp(Attacker->name , aly_team[position_of_attacker].name) != 0){
+            position_of_attacker++;
+        }
+
+        if(strcmp(Attacker->name , "Lifeline") == 0 ||strcmp(Attacker->name , "Medic") ){
+            
+            for (int i=0 ; i < aly_count ; i++){
+                if(x_click >= aly_pos[i]->x && x_click <= (aly_pos[i]-> x + aly_pos[i]-> w) && y_click >= aly_pos[i]->y && y_click <= (aly_pos[i]-> y + aly_pos[i] -> h ) && i != position_of_attacker && if_still_alive_only(aly_team[i])){
+                    aly_team[i].selected = ( aly_team[i].selected == 1) ? 0 : 1 ;
+                    return &aly_team[i];
+                }
+            }
+        }
+        else if(strcmp(Attacker->name , "John_Wick") == 0 || strcmp(Attacker->name , "Sans") == 0 || strcmp(Attacker->name , "Hulk") == 0|| strcmp(Attacker->name , "Hulk") == 0 || strcmp(Attacker->name , "Snorlax") == 0|| strcmp(Attacker->name , "Demolisher") == 0 || strcmp(Attacker->name , "Dracula") == 0 ) {
+            for (int i=0 ; i < enemy_count ; i++){
+                if(x_click >= enemy_pos[i]->x && x_click <= (enemy_pos[i]-> x + enemy_pos[i]-> w) && y_click >= enemy_pos[i]->y && y_click <= (enemy_pos[i]-> y + enemy_pos[i] -> h ) && if_still_alive_only(enemy_team[i])){
+                    enemy_team[i].selected = ( enemy_team[i].selected == 1) ? 0 : 1 ;
+                    return &enemy_team[i];
+                }
+            }
+        }
+        else if(strcmp(Attacker->name , "Batman")){
+            return &aly_team[position_of_attacker];
+        }
+        else{
+            return NULL;
+        }
+    }
+    else{
+        return NULL;
+    }
+
+
+    
+    
+
+}
+
+
+
 
 
 #endif

@@ -34,34 +34,41 @@ void normal_attack(Fighter* Attacker, Fighter* Target) { //to use when the chara
 }
 
 void special_attack(Fighter* Attacker, Fighter* Target) {
-    if (strcmp(Attacker->name, "John_Wick") == 0) {
-        int dmg = (int)(Attacker->dmg * 0.75);  // 75% damage per shot
-        Target->hp -= 2 * dmg;
-    } else if (strcmp(Attacker->name, "Hulk") == 0) {
-        Target->dmg = (int)(Target->dmg * 0.8);  // Reduces dmg by 20%
-    } else if (strcmp(Attacker->name, "Lifeline") == 0) {
-        Attacker->hp = (Attacker->hp + 25 > 100) ? 100 : Attacker->hp + 25;
-        /* can also be read like this : 
-            if (Attacker->hp + 25 > Attacker->hp_max) {
-                Attacker->hp = Attacker->hp_max;
-            } else {
-                Attacker->hp += 25;
-            } */
-    } else if (strcmp(Attacker->name, "Sans") == 0) {
-        Target->dodge /= 2;  // Reduces dodge by half
-    } else if (strcmp(Attacker->name, "Ronflex") == 0) {
-        Target->def = (int)(Target->def * 0.7);  // Reduces def by 30%
-    } else if (strcmp(Attacker->name, "Dracula") == 0) {
-        int heal = (int)(Attacker->dmg * 0.4);  // Heal 40% of dmg dealt
-        Target->hp -= heal;
-        Attacker->hp = (Attacker->hp + heal > 100) ? 100 : Attacker->hp + heal;
-    } else if (strcmp(Attacker->name, "Batman") == 0) {
-        // Batman becomes invisible for 1 turn
-    } else if (strcmp(Attacker->name, "Demolisher") == 0) {
-        int dmg = Attacker->dmg;
-        Target->hp -= dmg;
-    } else if (strcmp(Attacker->name, "Medic") == 0) {
-        Attacker->hp = (Attacker->hp + 30 > 100) ? 100 : Attacker->hp + 30;
+    if(Target != NULL){
+        if (strcmp(Attacker->name, "John_Wick") == 0) {
+            int dmg = (int)(Attacker->dmg * 0.75);  // 75% damage per shot
+            Target->hp -= 2 * dmg;
+
+        } else if (strcmp(Attacker->name, "Hulk") == 0) {
+            Target->dmg = (int)(Target->dmg * 0.8);  // Reduces dmg by 20%
+
+        } else if (strcmp(Attacker->name, "Lifeline") == 0) {
+            Attacker->hp = (Attacker->hp + 25 > 100) ? 100 : Attacker->hp + 25;
+            
+        } else if (strcmp(Attacker->name, "Sans") == 0) {
+            Target->dodge /= 2;  // Reduces dodge by half
+
+        } else if (strcmp(Attacker->name, "Ronflex") == 0) {
+            Target->def = (int)(Target->def * 0.7);  // Reduces def by 30%
+
+        } else if (strcmp(Attacker->name, "Dracula") == 0) {
+            int heal = (int)(Attacker->dmg * 0.4);  // Heal 40% of dmg dealt
+            Target->hp -= heal;
+            Attacker->hp = (Attacker->hp + heal > 100) ? 100 : Attacker->hp + heal;
+
+        } else if (strcmp(Attacker->name, "Batman") == 0) {
+            // Batman becomes invisible for 1 turn
+
+        } else if (strcmp(Attacker->name, "Demolisher") == 0) {
+            int dmg = Attacker->dmg;
+            Target->hp -= dmg;
+            
+        } else if (strcmp(Attacker->name, "Medic") == 0) {
+            Attacker->hp = (Attacker->hp + 30 > 100) ? 100 : Attacker->hp + 30;
+        }
+    }
+    else{
+        printf("Couldnt attack because Target is NULL\n");
     }
 }
 //Fonction to import the fighter and to use the assign fonction saw before.
