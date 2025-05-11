@@ -129,6 +129,7 @@ int main(int argc , char** argv){
     SDL_Texture* All_Logos[9] = {Square_JohnWick , Square_Sans , Square_Batman , Square_Hulk , Square_Snorlax , Square_Demolisher , Square_Lifeline , Square_Dracula , Square_Medic};
     SDL_Texture* fire_animation = loadTexture("assets/anim/burning_loop_3.png", render);
     SDL_Color dark_gray = { 70 , 70 , 70};
+    SDL_Color white = {255 , 255 , 255};
     SDL_Texture* visuals[9] = {loadTexture("assets/anim/John_Wick_model_idle.png" , render) , loadTexture("assets/anim/Sans_model_idle.png" ,render  ) , loadTexture( "assets/anim/Batman_model_idle.png",  render) , loadTexture( "assets/anim/Hulk_model_idle.png", render ) ,loadTexture( "assets/anim/Snorlax_model_idle.png", render ) ,loadTexture( "assets/anim/Demolisher_model_idle.png", render ) ,loadTexture( "assets/anim/Lifeline_model_idle.png", render ) ,loadTexture( "assets/anim/Dracula_model_idle.png", render ) ,loadTexture( "assets/anim/Medic_model_idle.png", render ) };
     SDL_Texture* visuals_selected[9] = {loadTexture("assets/anim/John_Wick_model_idle_selected.png" , render) , loadTexture("assets/anim/Sans_model_idle_selected.png" ,render  ) , loadTexture( "assets/anim/Batman_model_idle_selected.png",  render) , loadTexture( "assets/anim/Hulk_model_idle_selected.png", render ) ,loadTexture( "assets/anim/Snorlax_model_idle_selected.png", render ) ,loadTexture( "assets/anim/Demolisher_model_idle_selected.png", render ) ,loadTexture( "assets/anim/Lifeline_model_idle_selected.png", render ) ,loadTexture( "assets/anim/Dracula_model_idle_selected.png", render ) ,loadTexture( "assets/anim/Medic_model_idle_selected.png", render ) };
     SDL_Texture* Pause_button_texture = loadTexture("assets/fight/pause.png", render);
@@ -1084,11 +1085,13 @@ int main(int argc , char** argv){
                                                     SDL_RenderClear(render);
                                                     SDL_RenderCopy(render , fight_scenario , NULL , NULL);
                                                     renderfighters(render, hp_sprite , grave , team1 , team2 , team1_count , team2_count );
+                                                    
                                                     SDL_RenderCopy(render , Pause_button_texture , NULL , &Pause_button);
                                                     FIGHT_fire_in_background(render, fire_animation , fight_torches_texture);
                                                     
 
                                                     (turn_to_attack == 1) ? SDL_RenderCopy(render,turn_team1 , NULL ,NULL) : SDL_RenderCopy(render,turn_team2 , NULL ,NULL) ;
+                                                    (turn_to_attack == 1) ? rendercoins(render , team1_coins,&Coin_ammount , 20 , white , font ) : rendercoins(render , team2_coins ,&Coin_ammount , 20 , white , font );
                                                     
                                                     SDL_RenderCopy(render, instruction1 , NULL , NULL);
 
@@ -1108,6 +1111,7 @@ int main(int argc , char** argv){
                                                     SDL_RenderCopy(render , instruction2 , NULL , NULL);
 
                                                     (turn_to_attack == 1) ? SDL_RenderCopy(render,turn_team1 , NULL ,NULL) : SDL_RenderCopy(render,turn_team2 , NULL ,NULL) ;
+                                                    (turn_to_attack == 1) ? rendercoins(render , team1_coins, &Coin_ammount , 20 , white , font ) : rendercoins(render , team2_coins ,&Coin_ammount , 20 , white , font );
             
                                                     SDL_RenderPresent(render);
                                                 
@@ -1137,6 +1141,7 @@ int main(int argc , char** argv){
                                                     }
 
                                                     (turn_to_attack == 1) ? SDL_RenderCopy(render,turn_team1 , NULL ,NULL) : SDL_RenderCopy(render,turn_team2 , NULL ,NULL) ;
+                                                    (turn_to_attack == 1) ? rendercoins(render , team1_coins,&Coin_ammount , 20 , white , font ) : rendercoins(render , team2_coins ,&Coin_ammount , 20 , white , font );
 
                                                     if(attack_now == 1) { 
                                                         fight = SELECTING_FIGHTER;
